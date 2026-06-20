@@ -4,6 +4,7 @@ import Loader from './components/Loader';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import StatsBar from './components/StatsBar';
+import TelemetryDashboard from './components/TelemetryDashboard';
 import PipelineViz from './components/PipelineViz';
 import SimulationPlatform from './components/SimulationPlatform';
 import FeaturesGrid from './components/FeaturesGrid';
@@ -77,6 +78,7 @@ export default function App() {
         <Navbar />
         <HeroSection />
         <StatsBar />
+        <TelemetryDashboard />
         <PipelineViz />
         <SimulationPlatform />
         <FeaturesGrid />
