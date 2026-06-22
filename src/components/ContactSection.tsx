@@ -75,8 +75,8 @@ export default function ContactSection() {
                 gap: '16px',
               }}>
                 <svg width="48" height="48" viewBox="0 0 48 48">
-                  <circle cx="24" cy="24" r="20" stroke="#00FF85" strokeWidth="2" fill="none" />
-                  <path d="M16 24 L22 30 L33 18" stroke="#00FF85" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="24" cy="24" r="20" stroke="var(--green-neon)" strokeWidth="2" fill="none" />
+                  <path d="M16 24 L22 30 L33 18" stroke="var(--green-neon)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <h3 style={{
                   fontFamily: 'Space Grotesk, sans-serif',
@@ -339,7 +339,13 @@ export default function ContactSection() {
       <style>{`
         @media (max-width: 768px) {
           .contact-grid { grid-template-columns: 1fr !important; }
-          section { padding-left: 20px !important; padding-right: 20px !important; }
+          #contact { padding: 64px 24px !important; }
+        }
+        @media (max-width: 425px) {
+          #contact { padding: 48px 16px !important; }
+        }
+        @media (max-width: 375px) {
+          #contact { padding: 40px 12px !important; }
         }
       `}</style>
     </section>

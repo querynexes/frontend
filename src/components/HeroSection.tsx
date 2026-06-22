@@ -126,7 +126,7 @@ export default function CinematicHero() {
         ref={pinWrapRef}
         id="hero"
         style={{
-          height: '100vh',
+          height: '100dvh',
           width: '100%',
           position: 'relative',
           overflow: 'hidden',
@@ -152,7 +152,7 @@ export default function CinematicHero() {
 
         <div style={{
           position: 'absolute', inset: 0, zIndex: 1,
-          background: 'linear-gradient(to top, #000000 0%, rgba(5,10,7,0.75) 38%, rgba(5,10,7,0.35) 60%, transparent 85%)',
+          background: 'linear-gradient(to top, var(--bg-primary) 0%, rgba(5,10,7,0.75) 38%, rgba(5,10,7,0.35) 60%, transparent 85%)',
           pointerEvents: 'none',
         }} />
         <div style={{
@@ -180,7 +180,7 @@ export default function CinematicHero() {
             style={{
               maxWidth: '580px',
               width: '100%',
-              maxHeight: 'calc(100vh - 72px - 32px)',
+              maxHeight: 'calc(100dvh - 72px - 32px)',
               overflowY: 'auto',
               scrollbarWidth: 'none',
               background: 'rgba(5,10,7,0.6)',
@@ -279,9 +279,9 @@ export default function CinematicHero() {
                 color: 'var(--text-muted)',
                 letterSpacing: '0.08em',
               }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2A3F34' }} />
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2A3F34' }} />
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2A3F34' }} />
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--status-error)' }} />
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--status-warn)' }} />
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--green-neon)' }} />
                 <span style={{ marginLeft: '4px' }}>compile.log</span>
               </div>
 
@@ -380,7 +380,7 @@ export default function CinematicHero() {
           .hero-glass {
             max-width: 100% !important;
             padding: 20px !important;
-            max-height: calc(100vh - 64px - 16px) !important;
+            max-height: calc(100dvh - 64px - 16px) !important;
           }
           .hero-terminal {
             height: 96px !important;

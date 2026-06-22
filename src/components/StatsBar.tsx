@@ -25,13 +25,12 @@ const SEED_THROUGHPUT = [1200, 1340, 1180, 1500, 1420, 1680, 1560, 1890, 1740, 2
 // GPU utilization % over 20 steps
 const SEED_GPU = [41, 55, 48, 67, 72, 63, 78, 82, 75, 88, 91, 85, 93, 89, 94, 92, 96, 93, 95, 94];
 
-// Memory reduction waterfall steps
 const MEMORY_STEPS = [
-  { label: 'FP32 Base',      gb: 14.2, color: '#334E3E' },
-  { label: 'Quantize INT8',  gb: 7.8,  color: '#1E6B3C' },
-  { label: 'Prune Sparse',   gb: 5.4,  color: '#009B50' },
-  { label: 'Kernel Fusion',  gb: 3.2,  color: '#00C860' },
-  { label: 'Final (QNX)',    gb: 1.82, color: '#00FF85' },
+  { label: 'FP32 Base',      gb: 14.2, color: 'var(--green-dark)' },
+  { label: 'Quantize INT8',  gb: 7.8,  color: 'var(--green-deep)' },
+  { label: 'Prune Sparse',   gb: 5.4,  color: 'var(--green-stable)' },
+  { label: 'Kernel Fusion',  gb: 3.2,  color: 'var(--green-neon)' },
+  { label: 'Final (QNX)',    gb: 1.82, color: 'var(--green-neon)' },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -133,17 +132,17 @@ function LatencyDualChart() {
       {/* Chart header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 14 }}>
         <div>
-          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.14em', marginBottom: 5 }}>
+          <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.14em', marginBottom: 5 }}>
             INFERENCE LATENCY — P50 · 24H ROLLING WINDOW
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
-            <span style={{ fontSize: 28, fontWeight: 700, color: '#00FF85', lineHeight: 1, letterSpacing: '-0.02em', fontFamily: 'JetBrains Mono, monospace' }}>
+            <span style={{ fontSize: 28, fontWeight: 700, color: 'var(--green-neon)', lineHeight: 1, letterSpacing: '-0.02em', fontFamily: 'JetBrains Mono, monospace' }}>
               <AnimatedNumber target={11.6} decimals={1} suffix="ms" duration={2.0} />
             </span>
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', textDecoration: 'line-through', fontFamily: 'JetBrains Mono, monospace' }}>118.4ms</span>
+            <span style={{ fontSize: 11, color: 'var(--text-disabled)', textDecoration: 'line-through', fontFamily: 'JetBrains Mono, monospace' }}>118.4ms</span>
             <span style={{
-              fontSize: 9, color: '#00FF85', background: 'rgba(0,255,133,0.1)',
-              border: '1px solid rgba(0,255,133,0.2)', borderRadius: 4, padding: '2px 8px', letterSpacing: '0.05em',
+              fontSize: 9, color: 'var(--green-neon)', background: 'var(--glow-overlay)',
+              border: '1px solid var(--glow-overlay)', borderRadius: 4, padding: '2px 8px', letterSpacing: '0.05em',
               fontFamily: 'JetBrains Mono, monospace',
             }}>10.2×</span>
           </div>
@@ -152,22 +151,22 @@ function LatencyDualChart() {
           <motion.div
             animate={{ opacity: [1, 0.25, 1] }}
             transition={{ duration: 0.9, repeat: Infinity }}
-            style={{ width: 5, height: 5, borderRadius: '50%', background: '#00FF85' }}
+            style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--green-neon)' }}
           />
-          <span style={{ fontSize: 9, color: '#00FF85', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>LIVE</span>
+          <span style={{ fontSize: 9, color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>LIVE</span>
         </div>
       </div>
 
       {/* SVG */}
-      <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(0,255,133,0.07)', background: 'rgba(5,10,7,0.7)' }}>
+      <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', border: '1px solid var(--glow-overlay)', background: 'var(--bg-primary)' }}>
         {/* Y-axis labels */}
         <div style={{
-          position: 'absolute', left: 0, top: 0, bottom: 28, width: 38,
+          position: 'absolute', left: 0, top: 0, bottom: 28, width: 32,
           display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
           padding: '6px 0', zIndex: 2, pointerEvents: 'none',
         }}>
           {gridLines.slice().reverse().map(v => (
-            <span key={v} style={{ fontSize: 7.5, color: 'rgba(255,255,255,0.15)', paddingLeft: 5, fontFamily: 'JetBrains Mono, monospace' }}>
+            <span key={v} style={{ fontSize: 7.5, color: 'var(--text-disabled)', paddingLeft: 4, fontFamily: 'JetBrains Mono, monospace' }}>
               {v}ms
             </span>
           ))}
@@ -190,7 +189,7 @@ function LatencyDualChart() {
             <line key={v}
               x1={0} y1={CH - (v / maxV) * CH}
               x2={CW} y2={CH - (v / maxV) * CH}
-              stroke="rgba(255,255,255,0.04)" strokeWidth={1}
+              stroke="var(--glow-grid)" strokeWidth={1}
             />
           ))}
 
@@ -206,23 +205,23 @@ function LatencyDualChart() {
           />
 
           {/* Baseline line */}
-          <motion.path d={basePath} fill="none" stroke="#334E3E" strokeWidth={1.5} strokeLinecap="round"
+          <motion.path d={basePath} fill="none" stroke="var(--green-dark)" strokeWidth={1.5} strokeLinecap="round"
             initial={{ pathLength: 0 }} animate={{ pathLength: drawn ? 1 : 0 }}
             transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           />
           {/* Optimized line */}
-          <motion.path d={optPath} fill="none" stroke="#00FF85" strokeWidth={2} strokeLinecap="round"
+          <motion.path d={optPath} fill="none" stroke="var(--green-neon)" strokeWidth={2} strokeLinecap="round"
             initial={{ pathLength: 0 }} animate={{ pathLength: drawn ? 1 : 0 }}
             transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
           />
 
           {/* Live pulse at end of opt line */}
           <motion.circle cx={lastOptX - 2} cy={lastOptY} r={5}
-            fill="#00FF85" fillOpacity={0.12}
+            fill="var(--green-neon)" fillOpacity={0.12}
             animate={{ r: [5, 11, 5], fillOpacity: [0.12, 0, 0.12] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: 1.6 }}
           />
-          <motion.circle cx={lastOptX - 2} cy={lastOptY} r={2.5} fill="#00FF85"
+          <motion.circle cx={lastOptX - 2} cy={lastOptY} r={2.5} fill="var(--green-neon)"
             initial={{ opacity: 0 }} animate={{ opacity: drawn ? 1 : 0 }} transition={{ delay: 1.6 }}
           />
 
@@ -233,21 +232,21 @@ function LatencyDualChart() {
             const oyRaw = CH - ((optHist[hoverIdx] - minV) / (maxV - minV)) * CH;
             return (
               <>
-                <line x1={hx} y1={0} x2={hx} y2={CH} stroke="rgba(255,255,255,0.1)" strokeWidth={1} strokeDasharray="3 4" />
-                <circle cx={hx} cy={byRaw} r={3.5} fill="#334E3E" stroke="#556B5E" strokeWidth={1} />
-                <circle cx={hx} cy={oyRaw} r={3.5} fill="#00FF85" stroke="#00FF85" strokeWidth={1} />
+                <line x1={hx} y1={0} x2={hx} y2={CH} stroke="var(--text-disabled)" strokeWidth={1} strokeDasharray="3 4" />
+                <circle cx={hx} cy={byRaw} r={3.5} fill="var(--green-dark)" stroke="var(--border-strong)" strokeWidth={1} />
+                <circle cx={hx} cy={oyRaw} r={3.5} fill="var(--green-neon)" stroke="var(--green-neon)" strokeWidth={1} />
               </>
             );
           })()}
 
           <defs>
             <linearGradient id="baseGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"   stopColor="#334E3E" stopOpacity={0.15} />
-              <stop offset="100%" stopColor="#334E3E" stopOpacity={0} />
+              <stop offset="0%"   stopColor="var(--green-dark)" stopOpacity={0.15} />
+              <stop offset="100%" stopColor="var(--green-dark)" stopOpacity={0} />
             </linearGradient>
             <linearGradient id="optGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"   stopColor="#00FF85" stopOpacity={0.1} />
-              <stop offset="100%" stopColor="#00FF85" stopOpacity={0} />
+              <stop offset="0%"   stopColor="var(--green-neon)" stopOpacity={0.1} />
+              <stop offset="100%" stopColor="var(--green-neon)" stopOpacity={0} />
             </linearGradient>
           </defs>
         </svg>
@@ -258,37 +257,37 @@ function LatencyDualChart() {
             position: 'absolute', top: 8,
             left: `${Math.min((hoverIdx / (baselineHist.length - 1)) * 100, 72)}%`,
             transform: 'translateX(-50%)',
-            background: 'rgba(11,20,16,0.96)', border: '1px solid rgba(0,255,133,0.2)',
+            background: 'var(--bg-surface)', border: '1px solid var(--glow-overlay)',
             borderRadius: 6, padding: '6px 10px', pointerEvents: 'none',
             fontFamily: 'JetBrains Mono, monospace', fontSize: 9, zIndex: 10,
           }}>
-            <div style={{ color: '#334E3E', marginBottom: 3 }}>
-              BASELINE <span style={{ color: '#6C7C73' }}>{baselineHist[hoverIdx].toFixed(0)}ms</span>
+            <div style={{ color: 'var(--green-dark)', marginBottom: 3 }}>
+              BASELINE <span style={{ color: 'var(--text-muted)' }}>{baselineHist[hoverIdx].toFixed(0)}ms</span>
             </div>
-            <div style={{ color: '#00FF85' }}>
-              QNX <span style={{ color: '#00FF85', fontWeight: 700 }}>{optHist[hoverIdx].toFixed(1)}ms</span>
+            <div style={{ color: 'var(--green-neon)' }}>
+              QNX <span style={{ color: 'var(--green-neon)', fontWeight: 700 }}>{optHist[hoverIdx].toFixed(1)}ms</span>
             </div>
           </div>
         )}
 
         {/* Ticker row */}
         <div style={{
-          background: 'rgba(0,0,0,0.5)', borderTop: '1px solid rgba(0,255,133,0.06)',
-          padding: '7px 12px', display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center',
+          background: 'var(--bg-primary)', borderTop: '1px solid var(--glow-overlay)',
+          padding: '7px 12px', display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center',
         }}>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', fontFamily: 'JetBrains Mono, monospace' }}>
-              <span style={{ display: 'inline-block', width: 10, height: 2, background: '#334E3E', marginRight: 5, verticalAlign: 'middle' }} />
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 9, color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace' }}>
+              <span style={{ display: 'inline-block', width: 10, height: 2, background: 'var(--green-dark)', marginRight: 5, verticalAlign: 'middle' }} />
               PRE-OPT avg {(SEED_BASELINE.reduce((a, b) => a + b, 0) / SEED_BASELINE.length).toFixed(0)}ms
             </span>
-            <span style={{ fontSize: 9, color: '#00FF85', fontFamily: 'JetBrains Mono, monospace' }}>
-              <span style={{ display: 'inline-block', width: 10, height: 2, background: '#00FF85', marginRight: 5, verticalAlign: 'middle' }} />
+            <span style={{ fontSize: 9, color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace' }}>
+              <span style={{ display: 'inline-block', width: 10, height: 2, background: 'var(--green-neon)', marginRight: 5, verticalAlign: 'middle' }} />
               QNX avg {(SEED_OPT.reduce((a, b) => a + b, 0) / SEED_OPT.length).toFixed(1)}ms
             </span>
           </div>
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: 16, fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: 'rgba(255,255,255,0.25)' }}>
-            <span>P95 <span style={{ color: '#2ED3FF' }}>{jitter(14.2, 0).toFixed(1)}ms</span></span>
-            <span>P99 <span style={{ color: '#2ED3FF' }}>{jitter(21.7, 0).toFixed(1)}ms</span></span>
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 12, fontFamily: 'JetBrains Mono, monospace', fontSize: 9, color: 'var(--text-muted)' }}>
+            <span>P95 <span style={{ color: 'var(--status-info)' }}>{jitter(14.2, 0).toFixed(1)}ms</span></span>
+            <span>P99 <span style={{ color: 'var(--status-info)' }}>{jitter(21.7, 0).toFixed(1)}ms</span></span>
           </div>
         </div>
       </div>
@@ -317,18 +316,16 @@ function MemoryWaterfall() {
 
   return (
     <div ref={ref} style={{ flex: '1 1 240px', minWidth: 0 }}>
-      <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.14em', marginBottom: 14 }}>
+      <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.14em', marginBottom: 14 }}>
         MEMORY FOOTPRINT REDUCTION
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {MEMORY_STEPS.map((step, i) => (
-          <div key={step.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {/* Label */}
-            <div style={{ width: 88, fontSize: 8.5, color: 'rgba(255,255,255,0.3)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.04em', textAlign: 'right', flexShrink: 0 }}>
+          <div key={step.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ width: 80, fontSize: 8.5, color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.04em', textAlign: 'right', flexShrink: 0 }}>
               {step.label}
             </div>
-            {/* Bar */}
-            <div style={{ flex: 1, height: 22, background: 'rgba(255,255,255,0.04)', borderRadius: 3, overflow: 'hidden', position: 'relative' }}>
+            <div style={{ flex: 1, height: 20, background: 'var(--bg-primary)', borderRadius: 3, overflow: 'hidden', position: 'relative' }}>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: visible ? `${(step.gb / maxGB) * 100}%` : 0 }}
@@ -346,29 +343,27 @@ function MemoryWaterfall() {
                   transition={{ delay: 1.2 }}
                   style={{
                     position: 'absolute', inset: 0,
-                    background: 'linear-gradient(90deg, transparent 60%, rgba(0,255,133,0.2) 100%)',
+                    background: 'linear-gradient(90deg, transparent 60%, var(--glow-overlay) 100%)',
                     pointerEvents: 'none',
                   }}
                 />
               )}
             </div>
-            {/* Value */}
-            <div style={{ width: 40, fontSize: 9, color: i === MEMORY_STEPS.length - 1 ? '#00FF85' : 'rgba(255,255,255,0.35)', fontFamily: 'JetBrains Mono, monospace', fontWeight: i === MEMORY_STEPS.length - 1 ? 700 : 400, flexShrink: 0 }}>
+            <div style={{ width: 36, fontSize: 9, color: i === MEMORY_STEPS.length - 1 ? 'var(--green-neon)' : 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', fontWeight: i === MEMORY_STEPS.length - 1 ? 700 : 400, flexShrink: 0 }}>
               {step.gb}GB
             </div>
           </div>
         ))}
       </div>
-      {/* Reduction callout */}
       <div style={{
         marginTop: 16, padding: '10px 14px', borderRadius: 7,
-        background: 'rgba(0,255,133,0.05)', border: '1px solid rgba(0,255,133,0.15)',
+        background: 'var(--glow-overlay)', border: '1px solid var(--glow-overlay)',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
       }}>
-        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.06em' }}>
+        <div style={{ fontSize: 9, color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.06em' }}>
           TOTAL REDUCTION
         </div>
-        <div style={{ fontSize: 20, fontWeight: 700, color: '#00FF85', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '-0.02em' }}>
+        <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '-0.02em' }}>
           <AnimatedNumber target={87.2} decimals={1} suffix="%" duration={1.8} />
         </div>
       </div>
@@ -396,27 +391,27 @@ function ThroughputChart() {
   const areaPath = buildAreaPath(hist, TW, TH, minV, maxV);
 
   return (
-    <div style={{ flex: '0 0 auto' }}>
-      <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', marginBottom: 8, fontFamily: 'JetBrains Mono, monospace' }}>
+    <div style={{ flex: '0 0 auto', minWidth: 0 }}>
+      <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.12em', marginBottom: 8, fontFamily: 'JetBrains Mono, monospace' }}>
         THROUGHPUT — REQ/S
       </div>
-      <div style={{ fontSize: 22, fontWeight: 700, color: '#2ED3FF', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 10 }}>
+      <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--status-info)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 10 }}>
         <AnimatedNumber target={hist[hist.length - 1]} decimals={0} suffix="" duration={0.4} />
-        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', marginLeft: 4 }}>req/s</span>
+        <span style={{ fontSize: 10, color: 'var(--text-muted)', marginLeft: 4 }}>req/s</span>
       </div>
-      <div style={{ borderRadius: 6, overflow: 'hidden', border: '1px solid rgba(46,211,255,0.08)' }}>
-        <svg viewBox={`0 0 ${TW} ${TH}`} width="100%" height={TH} style={{ background: 'rgba(5,10,7,0.6)', display: 'block' }}>
+      <div style={{ borderRadius: 6, overflow: 'hidden', border: '1px solid var(--glow-overlay)' }}>
+        <svg viewBox={`0 0 ${TW} ${TH}`} width="100%" height={TH} style={{ background: 'var(--bg-primary)', display: 'block' }}>
           {[0.33, 0.66].map(f => (
-            <line key={f} x1={0} y1={TH * f} x2={TW} y2={TH * f} stroke="rgba(255,255,255,0.03)" strokeWidth={1} />
+            <line key={f} x1={0} y1={TH * f} x2={TW} y2={TH * f} stroke="var(--glow-grid)" strokeWidth={1} />
           ))}
           <motion.path d={areaPath} fill="url(#tpGrad)" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }} />
-          <motion.path d={linePath} fill="none" stroke="#2ED3FF" strokeWidth={1.5} strokeLinecap="round"
+          <motion.path d={linePath} fill="none" stroke="var(--status-info)" strokeWidth={1.5} strokeLinecap="round"
             initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           />
           <defs>
             <linearGradient id="tpGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"   stopColor="#2ED3FF" stopOpacity={0.12} />
-              <stop offset="100%" stopColor="#2ED3FF" stopOpacity={0} />
+              <stop offset="0%"   stopColor="var(--status-info)" stopOpacity={0.12} />
+              <stop offset="100%" stopColor="var(--status-info)" stopOpacity={0} />
             </linearGradient>
           </defs>
         </svg>
@@ -445,15 +440,15 @@ function GpuUtilChart() {
   const maxV = 100;
 
   return (
-    <div style={{ flex: '0 0 auto' }}>
-      <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', marginBottom: 8, fontFamily: 'JetBrains Mono, monospace' }}>
+    <div style={{ flex: '0 0 auto', minWidth: 0 }}>
+      <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.12em', marginBottom: 8, fontFamily: 'JetBrains Mono, monospace' }}>
         GPU UTILIZATION
       </div>
-      <div style={{ fontSize: 22, fontWeight: 700, color: '#FFB020', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 10 }}>
+      <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--status-warn)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: 10 }}>
         <AnimatedNumber target={bars[bars.length - 1]} decimals={0} suffix="%" duration={0.3} />
       </div>
-      <div style={{ borderRadius: 6, overflow: 'hidden', border: '1px solid rgba(255,176,32,0.08)' }}>
-        <svg viewBox={`0 0 ${GW} ${GH}`} width="100%" height={GH} style={{ background: 'rgba(5,10,7,0.6)', display: 'block' }}>
+      <div style={{ borderRadius: 6, overflow: 'hidden', border: '1px solid var(--glow-overlay)' }}>
+        <svg viewBox={`0 0 ${GW} ${GH}`} width="100%" height={GH} style={{ background: 'var(--bg-primary)', display: 'block' }}>
           {bars.map((v, i) => {
             const bh = (v / maxV) * GH;
             const x  = i * (GW / GPU_BARS) + 1;
@@ -463,13 +458,12 @@ function GpuUtilChart() {
                 key={i}
                 x={x} y={GH - bh} width={barW} height={bh}
                 rx={1.5}
-                fill={isLast ? '#FFB020' : `rgba(255,176,32,${0.15 + (v / maxV) * 0.5})`}
+                fill={isLast ? 'var(--status-warn)' : `rgba(255,176,32,${0.15 + (v / maxV) * 0.5})`}
                 animate={{ height: bh, y: GH - bh }}
                 transition={{ duration: 0.35, ease: 'easeOut' }}
               />
             );
           })}
-          {/* 80% threshold line */}
           <line x1={0} y1={GH * 0.2} x2={GW} y2={GH * 0.2} stroke="rgba(255,176,32,0.2)" strokeWidth={1} strokeDasharray="3 4" />
           <text x={4} y={GH * 0.2 - 3} fill="rgba(255,176,32,0.3)" fontSize={7} fontFamily="JetBrains Mono, monospace">80%</text>
         </svg>
@@ -485,18 +479,16 @@ function GpuUtilChart() {
 interface StatDef { count: number; suffix: string; label: string; desc: string; float?: boolean; color?: string; }
 
 const STATS: StatDef[] = [
-  { count: 847,  suffix: 'K+', label: 'Models Optimized',  desc: 'Compilation jobs processed',    color: '#00FF85' },
-  { count: 12.4, suffix: '×',  label: 'Avg. Speedup',      desc: 'Inference acceleration',          color: '#00FF85', float: true },
-  { count: 23,   suffix: '',   label: 'Frameworks',         desc: 'Supported ML runtimes',           color: '#2ED3FF' },
-  { count: 150,  suffix: '+',  label: 'Deploy Targets',     desc: 'Hardware & cloud platforms',      color: '#FFB020' },
+  { count: 847,  suffix: 'K+', label: 'Models Optimized',  desc: 'Compilation jobs processed',    color: 'var(--green-neon)' },
+  { count: 12.4, suffix: '×',  label: 'Avg. Speedup',      desc: 'Inference acceleration',          color: 'var(--green-neon)', float: true },
+  { count: 23,   suffix: '',   label: 'Frameworks',         desc: 'Supported ML runtimes',           color: 'var(--status-info)' },
+  { count: 150,  suffix: '+',  label: 'Deploy Targets',     desc: 'Hardware & cloud platforms',      color: 'var(--status-warn)' },
 ];
 
 function StatCounter({ stat, index }: { stat: StatDef; index: number }) {
   const [live, setLive] = useState<number | null>(null);
   const ref   = useRef<HTMLDivElement>(null);
-  const color = stat.color ?? '#00FF85';
-
-  // Tick live after initial animation completes
+  const color = stat.color ?? 'var(--green-neon)';
   useEffect(() => {
     if (live === null) return;
     if (!stat.float) return; // only tick speedup
@@ -515,8 +507,8 @@ function StatCounter({ stat, index }: { stat: StatDef; index: number }) {
       transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       style={{
         padding: '22px 24px',
-        background: '#0B1410',
-        border: '1px solid rgba(30,46,38,0.8)',
+        background: 'var(--bg-secondary)',
+        border: '1px solid var(--border-default)',
         borderRadius: 10,
         position: 'relative',
         overflow: 'hidden',
@@ -548,10 +540,10 @@ function StatCounter({ stat, index }: { stat: StatDef; index: number }) {
           duration={1.8}
         />
       </div>
-      <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em', marginBottom: 5 }}>
+      <div style={{ fontSize: 10, color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em', marginBottom: 5 }}>
         {stat.label.toUpperCase()}
       </div>
-      <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.28)' }}>
+      <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>
         {stat.desc}
       </div>
 
@@ -586,10 +578,10 @@ function FrameworkStrip() {
         {doubled.map((fw, i) => (
           <div key={i} style={{
             fontFamily: 'JetBrains Mono, monospace', fontSize: 10.5,
-            color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em',
-            border: '1px solid rgba(30,46,38,0.9)',
+            color: 'var(--text-muted)', letterSpacing: '0.1em',
+            border: '1px solid var(--border-default)',
             padding: '6px 14px', borderRadius: 5, whiteSpace: 'nowrap',
-            background: 'rgba(5,10,7,0.5)',
+            background: 'var(--bg-primary)',
             transition: 'all 0.15s',
           }}>
             {fw.toUpperCase()}
@@ -607,11 +599,11 @@ function FrameworkStrip() {
 function SectionDivider({ label }: { label: string }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-      <div style={{ width: 16, height: 1, background: '#00FF85' }} />
-      <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.25)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
+      <div style={{ width: 16, height: 1, background: 'var(--green-neon)' }} />
+      <span style={{ fontSize: 9, color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.15em' }}>
         {label}
       </span>
-      <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.04)' }} />
+      <div style={{ flex: 1, height: 1, background: 'var(--glow-grid)' }} />
     </div>
   );
 }
@@ -640,8 +632,8 @@ export default function StatsBar() {
       <div style={{
         position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
         backgroundImage: `
-          linear-gradient(rgba(0,255,133,0.01) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0,255,133,0.01) 1px, transparent 1px)
+          linear-gradient(rgba(0,255,133,0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,255,133,0.025) 1px, transparent 1px)
         `,
         backgroundSize: '48px 48px',
       }} />
@@ -673,7 +665,7 @@ export default function StatsBar() {
           }}>
             {/* Throughput card */}
             <div style={{
-              background: '#0B1410', border: '1px solid rgba(46,211,255,0.1)',
+              background: 'var(--bg-secondary)', border: '1px solid var(--border-default)',
               borderRadius: 10, padding: '18px 20px',
               position: 'relative', overflow: 'hidden',
             }}>
@@ -683,7 +675,7 @@ export default function StatsBar() {
 
             {/* GPU card */}
             <div style={{
-              background: '#0B1410', border: '1px solid rgba(255,176,32,0.1)',
+              background: 'var(--bg-secondary)', border: '1px solid var(--border-default)',
               borderRadius: 10, padding: '18px 20px',
               position: 'relative', overflow: 'hidden',
             }}>
@@ -693,29 +685,29 @@ export default function StatsBar() {
 
             {/* Live mini readout card */}
             <div style={{
-              background: '#0B1410', border: '1px solid rgba(30,46,38,0.8)',
+              background: 'var(--bg-secondary)', border: '1px solid var(--border-default)',
               borderRadius: 10, padding: '18px 20px',
               display: 'flex', flexDirection: 'column', gap: 10,
             }}>
-              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', fontFamily: 'JetBrains Mono, monospace', marginBottom: 4 }}>
+              <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.12em', fontFamily: 'JetBrains Mono, monospace', marginBottom: 4 }}>
                 SYSTEM STATUS
               </div>
               {[
-                { label: 'CACHE HIT RATE',    value: '74.2%',   color: '#00FF85' },
-                { label: 'ERROR RATE',         value: '0.03%',   color: '#00FF85' },
-                { label: 'ACTIVE JOBS',        value: '1,847',   color: '#2ED3FF' },
-                { label: 'MEM BANDWIDTH',      value: '3.2 TB/s',color: '#FFB020' },
-                { label: 'KERNEL VERSION',     value: '2.4.1',   color: 'rgba(255,255,255,0.5)' },
+                { label: 'CACHE HIT RATE',    value: '74.2%',   color: 'var(--green-neon)' },
+                { label: 'ERROR RATE',         value: '0.03%',   color: 'var(--green-neon)' },
+                { label: 'ACTIVE JOBS',        value: '1,847',   color: 'var(--status-info)' },
+                { label: 'MEM BANDWIDTH',      value: '3.2 TB/s',color: 'var(--status-warn)' },
+                { label: 'KERNEL VERSION',     value: '2.4.1',   color: 'var(--text-muted)' },
               ].map(({ label, value, color }) => (
-                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.28)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.06em' }}>{label}</span>
+                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '1px solid var(--glow-grid)' }}>
+                  <span style={{ fontSize: 9, color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.06em' }}>{label}</span>
                   <span style={{ fontSize: 10, color, fontWeight: 600, fontFamily: 'JetBrains Mono, monospace' }}>{value}</span>
                 </div>
               ))}
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
                 <motion.div animate={{ opacity: [1, 0.2, 1] }} transition={{ duration: 1.2, repeat: Infinity }}
-                  style={{ width: 5, height: 5, borderRadius: '50%', background: '#00FF85' }} />
-                <span style={{ fontSize: 8.5, color: '#00FF85', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>ALL SYSTEMS OPERATIONAL</span>
+                  style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--green-neon)' }} />
+                <span style={{ fontSize: 8.5, color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>ALL SYSTEMS OPERATIONAL</span>
               </div>
             </div>
           </div>
@@ -748,8 +740,16 @@ export default function StatsBar() {
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         @media (max-width: 768px) {
-          #stats-bar { padding-left: 20px !important; padding-right: 20px !important; padding-top: 48px !important; }
+          #stats-bar { padding: 40px 20px !important; gap: 32px !important; }
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 425px) {
+          #stats-bar { padding: 32px 16px !important; gap: 28px !important; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+        }
+        @media (max-width: 375px) {
+          #stats-bar { padding: 24px 12px !important; gap: 24px !important; }
+          .stats-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

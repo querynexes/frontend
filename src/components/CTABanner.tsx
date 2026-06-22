@@ -133,7 +133,7 @@ export default function CTABanner() {
               fontWeight: 600,
               fontSize: '15px',
               padding: '14px 28px',
-              borderRadius: '8px',
+              borderRadius: '6px',
               border: 'none',
               cursor: 'none',
               textDecoration: 'none',
@@ -164,7 +164,7 @@ export default function CTABanner() {
               fontWeight: 500,
               fontSize: '15px',
               padding: '13px 26px',
-              borderRadius: '8px',
+              borderRadius: '6px',
               border: '2px solid var(--bg-primary)',
               cursor: 'none',
               textDecoration: 'none',
@@ -215,7 +215,13 @@ export default function CTABanner() {
 
       <style>{`
         @media (max-width: 768px) {
-          #cta-banner { padding-left: 20px !important; padding-right: 20px !important; }
+          #cta-banner { padding: 64px 24px !important; }
+        }
+        @media (max-width: 425px) {
+          #cta-banner { padding: 48px 16px !important; }
+        }
+        @media (max-width: 375px) {
+          #cta-banner { padding: 40px 12px !important; }
         }
       `}</style>
     </section>

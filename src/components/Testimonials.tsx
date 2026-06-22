@@ -145,7 +145,13 @@ export default function Testimonials() {
           .test-responsive { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 768px) {
-          #testimonials { padding-left: 20px !important; padding-right: 20px !important; }
+          #testimonials { padding: 64px 24px !important; }
+        }
+        @media (max-width: 425px) {
+          #testimonials { padding: 48px 16px !important; }
+        }
+        @media (max-width: 375px) {
+          #testimonials { padding: 40px 12px !important; }
         }
       `}</style>
     </section>

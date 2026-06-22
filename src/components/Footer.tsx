@@ -48,8 +48,8 @@ export default function Footer() {
             gap: '10px',
           }}>
             <svg width="22" height="22" viewBox="0 0 28 28">
-              <path d="M14 3 L24 8.5 L24 19.5 L14 25 L4 19.5 L4 8.5 Z" stroke="#00FF85" strokeWidth="1.5" fill="none" />
-              <path d="M14 9 L19 12 L19 18 L14 21 L9 18 L9 12 Z" stroke="#00A854" strokeWidth="1" fill="none" />
+              <path d="M14 3 L24 8.5 L24 19.5 L14 25 L4 19.5 L4 8.5 Z" stroke="var(--green-neon)" strokeWidth="1.5" fill="none" />
+              <path d="M14 9 L19 12 L19 18 L14 21 L9 18 L9 12 Z" stroke="var(--green-deep)" strokeWidth="1" fill="none" />
             </svg>
             QUERYNEXES
           </div>
@@ -189,7 +189,13 @@ export default function Footer() {
           .footer-responsive {
             grid-template-columns: 1fr !important;
           }
-          footer { padding-left: 20px !important; padding-right: 20px !important; }
+          footer { padding: 48px 24px 28px !important; }
+        }
+        @media (max-width: 425px) {
+          footer { padding: 40px 16px 24px !important; }
+        }
+        @media (max-width: 375px) {
+          footer { padding: 32px 12px 20px !important; }
         }
       `}</style>
     </footer>

@@ -234,6 +234,13 @@ export default function PipelineViz() {
         @media (max-width: 768px) {
           .pipeline-scroll { flex-direction: column !important; overflow-x: visible !important; }
           .pipeline-scroll > div { flex-direction: column !important; }
+          #pipeline { padding: 64px 24px !important; }
+        }
+        @media (max-width: 425px) {
+          #pipeline { padding: 48px 16px !important; }
+        }
+        @media (max-width: 375px) {
+          #pipeline { padding: 40px 12px !important; }
         }
       `}</style>
     </section>

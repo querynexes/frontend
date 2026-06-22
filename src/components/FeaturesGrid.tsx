@@ -190,7 +190,13 @@ export default function FeaturesGrid() {
         }
         @media (max-width: 640px) {
           .features-responsive { grid-template-columns: 1fr !important; }
-          #features { padding-left: 20px !important; padding-right: 20px !important; }
+          #features { padding: 64px 20px !important; }
+        }
+        @media (max-width: 425px) {
+          #features { padding: 48px 16px !important; }
+        }
+        @media (max-width: 375px) {
+          #features { padding: 40px 12px !important; }
         }
       `}</style>
     </section>
