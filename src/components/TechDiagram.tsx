@@ -130,13 +130,13 @@ export default function TechDiagram() {
     <section
       id="tech-diagram"
       ref={containerRef}
-      style={{
-        padding: '120px 48px',
-        background: 'var(--bg-primary, #020406)',
-        color: '#fff',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
+        style={{
+          padding: '120px 48px',
+          background: 'var(--bg-primary)',
+          color: 'var(--text-primary)',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
     >
       {/* --- Fullscreen Gallery Lightbox --- */}
       <AnimatePresence>
@@ -191,8 +191,8 @@ export default function TechDiagram() {
               onClick={e => e.stopPropagation()}
             >
               <h3 style={{ fontSize: '24px', margin: '0 0 8px 0', fontFamily: 'Space Grotesk, sans-serif' }}>{GALLERY_ITEMS[activeGalleryIdx].title}</h3>
-              <p style={{ color: '#00FF85', fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', margin: 0 }}>{GALLERY_ITEMS[activeGalleryIdx].desc}</p>
-              <div style={{ marginTop: '16px', fontSize: '12px', color: '#64748B', fontFamily: 'JetBrains Mono, monospace' }}>
+              <p style={{ color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', fontSize: '14px', margin: 0 }}>{GALLERY_ITEMS[activeGalleryIdx].desc}</p>
+              <div style={{ marginTop: '16px', fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace' }}>
                 {activeGalleryIdx + 1} OF {GALLERY_ITEMS.length}
               </div>
             </motion.div>
@@ -207,9 +207,9 @@ export default function TechDiagram() {
         
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-          <span style={{ color: '#00FF85', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', letterSpacing: '0.15em' }}>// ARCHITECTURE OVERVIEW</span>
-          <h2 style={{ fontSize: '40px', fontWeight: 700, margin: '16px 0', fontFamily: 'Space Grotesk, sans-serif' }}>The Optimization Forge</h2>
-          <p style={{ color: '#8892B0', maxWidth: '600px', margin: '0 auto', fontSize: '16px', lineHeight: 1.6 }}>
+          <span className="section-label">// ARCHITECTURE OVERVIEW</span>
+          <h2 className="section-title">The Optimization Forge</h2>
+          <p className="section-sub">
             Explore our hardware telemetry below. QueryNexes dynamically restructures computational graphs to extract maximum FLOPs from target silicon.
           </p>
         </div>
@@ -217,8 +217,8 @@ export default function TechDiagram() {
         {/* Dual-Control Carousel (Scroll + Drag + Click) */}
         <div style={{ marginBottom: '80px', position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', padding: '0 20px' }}>
-            <span style={{ fontSize: '11px', color: '#8892B0', fontFamily: 'JetBrains Mono, monospace' }}>TELEMETRY & VISUALIZERS</span>
-            <span style={{ fontSize: '11px', color: '#00FF85', fontFamily: 'JetBrains Mono, monospace', opacity: 0.8, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '11px', color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace' }}>TELEMETRY & VISUALIZERS</span>
+            <span style={{ fontSize: '11px', color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', opacity: 0.8, display: 'flex', alignItems: 'center', gap: '8px' }}>
               SCROLL OR DRAG TO EXPLORE <ChevronRight size={14} />
             </span>
           </div>
@@ -241,7 +241,7 @@ export default function TechDiagram() {
                     whileHover={{ y: -5, boxShadow: '0 12px 32px rgba(0,255,133,0.15)' }}
                     style={{ 
                       width: '320px', height: '180px', 
-                      border: '1px solid #1A2633', borderRadius: '12px', 
+                      border: '1px solid var(--border-default)', borderRadius: '12px', 
                       overflow: 'hidden', position: 'relative',
                       cursor: 'pointer'
                     }}
@@ -250,11 +250,11 @@ export default function TechDiagram() {
                     <img src={item.img} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, transition: 'opacity 0.3s' }} className="gallery-img" />
                     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)', pointerEvents: 'none' }} />
                     <div style={{ position: 'absolute', bottom: '16px', left: '16px', pointerEvents: 'none' }}>
-                      <div style={{ fontSize: '10px', color: '#00FF85', fontFamily: 'JetBrains Mono, monospace', marginBottom: '4px' }}>{item.id.toString().padStart(2, '0')} //</div>
-                      <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff', fontFamily: 'Space Grotesk, sans-serif' }}>{item.title}</div>
+                      <div style={{ fontSize: '10px', color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', marginBottom: '4px' }}>{item.id.toString().padStart(2, '0')} //</div>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'Space Grotesk, sans-serif' }}>{item.title}</div>
                     </div>
                     <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0,0,0,0.5)', padding: '6px', borderRadius: '4px', backdropFilter: 'blur(4px)' }} className="maximize-icon">
-                      <Maximize2 size={14} color="#00FF85" />
+                      <Maximize2 size={14} style={{ color: 'var(--green-neon)' }} />
                     </div>
                   </motion.div>
                 ))}
@@ -273,8 +273,8 @@ export default function TechDiagram() {
           
           {/* Left: The Pipeline Diagram */}
           <div style={{
-            background: '#060B11',
-            border: '1px solid #1A2633',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-default)',
             borderRadius: '16px',
             padding: '40px',
             boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
@@ -295,8 +295,8 @@ export default function TechDiagram() {
                           key={node.id}
                           onMouseEnter={() => setActiveNode(node)}
                           style={{
-                            background: isActive ? `${layer.color}10` : '#0A0F14',
-                            border: `1px solid ${isActive ? layer.color : '#1A2633'}`,
+                            background: isActive ? `${layer.color}10` : 'var(--bg-primary)',
+                            border: `1px solid ${isActive ? layer.color : 'var(--border-default)'}`,
                             borderRadius: '8px',
                             padding: '16px 12px',
                             cursor: 'pointer',
@@ -305,9 +305,9 @@ export default function TechDiagram() {
                             transform: isActive ? 'translateY(-2px)' : 'none',
                           }}
                         >
-                          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: isActive ? layer.color : '#334155', marginBottom: '12px', transition: 'background 0.2s' }} />
-                          <div style={{ fontSize: '13px', fontWeight: 600, color: isActive ? '#fff' : '#E2E8F0', marginBottom: '4px' }}>{node.label}</div>
-                          <div style={{ fontSize: '11px', color: '#8892B0', fontFamily: 'JetBrains Mono, monospace' }}>{node.tech}</div>
+                          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: isActive ? layer.color : 'var(--text-disabled)', marginBottom: '12px', transition: 'background 0.2s' }} />
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>{node.label}</div>
+                          <div style={{ fontSize: '11px', color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace' }}>{node.tech}</div>
                         </div>
                       )
                     })}
@@ -319,16 +319,16 @@ export default function TechDiagram() {
 
           {/* Right: Dynamic Inspector Panel */}
           <div style={{
-            background: '#0A0F14',
-            border: '1px solid #1A2633',
+            background: 'var(--bg-surface)',
+            border: '1px solid var(--border-default)',
             borderRadius: '16px',
             padding: '40px',
             display: 'flex', flexDirection: 'column',
             height: '100%' // Matches left side height exactly
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid #1A2633', paddingBottom: '16px', marginBottom: '32px' }}>
-              <div style={{ width: '8px', height: '8px', background: '#00FF85', animation: 'pulse 2s infinite' }} />
-              <span style={{ fontSize: '11px', color: '#8892B0', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>ACTIVE NODE INSPECTOR</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--border-default)', paddingBottom: '16px', marginBottom: '32px' }}>
+              <div style={{ width: '8px', height: '8px', background: 'var(--green-neon)', animation: 'pulse 2s infinite' }} />
+              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em' }}>ACTIVE NODE INSPECTOR</span>
             </div>
 
             <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -340,22 +340,22 @@ export default function TechDiagram() {
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <div style={{ fontSize: '12px', color: '#00FF85', fontFamily: 'JetBrains Mono, monospace', marginBottom: '12px' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', marginBottom: '12px' }}>
                     // {activeNode.tech.toUpperCase()}
                   </div>
                   <h3 style={{ fontSize: '32px', fontWeight: 700, margin: '0 0 24px 0', fontFamily: 'Space Grotesk, sans-serif' }}>
                     {activeNode.label}
                   </h3>
-                  <p style={{ color: '#94A3B8', fontSize: '16px', lineHeight: 1.8, marginBottom: '40px' }}>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '16px', lineHeight: 1.8, marginBottom: '40px' }}>
                     {activeNode.details}
                   </p>
 
-                  <div style={{ background: '#030508', border: '1px solid #1A2633', padding: '24px', borderRadius: '8px' }}>
-                    <div style={{ fontSize: '10px', color: '#64748B', fontFamily: 'JetBrains Mono, monospace', marginBottom: '12px' }}>SYSTEM LOG OUTPUT</div>
-                    <div style={{ fontSize: '12px', color: '#4ADE80', fontFamily: 'JetBrains Mono, monospace', display: 'flex', flexDirection: 'column', gap: '8px', lineHeight: 1.5 }}>
+                  <div style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-default)', padding: '24px', borderRadius: '8px' }}>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)', fontFamily: 'JetBrains Mono, monospace', marginBottom: '12px' }}>SYSTEM LOG OUTPUT</div>
+                    <div style={{ fontSize: '12px', color: 'var(--green-stable)', fontFamily: 'JetBrains Mono, monospace', display: 'flex', flexDirection: 'column', gap: '8px', lineHeight: 1.5 }}>
                       <span>&gt; Initialize module: {activeNode.id.toUpperCase()}_PROC</span>
-                      <span style={{ color: '#94A3B8' }}>&gt; Checking hardware bounds... [VERIFIED]</span>
-                      <span style={{ color: '#94A3B8' }}>&gt; Allocating memory buffers... [SUCCESS]</span>
+                      <span style={{ color: 'var(--text-muted)' }}>&gt; Checking hardware bounds... [VERIFIED]</span>
+                      <span style={{ color: 'var(--text-muted)' }}>&gt; Allocating memory buffers... [SUCCESS]</span>
                       <span>&gt; Awaiting execution trigger...</span>
                     </div>
                   </div>
@@ -375,7 +375,7 @@ export default function TechDiagram() {
         .gallery-card .maximize-icon { opacity: 0; transition: opacity 0.2s; }
         .gallery-card:hover .maximize-icon { opacity: 1; }
         .gallery-card:hover .gallery-img { opacity: 1 !important; }
-        .gallery-nav:hover { background: rgba(0, 255, 133, 0.2) !important; border-color: #00FF85 !important; }
+        .gallery-nav:hover { background: rgba(0, 255, 133, 0.2) !important; border-color: var(--green-neon) !important; }
         
         @media (max-width: 1024px) {
           .command-center-layout { grid-template-columns: 1fr !important; }

@@ -86,9 +86,9 @@ export default function App() {
         <Pricing />
         <Testimonials />
         <FAQ />
-        <CTABanner />
         <AboutSection />
         <ContactSection />
+        <CTABanner />
         <Footer />
       </div>
 
