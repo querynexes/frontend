@@ -25,10 +25,8 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Platform', href: '#features' },
-    { label: 'Solutions', href: '#features' },
     { label: 'Simulation', href: '#simulation' },
     { label: 'Pricing', href: '#pricing' },
-    { label: 'Docs', href: '#faq' },
     { label: 'About', href: '#about' },
     { label: 'Contact', href: '#contact' },
   ];

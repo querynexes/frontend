@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import AccordionGallery from './AccordionGallery'; // Adjust path based on your folder structure
 
 export default function AboutSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -35,12 +36,17 @@ export default function AboutSection() {
         <span className="section-label reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
           / ABOUT
         </span>
-        <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
+        <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', marginBottom: '16px' }}>
           The AI Compilation Engine
         </h2>
-        <p className="section-sub reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
+        <p className="section-sub reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', marginBottom: '48px', maxWidth: '800px' }}>
           From research prototype to production deployment — QueryNexes bridges the gap with a hardware-aware compilation pipeline designed for the modern AI stack.
         </p>
+
+        {/* The New Interactive Gallery Component */}
+        <div className="reveal-item" style={{ opacity: 0, transition: 'opacity 0.8s ease' }}>
+          <AccordionGallery />
+        </div>
 
         <div style={{
           display: 'grid',
@@ -167,7 +173,7 @@ export default function AboutSection() {
           >
             <iframe
               title="QueryNexes Office Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019640085158!2d-122.4015!3d37.7898!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085807f4f4f4f4f%3A0x4f4f4f4f4f4f4f4f!2s44%20Montgomery%20St%2C%20San%20Francisco%2C%20CA%2094104!5e0!3m2!1sen!2sus!4v1"
+              src="https://maps.google.com/maps?q=Colombo&t=&z=13&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="100%"
               style={{ minHeight: '200px', border: 'none', display: 'block' }}
