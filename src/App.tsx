@@ -12,6 +12,8 @@ import Pricing from './components/Pricing';
 import Testimonials from './components/Testimonials';
 import FAQ from './components/FAQ';
 import CTABanner from './components/CTABanner';
+import AboutSection from './components/AboutSection';
+import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import { useCustomCursor } from './hooks/useCustomCursor';
 import { useScrollReveal } from './hooks/useScrollReveal';
@@ -85,6 +87,8 @@ export default function App() {
         <Testimonials />
         <FAQ />
         <CTABanner />
+        <AboutSection />
+        <ContactSection />
         <Footer />
       </div>
 

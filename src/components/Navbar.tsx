@@ -2,12 +2,23 @@ import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { playTick } from '../utils/audio';
 
+const SECTION_IDS = ['hero', 'features', 'simulation', 'pricing', 'faq', 'about', 'contact'];
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [active, setActive] = useState('');
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 80);
+      let current = 'hero';
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 200) current = id;
+      }
+      setActive(current);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -18,6 +29,8 @@ export default function Navbar() {
     { label: 'Simulation', href: '#simulation' },
     { label: 'Pricing', href: '#pricing' },
     { label: 'Docs', href: '#faq' },
+    { label: 'About', href: '#about' },
+    { label: 'Contact', href: '#contact' },
   ];
 
   const scrollTo = (href: string) => {
@@ -80,7 +93,7 @@ export default function Navbar() {
                 style={{
                   fontFamily: 'Space Grotesk, sans-serif',
                   fontSize: '14px',
-                  color: 'var(--text-secondary)',
+                  color: active === link.href.slice(1) ? 'var(--green-neon)' : 'var(--text-secondary)',
                   textDecoration: 'none',
                   position: 'relative',
                   paddingBottom: '4px',
@@ -97,23 +110,6 @@ export default function Navbar() {
 
         {/* Actions */}
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }} className="hidden md:flex">
-          <button
-            onMouseEnter={playTick}
-            style={{
-              background: 'none',
-              border: 'none',
-              fontFamily: 'Space Grotesk, sans-serif',
-              fontSize: '14px',
-              color: 'var(--text-muted)',
-              cursor: 'none',
-              padding: '8px 16px',
-              transition: 'color 0.2s',
-            }}
-            onMouseOver={e => (e.currentTarget.style.color = 'var(--text-primary)')}
-            onMouseOut={e => (e.currentTarget.style.color = 'var(--text-muted)')}
-          >
-            Sign In
-          </button>
           <button
             className="btn-primary"
             onMouseEnter={playTick}
