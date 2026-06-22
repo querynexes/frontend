@@ -1,22 +1,33 @@
 import { Github, Linkedin, Twitter } from 'lucide-react';
 import { playTick } from '../utils/audio';
 
+type Page = 'home' | 'product' | 'privacy' | 'terms';
+
 const LINKS = {
-  Platform: ['Features', 'Simulation', 'Performance', 'API'],
-  Solutions: ['Cloud AI', 'Edge AI', 'Enterprise', 'Research'],
-  Resources: ['Documentation', 'SDK Reference', 'Blog', 'Status'],
-  Company: ['About', 'Careers', 'Contact', 'Privacy'],
+  Platform: ['Features', 'Simulation', 'API'],
+  Resources: ['Documentation', 'FAQ', 'Testimonials'],
+  Company: ['About', 'Contact', 'Privacy Policy', 'Terms & Conditions'],
 };
 
 const HREF_MAP: Record<string, string> = {
   Features: '#features',
   Simulation: '#simulation',
-  Performance: '#features',
   API: '#faq',
   Documentation: '#faq',
+  FAQ: '#faq',
+  Testimonials: '#testimonials',
+  About: '#about',
+  Contact: '#contact',
 };
 
-export default function Footer() {
+const PAGE_MAP: Record<string, Page> = {
+  'Privacy Policy': 'privacy',
+  'Terms & Conditions': 'terms',
+};
+
+export default function Footer({ onNavigate }: {
+  onNavigate?: (page: Page) => void;
+} = {}) {
   const scrollTo = (id: string) => {
     const el = document.querySelector(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -121,11 +132,20 @@ export default function Footer() {
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {links.map(link => {
                 const href = HREF_MAP[link];
+                const pageTarget = PAGE_MAP[link];
                 return (
                   <li key={link}>
                     <a
-                      href={href || '#'}
-                      onClick={e => { if (href) { e.preventDefault(); scrollTo(href); } }}
+                      href={pageTarget ? `/${pageTarget}` : href || '#'}
+                      onClick={e => {
+                        if (pageTarget) {
+                          e.preventDefault();
+                          onNavigate?.(pageTarget);
+                        } else if (href) {
+                          e.preventDefault();
+                          scrollTo(href);
+                        }
+                      }}
                       onMouseEnter={playTick}
                       style={{
                         fontSize: '14px',

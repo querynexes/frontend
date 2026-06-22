@@ -4,12 +4,19 @@ import { playTick } from '../utils/audio';
 
 const SECTION_IDS = ['hero', 'features', 'simulation', 'pricing', 'faq', 'about', 'contact'];
 
-export default function Navbar() {
+type NavPage = 'home' | 'product' | 'privacy' | 'terms';
+
+export default function Navbar({ currentPage, onNavigate }: {
+  currentPage?: NavPage;
+  onNavigate?: (page: NavPage) => void;
+} = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [active, setActive] = useState('');
 
   useEffect(() => {
+    if (currentPage !== 'home') return;
+    setActive('hero');
     const onScroll = () => {
       setScrolled(window.scrollY > 80);
       let current = 'hero';
@@ -21,7 +28,7 @@ export default function Navbar() {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [currentPage]);
 
   const navLinks = [
     { label: 'Platform', href: '#features' },
@@ -33,8 +40,16 @@ export default function Navbar() {
 
   const scrollTo = (href: string) => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (currentPage !== 'home') {
+      onNavigate?.('home');
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -112,9 +127,9 @@ export default function Navbar() {
             className="btn-primary"
             onMouseEnter={playTick}
             style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '6px' }}
-            onClick={() => scrollTo('#pricing')}
+            onClick={() => onNavigate?.(currentPage === 'home' ? 'product' : 'home')}
           >
-            Get Early Access
+            {currentPage === 'home' ? 'QN_Core' : 'Dashboard'}
           </button>
         </div>
 
@@ -185,10 +200,10 @@ export default function Navbar() {
 
           <button
             className="btn-primary"
-            onClick={() => scrollTo('#pricing')}
+            onClick={() => onNavigate?.(currentPage === 'home' ? 'product' : 'home')}
             style={{ padding: '14px 32px', fontSize: '16px', marginTop: '12px' }}
           >
-            Get Early Access
+            {currentPage === 'home' ? 'QN_Core' : 'Dashboard'}
           </button>
         </div>
       )}
