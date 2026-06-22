@@ -1,13 +1,24 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { playSimClick, playIslandHover } from '../../utils/audio';
+
+// Drop your downloaded .glb files here: src/assets/models/1.glb, 2.glb, 3.glb
+// 1.glb -> INPUT island, 2.glb -> PROCESS island (center), 3.glb -> OUTPUT island
+const modelGlob = import.meta.glob('/src/assets/models/*.glb', { eager: true, import: 'default', query: '?url' });
+const MODEL_URLS: Record<string, string> = {};
+Object.entries(modelGlob).forEach(([path, url]) => {
+  const name = path.match(/(\d+)\.glb$/)?.[1];
+  if (name) MODEL_URLS[name] = url as string;
+});
 
 type SimMode = 'overview' | 'input' | 'process' | 'output';
 
 interface Island {
-  group: THREE.Group;
+  group: THREE.Group;      // wraps the loaded model — used for hover scale + bob animation
+  model: THREE.Object3D;   // the actual loaded glTF scene, centered/scaled inside `group`
+  hitbox: THREE.Mesh;      // invisible box used for raycasting (glb meshes vary too much to rely on directly)
   ring: THREE.Mesh;
-  base: THREE.Mesh;
   label: string;
   sublabel: string;
   position: [number, number, number];
@@ -57,85 +68,70 @@ const DETAIL_DATA: Record<string, DetailInfo> = {
   },
 };
 
-function buildIsland(
+/** Centers a loaded glTF scene on its own bounding-box center and scales it
+ *  so its largest dimension equals `targetSize`. Mutates in place. */
+function normalizeModel(root: THREE.Object3D, targetSize: number) {
+  const box = new THREE.Box3().setFromObject(root);
+  const size = new THREE.Vector3();
+  const center = new THREE.Vector3();
+  box.getSize(size);
+  box.getCenter(center);
+
+  const maxDim = Math.max(size.x, size.y, size.z) || 1;
+  const scale = targetSize / maxDim;
+  root.scale.setScalar(scale);
+
+  // Re-measure after scaling, then re-center so the model sits on y=0.
+  const scaledBox = new THREE.Box3().setFromObject(root);
+  const scaledCenter = new THREE.Vector3();
+  scaledBox.getCenter(scaledCenter);
+  root.position.x -= scaledCenter.x;
+  root.position.z -= scaledCenter.z;
+  root.position.y -= scaledBox.min.y; // rest on the ground plane
+
+  root.traverse((child) => {
+    if ((child as THREE.Mesh).isMesh) {
+      const mesh = child as THREE.Mesh;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+    }
+  });
+}
+
+function buildIslandRig(
   x: number, y: number, z: number,
-  baseColor: number, emissiveColor: number,
-  isCenter = false
-): { group: THREE.Group; ring: THREE.Mesh; base: THREE.Mesh } {
+  model: THREE.Object3D,
+  isCenter: boolean,
+  label: string,
+  sublabel: string
+): { group: THREE.Group; hitbox: THREE.Mesh; ring: THREE.Mesh } {
   const group = new THREE.Group();
   group.position.set(x, y, z);
 
-  // Multi-layer PCB stack
-  const layerCount = isCenter ? 5 : 3;
-  for (let i = 0; i < layerCount; i++) {
-    const size = 2.2 - i * (isCenter ? 0.18 : 0.2);
-    const mat = new THREE.MeshStandardMaterial({
-      color: i === 0 ? baseColor : new THREE.Color(baseColor).lerp(new THREE.Color(0x16241D), i * 0.25).getHex(),
-      metalness: 0.88,
-      roughness: 0.12,
-      emissive: emissiveColor,
-      emissiveIntensity: 0.3 + (layerCount - i) * 0.05,
-    });
-    const slab = new THREE.Mesh(new THREE.BoxGeometry(size, 0.12, size), mat);
-    slab.position.y = 0.25 + i * 0.14 + (isCenter ? i * 0.03 : 0);
-    slab.castShadow = true;
-    group.add(slab);
-  }
+  const targetSize = isCenter ? 2.6 : 2.1;
+  normalizeModel(model, targetSize);
+  group.add(model);
 
-  // Base platform
-  const baseMat = new THREE.MeshStandardMaterial({
-    color: baseColor,
-    metalness: 0.9,
-    roughness: 0.15,
-    emissive: emissiveColor,
-    emissiveIntensity: 0.5,
-  });
-  const base = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.5, 2.6), baseMat);
-  base.position.y = 0;
-  base.castShadow = true;
-  base.receiveShadow = true;
-  group.add(base);
+  // Invisible raycast hitbox — sized to the model's footprint, since glb
+  // geometry varies too much (and may be multi-mesh) to raycast reliably.
+  const hitbox = new THREE.Mesh(
+    new THREE.BoxGeometry(targetSize * 1.15, targetSize * 1.15, targetSize * 1.15),
+    new THREE.MeshBasicMaterial({ visible: false })
+  );
+  hitbox.position.y = targetSize * 0.5;
+  group.add(hitbox);
 
-  // Pulsing ring
+  // Subtle grounding ring kept as a UI accent (not the model itself)
   const ring = new THREE.Mesh(
-    new THREE.TorusGeometry(1.9, 0.04, 8, 48),
-    new THREE.MeshBasicMaterial({ color: 0x00FF85, transparent: true, opacity: 0.5 })
+    new THREE.TorusGeometry(targetSize * 0.85, 0.03, 8, 48),
+    new THREE.MeshBasicMaterial({ color: 0x00FF85, transparent: true, opacity: 0.4 })
   );
   ring.rotation.x = Math.PI / 2;
-  ring.position.y = -0.28;
+  ring.position.y = 0.02;
   group.add(ring);
 
-  // Outer ring
-  const outerRing = new THREE.Mesh(
-    new THREE.TorusGeometry(2.5, 0.02, 6, 48),
-    new THREE.MeshBasicMaterial({ color: 0x00A854, transparent: true, opacity: 0.3 })
-  );
-  outerRing.rotation.x = Math.PI / 2;
-  outerRing.position.y = -0.28;
-  group.add(outerRing);
-
-  // LED strips on sides
-  if (isCenter) {
-    const ledMat = new THREE.MeshBasicMaterial({ color: 0x00FF85 });
-    for (let side = 0; side < 4; side++) {
-      const led = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.6, 0.02), ledMat);
-      const angle = (side / 4) * Math.PI * 2;
-      led.position.set(Math.cos(angle) * 1.3, 0.3, Math.sin(angle) * 1.3);
-      group.add(led);
-    }
-  }
-
-  // Core sphere (center only)
-  if (isCenter) {
-    const core = new THREE.Mesh(
-      new THREE.SphereGeometry(0.3, 16, 16),
-      new THREE.MeshStandardMaterial({ color: 0x00FFC3, emissive: 0x00FFC3, emissiveIntensity: 2 })
-    );
-    core.position.y = 1.0;
-    group.add(core);
-  }
-
-  return { group, ring, base };
+  void label; void sublabel; // kept on Island record for the UI legend, not used in-scene
+  return { group, hitbox, ring };
 }
 
 function buildDataTube(from: THREE.Vector3, to: THREE.Vector3): { tube: THREE.Mesh; glowTube: THREE.Mesh } {
@@ -164,8 +160,6 @@ export default function SimulationScene() {
     renderer: THREE.WebGLRenderer;
     islands: Island[];
     raycaster: THREE.Raycaster;
-    dataParticleGeo: THREE.BufferGeometry;
-    dpAngles: Float32Array;
     dpT: Float32Array;
     dpSeg: Int32Array;
     orbitGeo: THREE.BufferGeometry;
@@ -184,6 +178,14 @@ export default function SimulationScene() {
   const [mode, setMode] = useState<SimMode>('overview');
   const [paused, setPaused] = useState(false);
   const [hovered, setHovered] = useState<number | null>(null);
+  const hoveredRef = useRef<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const setHoveredBoth = useCallback((idx: number | null) => {
+    hoveredRef.current = idx;
+    setHovered(idx);
+  }, []);
 
   const switchMode = useCallback((newMode: SimMode) => {
     modeRef.current = newMode;
@@ -193,7 +195,6 @@ export default function SimulationScene() {
     const data = sceneDataRef.current;
     if (!data) return;
 
-    // Update camera target
     if (newMode === 'overview') {
       data.camTarget = { x: 0, y: 6, z: 16 };
       data.camLook.set(0, 0, 0);
@@ -208,7 +209,6 @@ export default function SimulationScene() {
       data.camLook.set(5.5, 0.5, 0);
     }
 
-    // Show/hide detail groups
     data.inputDetailGroup.visible = newMode === 'input';
     data.processDetailGroup.visible = newMode === 'process';
     data.outputDetailGroup.visible = newMode === 'output';
@@ -219,6 +219,7 @@ export default function SimulationScene() {
     const canvas = canvasRef.current;
     if (!canvas || window.innerWidth < 768) return;
 
+    let disposed = false;
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
 
@@ -228,6 +229,7 @@ export default function SimulationScene() {
     renderer.setClearColor(0x050A07, 1);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x050A07, 0.025);
@@ -256,18 +258,11 @@ export default function SimulationScene() {
     gridMesh.position.y = -2;
     scene.add(gridMesh);
 
-    // Islands
     const islandDefs = [
-      { x: -5.5, y: 0, z: 0, color: 0x0B1410, emissive: 0x001808, label: 'INPUT', sublabel: 'Model Repository', center: false },
-      { x: 0, y: 0.6, z: 0, color: 0x111C16, emissive: 0x002810, label: 'PROCESS', sublabel: 'Compilation · Optimization', center: true },
-      { x: 5.5, y: 0, z: 0, color: 0x0B1410, emissive: 0x001808, label: 'OUTPUT', sublabel: 'Cloud · Edge · Enterprise', center: false },
+      { x: -5.5, y: 0, z: 0, modelKey: '1', label: 'INPUT', sublabel: 'Model Repository', center: false },
+      { x: 0, y: 0.6, z: 0, modelKey: '2', label: 'PROCESS', sublabel: 'Compilation · Optimization', center: true },
+      { x: 5.5, y: 0, z: 0, modelKey: '3', label: 'OUTPUT', sublabel: 'Cloud · Edge · Enterprise', center: false },
     ];
-
-    const islands: Island[] = islandDefs.map(d => {
-      const { group, ring, base } = buildIsland(d.x, d.y, d.z, d.color, d.emissive, d.center);
-      scene.add(group);
-      return { group, ring, base, label: d.label, sublabel: d.sublabel, position: [d.x, d.y, d.z] };
-    });
 
     // Tubes between islands
     const tubeData = [
@@ -331,7 +326,6 @@ export default function SimulationScene() {
       fm.rotation.x = -0.3;
       inputDetailGroup.add(fm);
 
-      // File edge glow
       const edges = new THREE.EdgesGeometry(new THREE.BoxGeometry(0.9, 0.05, 1.2));
       const edgeMat = new THREE.LineBasicMaterial({ color: 0x00FF85, transparent: true, opacity: 0.8 });
       const edgeMesh = new THREE.LineSegments(edges, edgeMat);
@@ -339,7 +333,6 @@ export default function SimulationScene() {
       edgeMesh.rotation.copy(fm.rotation);
       inputDetailGroup.add(edgeMesh);
     });
-    // Intake funnel
     const funnel = new THREE.Mesh(
       new THREE.ConeGeometry(0.8, 1.5, 12, 1, true),
       new THREE.MeshBasicMaterial({ color: 0x00A854, wireframe: true, transparent: true, opacity: 0.6 })
@@ -362,7 +355,6 @@ export default function SimulationScene() {
       processDetailGroup.add(layer);
       processLayerOffsets[li] = li * 0.4;
     }
-    // IR graph nodes
     const nodeCount = 12;
     const nodeMat = new THREE.MeshStandardMaterial({ color: 0x00FF85, emissive: 0x00FF85, emissiveIntensity: 1.5 });
     const nodePositions: THREE.Vector3[] = [];
@@ -377,7 +369,6 @@ export default function SimulationScene() {
       nodePositions.push(np);
       processDetailGroup.add(nMesh);
     }
-    // Edges between nodes
     for (let ni = 0; ni < nodeCount - 1; ni++) {
       const pts = [nodePositions[ni], nodePositions[ni + 1]];
       const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
@@ -401,7 +392,6 @@ export default function SimulationScene() {
       );
       zone.position.set(dt.x + 5.5, dt.y, dt.z);
       outputDetailGroup.add(zone);
-      // Status LED
       const led = new THREE.Mesh(
         new THREE.SphereGeometry(0.1, 8, 8),
         new THREE.MeshBasicMaterial({ color: dt.color })
@@ -410,7 +400,6 @@ export default function SimulationScene() {
       outputDetailGroup.add(led);
     });
 
-    // Output packets
     const outputPackets: { mesh: THREE.Mesh; t: number; speed: number; target: THREE.Vector3 }[] = [];
     deployTargets.forEach(dt => {
       const pkg = new THREE.Mesh(
@@ -422,158 +411,189 @@ export default function SimulationScene() {
     });
     scene.add(outputDetailGroup);
 
-    // Raycaster
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-
     const camTarget = { x: 0, y: 6, z: 16 };
     const camLook = new THREE.Vector3(0, 0, 0);
 
-    sceneDataRef.current = {
-      scene, camera, renderer, islands, raycaster,
-      dataParticleGeo: dpGeo,
-      dpAngles: new Float32Array(dpCount),
-      dpT, dpSeg,
-      orbitGeo, orbitAngles, orbitRadii, orbitMesh,
-      camTarget, camLook,
-      inputDetailGroup, processDetailGroup, outputDetailGroup,
-      processLayerOffsets,
-      outputPackets,
-    };
+    let islands: Island[] = [];
+    let onClick: (e: MouseEvent) => void = () => {};
+    let onMouseMove: (e: MouseEvent) => void = () => {};
+    let animate: () => void = () => {};
+    let onResize: () => void = () => {};
 
-    // Click handler
-    const onClick = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const baseMeshes = islands.map(isl => isl.base);
-      const hits = raycaster.intersectObjects(baseMeshes);
-      if (hits.length) {
-        const idx = baseMeshes.indexOf(hits[0].object as THREE.Mesh);
-        const modes: SimMode[] = ['input', 'process', 'output'];
-        switchMode(modes[idx]);
-      } else if (modeRef.current !== 'overview') {
-        // Click elsewhere in detail mode = back to overview
-      }
-    };
-    canvas.addEventListener('click', onClick);
+    // ---- Load all 3 GLB models, then assemble the islands ----
+    const loader = new GLTFLoader();
+    const missing = islandDefs.filter(d => !MODEL_URLS[d.modelKey]);
+    if (missing.length) {
+      setLoadError(
+        `Missing model file(s): ${missing.map(m => `${m.modelKey}.glb`).join(', ')}. ` +
+        `Place them in src/assets/models/.`
+      );
+      setLoading(false);
+      return () => { renderer.dispose(); };
+    }
+    const badUrls = islandDefs.filter(d => typeof MODEL_URLS[d.modelKey] !== 'string');
+    if (badUrls.length) {
+      setLoadError(
+        `Model URL resolved to a non-string value for: ${badUrls.map(m => `${m.modelKey}.glb`).join(', ')}. ` +
+        `This usually means the Vite glob options need { import: 'default' }.`
+      );
+      setLoading(false);
+      return () => { renderer.dispose(); };
+    }
 
-    // Hover handler
-    const onMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const baseMeshes = islands.map(isl => isl.base);
-      const hits = raycaster.intersectObjects(baseMeshes);
-      if (hits.length) {
-        const idx = baseMeshes.indexOf(hits[0].object as THREE.Mesh);
-        setHovered(idx);
-        playIslandHover();
-      } else {
-        setHovered(null);
-      }
-    };
-    canvas.addEventListener('mousemove', onMouseMove);
+    Promise.all(
+      islandDefs.map(d => loader.loadAsync(MODEL_URLS[d.modelKey]))
+    ).then((gltfs) => {
+      if (disposed) return;
 
-    // Animation loop
-    const animate = () => {
-      frameRef.current = requestAnimationFrame(animate);
-      if (pausedRef.current) return;
-
-      const now = Date.now();
-      const data = sceneDataRef.current!;
-
-      // Camera lerp
-      camera.position.x += (data.camTarget.x - camera.position.x) * 0.05;
-      camera.position.y += (data.camTarget.y - camera.position.y) * 0.05;
-      camera.position.z += (data.camTarget.z - camera.position.z) * 0.05;
-      camera.lookAt(data.camLook);
-
-      // Islands
-      islands.forEach((isl, i) => {
-        (isl.ring.material as THREE.MeshBasicMaterial).opacity = 0.25 + Math.sin(now * 0.0018 + i * 2.1) * 0.22;
-        const baseY = islandDefs[i].y;
-        isl.group.position.y = baseY + Math.sin(now * 0.0009 + i * 1.4) * 0.1;
-        // Hover highlight
-        const isHovered = hovered === i;
-        (isl.base.material as THREE.MeshStandardMaterial).emissiveIntensity = isHovered ? 1.2 : 0.5;
+      islands = islandDefs.map((d, i) => {
+        const root = gltfs[i].scene;
+        const { group, hitbox, ring } = buildIslandRig(d.x, d.y, d.z, root, d.center, d.label, d.sublabel);
+        scene.add(group);
+        return { group, model: root, hitbox, ring, label: d.label, sublabel: d.sublabel, position: [d.x, d.y, d.z] };
       });
 
-      // Data stream particles
-      const seg1 = [new THREE.Vector3(-5.5, 0.5, 0), new THREE.Vector3(0, 0.8, 0)];
-      const seg2 = [new THREE.Vector3(0, 0.8, 0), new THREE.Vector3(5.5, 0.5, 0)];
-      const dpArr = dpPos;
-      for (let i = 0; i < dpCount; i++) {
-        dpT[i] += 0.007;
-        if (dpT[i] > 1) { dpT[i] = 0; dpSeg[i] = (dpSeg[i] + 1) % 2; }
-        const t = dpT[i];
-        const seg = dpSeg[i] === 0 ? seg1 : seg2;
-        const arcY = Math.sin(t * Math.PI) * 1.2;
-        dpArr[i * 3] = seg[0].x + (seg[1].x - seg[0].x) * t;
-        dpArr[i * 3 + 1] = seg[0].y + (seg[1].y - seg[0].y) * t + arcY;
-        dpArr[i * 3 + 2] = (Math.random() - 0.5) * 0.06;
-      }
-      dpGeo.attributes.position.needsUpdate = true;
+      sceneDataRef.current = {
+        scene, camera, renderer, islands, raycaster,
+        dpT, dpSeg,
+        orbitGeo, orbitAngles, orbitRadii, orbitMesh,
+        camTarget, camLook,
+        inputDetailGroup, processDetailGroup, outputDetailGroup,
+        processLayerOffsets,
+        outputPackets,
+      };
 
-      // Orbit particles (detail mode)
-      if (modeRef.current !== 'overview') {
-        const cx = modeRef.current === 'input' ? -5.5 : modeRef.current === 'output' ? 5.5 : 0;
-        const oArr = orbitPos;
-        for (let i = 0; i < orbitCount; i++) {
-          orbitAngles[i] += 0.018 + (i % 3) * 0.005;
-          const vy = Math.sin(orbitAngles[i] * 0.6) * 1.8;
-          oArr[i * 3] = cx + Math.cos(orbitAngles[i]) * orbitRadii[i];
-          oArr[i * 3 + 1] = vy + 0.8;
-          oArr[i * 3 + 2] = Math.sin(orbitAngles[i]) * orbitRadii[i];
+      onClick = (e: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const hitboxes = islands.map(isl => isl.hitbox);
+        const hits = raycaster.intersectObjects(hitboxes);
+        if (hits.length) {
+          const idx = hitboxes.indexOf(hits[0].object as THREE.Mesh);
+          const modes: SimMode[] = ['input', 'process', 'output'];
+          switchMode(modes[idx]);
         }
-        orbitGeo.attributes.position.needsUpdate = true;
-      }
+      };
+      canvas.addEventListener('click', onClick);
 
-      // Input detail — rotate file objects
-      if (data.inputDetailGroup.visible) {
-        data.inputDetailGroup.children.forEach((c, ci) => {
-          if (ci < 8) {
-            c.rotation.y += 0.004;
+      onMouseMove = (e: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const hitboxes = islands.map(isl => isl.hitbox);
+        const hits = raycaster.intersectObjects(hitboxes);
+        if (hits.length) {
+          const idx = hitboxes.indexOf(hits[0].object as THREE.Mesh);
+          setHoveredBoth(idx);
+          playIslandHover();
+        } else {
+          setHoveredBoth(null);
+        }
+      };
+      canvas.addEventListener('mousemove', onMouseMove);
+
+      animate = () => {
+        frameRef.current = requestAnimationFrame(animate);
+        if (pausedRef.current) return;
+
+        const now = Date.now();
+        const data = sceneDataRef.current!;
+
+        camera.position.x += (data.camTarget.x - camera.position.x) * 0.05;
+        camera.position.y += (data.camTarget.y - camera.position.y) * 0.05;
+        camera.position.z += (data.camTarget.z - camera.position.z) * 0.05;
+        camera.lookAt(data.camLook);
+
+        islands.forEach((isl, i) => {
+          (isl.ring.material as THREE.MeshBasicMaterial).opacity = 0.25 + Math.sin(now * 0.0018 + i * 2.1) * 0.18;
+          const baseY = islandDefs[i].y;
+          isl.group.position.y = baseY + Math.sin(now * 0.0009 + i * 1.4) * 0.08;
+          // Hover highlight via gentle scale, since glb material can't be
+          // reliably overridden the way a procedural emissive mesh could be.
+          const isHovered = hoveredRef.current === i;
+          const targetScale = isHovered ? 1.06 : 1.0;
+          isl.model.scale.setScalar(
+            isl.model.scale.x + (targetScale * (isl.model.userData.baseScale ?? 1) - isl.model.scale.x) * 0.15
+          );
+        });
+
+        const seg1 = [new THREE.Vector3(-5.5, 0.5, 0), new THREE.Vector3(0, 0.8, 0)];
+        const seg2 = [new THREE.Vector3(0, 0.8, 0), new THREE.Vector3(5.5, 0.5, 0)];
+        for (let i = 0; i < dpCount; i++) {
+          dpT[i] += 0.007;
+          if (dpT[i] > 1) { dpT[i] = 0; dpSeg[i] = (dpSeg[i] + 1) % 2; }
+          const t = dpT[i];
+          const seg = dpSeg[i] === 0 ? seg1 : seg2;
+          const arcY = Math.sin(t * Math.PI) * 1.2;
+          dpPos[i * 3] = seg[0].x + (seg[1].x - seg[0].x) * t;
+          dpPos[i * 3 + 1] = seg[0].y + (seg[1].y - seg[0].y) * t + arcY;
+          dpPos[i * 3 + 2] = (Math.random() - 0.5) * 0.06;
+        }
+        dpGeo.attributes.position.needsUpdate = true;
+
+        if (modeRef.current !== 'overview') {
+          const cx = modeRef.current === 'input' ? -5.5 : modeRef.current === 'output' ? 5.5 : 0;
+          for (let i = 0; i < orbitCount; i++) {
+            orbitAngles[i] += 0.018 + (i % 3) * 0.005;
+            const vy = Math.sin(orbitAngles[i] * 0.6) * 1.8;
+            orbitPos[i * 3] = cx + Math.cos(orbitAngles[i]) * orbitRadii[i];
+            orbitPos[i * 3 + 1] = vy + 0.8;
+            orbitPos[i * 3 + 2] = Math.sin(orbitAngles[i]) * orbitRadii[i];
           }
+          orbitGeo.attributes.position.needsUpdate = true;
+        }
+
+        if (data.inputDetailGroup.visible) {
+          data.inputDetailGroup.children.forEach((c, ci) => {
+            if (ci < 8) c.rotation.y += 0.004;
+          });
+          (data.inputDetailGroup.children[data.inputDetailGroup.children.length - 1] as THREE.Mesh).rotation.y += 0.01;
+        }
+
+        if (data.processDetailGroup.visible) {
+          data.processDetailGroup.children.slice(0, 4).forEach((c, li) => {
+            c.position.y = data.processLayerOffsets[li] + Math.sin(now * 0.001 + li) * 0.06;
+          });
+        }
+
+        outputPackets.forEach(pkt => {
+          pkt.t += pkt.speed;
+          if (pkt.t > 1) pkt.t = 0;
+          const origin = new THREE.Vector3(5.5, 1, 0);
+          pkt.mesh.position.lerpVectors(origin, pkt.target, pkt.t);
+          pkt.mesh.visible = data.outputDetailGroup.visible;
         });
-        (data.inputDetailGroup.children[data.inputDetailGroup.children.length - 1] as THREE.Mesh).rotation.y += 0.01;
-      }
 
-      // Process detail — floating layers
-      if (data.processDetailGroup.visible) {
-        data.processDetailGroup.children.slice(0, 4).forEach((c, li) => {
-          c.position.y = data.processLayerOffsets[li] + Math.sin(now * 0.001 + li) * 0.06;
-        });
-      }
+        fillLight.intensity = 1.8 + Math.sin(now * 0.0008) * 0.5;
+        renderer.render(scene, camera);
+      };
 
-      // Output packets
-      outputPackets.forEach(pkt => {
-        pkt.t += pkt.speed;
-        if (pkt.t > 1) pkt.t = 0;
-        const origin = new THREE.Vector3(5.5, 1, 0);
-        pkt.mesh.position.lerpVectors(origin, pkt.target, pkt.t);
-        pkt.mesh.visible = data.outputDetailGroup.visible;
-      });
+      islands.forEach(isl => { isl.model.userData.baseScale = isl.model.scale.x; });
+      animate();
 
-      // Fill light pulse
-      fillLight.intensity = 1.8 + Math.sin(now * 0.0008) * 0.5;
+      onResize = () => {
+        const nw = canvas.clientWidth;
+        const nh = canvas.clientHeight;
+        renderer.setSize(nw, nh);
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+      };
+      window.addEventListener('resize', onResize);
 
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    const onResize = () => {
-      const nw = canvas.clientWidth;
-      const nh = canvas.clientHeight;
-      renderer.setSize(nw, nh);
-      camera.aspect = nw / nh;
-      camera.updateProjectionMatrix();
-    };
-    window.addEventListener('resize', onResize);
+      setLoading(false);
+    }).catch((err) => {
+      console.error('Failed to load island models:', err);
+      setLoadError('One or more .glb models failed to load. Check the console for details.');
+      setLoading(false);
+    });
 
     return () => {
+      disposed = true;
       cancelAnimationFrame(frameRef.current);
       canvas.removeEventListener('click', onClick);
       canvas.removeEventListener('mousemove', onMouseMove);
@@ -589,5 +609,5 @@ export default function SimulationScene() {
 
   const detailInfo = DETAIL_DATA[mode];
 
-  return { canvasRef, mode, paused, hovered, switchMode, togglePause, detailInfo };
+  return { canvasRef, mode, paused, hovered, loading, loadError, switchMode, togglePause, detailInfo };
 }

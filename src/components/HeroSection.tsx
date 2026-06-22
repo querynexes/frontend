@@ -3,17 +3,14 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
 import { playTick } from '../utils/audio';
+import img1 from '../assets/1.jpg';
+import img2 from '../assets/2.jpg';
+import img3 from '../assets/3.jpg';
+import img4 from '../assets/4.jpg';
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
-// [REQUIRES_ORIGINAL_CORP_ASSET] — placeholders below must be replaced with
-// authentic photography (macro silicon die shots, fiber optics, server racks).
-const IMAGE_STACK = [
-  { id: 0, src: 'https://picsum.photos/seed/querynexes-die/1920/1080', label: '[REQUIRES_ORIGINAL_CORP_ASSET] macro silicon die' },
-  { id: 1, src: 'https://picsum.photos/seed/querynexes-fiber/1920/1080', label: '[REQUIRES_ORIGINAL_CORP_ASSET] fiber optic close-up' },
-  { id: 2, src: 'https://picsum.photos/seed/querynexes-rack/1920/1080', label: '[REQUIRES_ORIGINAL_CORP_ASSET] physical server rack' },
-  { id: 3, src: 'https://picsum.photos/seed/querynexes-gpu/1920/1080', label: '[REQUIRES_ORIGINAL_CORP_ASSET] GPU cluster interior' },
-];
+const IMAGES = [img1, img2, img3, img4];
 
 const LOG_LINES = [
   { text: '$ querynexes compile --model resnet-x.pt', cls: 'cmd' },
@@ -31,71 +28,73 @@ export default function CinematicHero() {
   const metric2Ref = useRef<HTMLSpanElement>(null);
   const metric3Ref = useRef<HTMLSpanElement>(null);
 
-  // ---- Pinned scroll-driven image sequence ----
   useEffect(() => {
-    const section = sectionRef.current;
-    const pinWrap = pinWrapRef.current;
-    if (!section || !pinWrap) return;
+    const ctx = gsap.context(() => {
+      const section = sectionRef.current;
+      const pinWrap = pinWrapRef.current;
+      if (!section || !pinWrap) return;
 
-    const images = imageRefs.current.filter(Boolean) as HTMLDivElement[];
-    const segments = images.length;
+      const images = imageRefs.current.filter(Boolean) as HTMLDivElement[];
+      if (images.length === 0) return;
 
-    images.forEach((img, i) => {
-      gsap.set(img, { opacity: i === 0 ? 1 : 0, scale: 1 });
+      gsap.set(images[0], { opacity: 1 });
+      images.slice(1).forEach(img => gsap.set(img, { opacity: 0 }));
+
+      const st = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: `+=${images.length * 100}%`,
+        pin: pinWrap,
+        pinSpacing: true,
+        scrub: true,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const segmentCount = images.length - 1;
+          const raw = progress * segmentCount;
+          const activeIdx = Math.min(Math.floor(raw), segmentCount - 1);
+          const localT = raw - activeIdx;
+
+          images.forEach((img, i) => {
+            if (i === activeIdx) {
+              gsap.set(img, { opacity: 1 - localT, scale: 1 + localT * 0.15, zIndex: 2 });
+            } else if (i === activeIdx + 1) {
+              gsap.set(img, { opacity: localT, scale: 1.05 - localT * 0.05, zIndex: 1 });
+            } else {
+              gsap.set(img, { opacity: 0 });
+            }
+          });
+        },
+      });
+
+      return () => st.kill();
     });
 
-    const st = ScrollTrigger.create({
-      trigger: section,
-      start: 'top top',
-      end: `+=${segments * 100}%`,
-      pin: pinWrap,
-      pinSpacing: true,
-      scrub: true,
-      onUpdate: (self) => {
-        const progress = self.progress;
-        const segmentCount = segments - 1;
-        const raw = progress * segmentCount;
-        const activeIdx = Math.min(Math.floor(raw), segmentCount - 1);
-        const localT = raw - activeIdx;
-
-        images.forEach((img, i) => {
-          if (i === activeIdx) {
-            gsap.set(img, { opacity: 1 - localT, scale: 1 + localT * 0.15, zIndex: 2 });
-          } else if (i === activeIdx + 1) {
-            gsap.set(img, { opacity: localT, scale: 1.05 - localT * 0.05, zIndex: 1 });
-          } else {
-            gsap.set(img, { opacity: 0 });
-          }
-        });
-      },
-    });
-
-    return () => { st.kill(); };
+    return () => ctx.revert();
   }, []);
 
-  // ---- Terminal log typing ----
   useEffect(() => {
-    const container = logRef.current;
-    if (!container) return;
-    const lineEls = Array.from(container.querySelectorAll<HTMLSpanElement>('[data-log-line]'));
-    const tl = gsap.timeline({ delay: 0.4, repeat: -1, repeatDelay: 1.6 });
+    const ctx = gsap.context(() => {
+      const container = logRef.current;
+      if (!container) return;
+      const lineEls = Array.from(container.querySelectorAll<HTMLSpanElement>('[data-log-line]'));
+      const tl = gsap.timeline({ delay: 0.4, repeat: -1, repeatDelay: 1.6 });
 
-    lineEls.forEach((el, i) => {
-      const full = LOG_LINES[i].text;
-      el.textContent = '';
-      tl.to(el, {
-        duration: Math.max(0.4, full.length * 0.018),
-        text: full,
-        ease: 'none',
-      }, i === 0 ? 0 : '+=0.05');
+      lineEls.forEach((el, i) => {
+        const full = LOG_LINES[i].text;
+        el.textContent = '';
+        tl.to(el, {
+          duration: Math.max(0.4, full.length * 0.018),
+          text: full,
+          ease: 'none',
+        }, i === 0 ? 0 : '+=0.05');
+      });
+      tl.to({}, { duration: 1.4 });
+      tl.call(() => lineEls.forEach(el => { el.textContent = ''; }));
     });
-    tl.to({}, { duration: 1.4 });
-    tl.call(() => lineEls.forEach(el => { el.textContent = ''; }));
 
-    return () => { tl.kill(); };
+    return () => ctx.revert();
   }, []);
 
-  // ---- Counters ----
   useEffect(() => {
     function animateCounter(el: HTMLSpanElement | null, target: number, suffix: string, isFloat: boolean, duration = 1800) {
       if (!el) return;
@@ -123,7 +122,6 @@ export default function CinematicHero() {
 
   return (
     <div ref={sectionRef} style={{ position: 'relative' }}>
-      {/* Pinned viewport */}
       <div
         ref={pinWrapRef}
         id="hero"
@@ -135,17 +133,15 @@ export default function CinematicHero() {
           background: 'var(--bg-primary)',
         }}
       >
-        {/* Cinematic image stack */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-          {IMAGE_STACK.map((img, i) => (
+          {IMAGES.map((src, i) => (
             <div
-              key={img.id}
+              key={i}
               ref={el => (imageRefs.current[i] = el)}
-              data-asset-label={img.label}
               style={{
                 position: 'absolute',
                 inset: 0,
-                backgroundImage: `url(${img.src})`,
+                backgroundImage: `url(${src})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 willChange: 'transform, opacity',
@@ -154,7 +150,6 @@ export default function CinematicHero() {
           ))}
         </div>
 
-        {/* Vignette for text contrast */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 1,
           background: 'linear-gradient(to top, #000000 0%, rgba(5,10,7,0.75) 38%, rgba(5,10,7,0.35) 60%, transparent 85%)',
@@ -166,11 +161,6 @@ export default function CinematicHero() {
           pointerEvents: 'none',
         }} />
 
-        {/*
-          KEY FIX: Use a flex column with justify-content: center so the glass
-          panel is vertically centered and never overflows. The glass panel
-          itself uses overflow: hidden as a last-resort guard.
-        */}
         <div
           className="hero-fg"
           style={{
@@ -178,8 +168,8 @@ export default function CinematicHero() {
             zIndex: 10,
             height: '100%',
             display: 'flex',
-            alignItems: 'center',           /* vertically center the card */
-            paddingTop: '72px',             /* account for fixed navbar */
+            alignItems: 'center',
+            paddingTop: '72px',
             paddingLeft: '48px',
             paddingRight: '48px',
             boxSizing: 'border-box',
@@ -190,10 +180,8 @@ export default function CinematicHero() {
             style={{
               maxWidth: '580px',
               width: '100%',
-              /* Let the card grow but never exceed the available column height */
               maxHeight: 'calc(100vh - 72px - 32px)',
               overflowY: 'auto',
-              /* hide scrollbar visually — content must fit without scrolling at desktop */
               scrollbarWidth: 'none',
               background: 'rgba(5,10,7,0.6)',
               backdropFilter: 'blur(8px)',
@@ -203,7 +191,6 @@ export default function CinematicHero() {
               boxSizing: 'border-box',
             }}
           >
-            {/* Badge */}
             <div style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -222,7 +209,6 @@ export default function CinematicHero() {
               LIVE SYSTEM &nbsp;—&nbsp; COMPILER v2.4.1
             </div>
 
-            {/* Headline — tighter size so it takes fewer lines vertically */}
             <h1 style={{
               fontFamily: 'Space Grotesk, sans-serif',
               fontWeight: 700,
@@ -255,7 +241,6 @@ export default function CinematicHero() {
               hardware-optimized assets for cloud, edge, and enterprise deployment.
             </p>
 
-            {/* CTAs */}
             <div style={{ display: 'flex', gap: '12px', marginBottom: '18px', flexWrap: 'wrap' }}>
               <a
                 href="#pricing"
@@ -277,7 +262,6 @@ export default function CinematicHero() {
               </a>
             </div>
 
-            {/* Terminal readout */}
             <div style={{
               border: '1px solid var(--border-default)',
               borderRadius: '6px',
@@ -286,7 +270,6 @@ export default function CinematicHero() {
               overflow: 'hidden',
               boxSizing: 'border-box',
             }}>
-              {/* Terminal title bar */}
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
                 padding: '5px 10px',
@@ -302,7 +285,6 @@ export default function CinematicHero() {
                 <span style={{ marginLeft: '4px' }}>compile.log</span>
               </div>
 
-              {/* Terminal body — fixed height to show all 4 lines + cursor */}
               <div
                 ref={logRef}
                 className="hero-terminal"
@@ -311,7 +293,6 @@ export default function CinematicHero() {
                   fontFamily: 'JetBrains Mono, monospace',
                   fontSize: '11px',
                   lineHeight: 1.7,
-                  /* 4 lines × (11px font × 1.7 lh ≈ 18.7px) + cursor row + padding = ~110px */
                   height: '110px',
                   overflow: 'hidden',
                   boxSizing: 'border-box',
@@ -333,7 +314,6 @@ export default function CinematicHero() {
                     }}
                   />
                 ))}
-                {/* Blinking cursor */}
                 <span style={{
                   display: 'inline-block',
                   width: '6px',
@@ -346,7 +326,6 @@ export default function CinematicHero() {
               </div>
             </div>
 
-            {/* Metrics */}
             <div style={{ display: 'flex', gap: '28px', flexWrap: 'wrap' }}>
               {[
                 { ref: metric1Ref, suffix: '%', label: 'FASTER INFERENCE' },
@@ -368,7 +347,6 @@ export default function CinematicHero() {
           </div>
         </div>
 
-        {/* Scroll progress hint */}
         <div style={{
           position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
           zIndex: 10,
@@ -376,14 +354,13 @@ export default function CinematicHero() {
           color: 'var(--text-disabled)', letterSpacing: '0.1em',
           whiteSpace: 'nowrap',
         }}>
-          SCROLL — SEQUENCE {IMAGE_STACK.length} FRAMES
+          SCROLL — SEQUENCE {IMAGES.length} FRAMES
         </div>
       </div>
 
       <style>{`
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* Hide scrollbar on the glass panel (should never be needed at desktop) */
         .hero-glass::-webkit-scrollbar { display: none; }
 
         @media (max-width: 1024px) {
