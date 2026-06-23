@@ -1,5 +1,6 @@
 import { Github, Linkedin, Twitter } from 'lucide-react';
 import { playTick } from '../utils/audio';
+import logoLight from '../assets/logos/querynexes-logo.png';
 
 type Page = 'home' | 'product' | 'privacy' | 'terms';
 
@@ -58,11 +59,7 @@ export default function Footer({ onNavigate }: {
             alignItems: 'center',
             gap: '10px',
           }}>
-            <svg width="22" height="22" viewBox="0 0 28 28">
-              <path d="M14 3 L24 8.5 L24 19.5 L14 25 L4 19.5 L4 8.5 Z" stroke="var(--green-neon)" strokeWidth="1.5" fill="none" />
-              <path d="M14 9 L19 12 L19 18 L14 21 L9 18 L9 12 Z" stroke="var(--green-deep)" strokeWidth="1" fill="none" />
-            </svg>
-            QUERYNEXES
+            <img src={logoLight} alt="QueryNexes" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
           </div>
 
           <p style={{

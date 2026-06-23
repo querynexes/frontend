@@ -1,45 +1,50 @@
 import { useEffect, useRef } from 'react';
-import { Cpu, Layers, Zap, BarChart3, Package, Code2 } from 'lucide-react';
 import { playTick } from '../utils/audio';
+import iconCompilation from '../assets/icons/features/compilation-engine.png';
+import iconOptimization from '../assets/icons/features/optimization-layer.png';
+import iconAcceleration from '../assets/icons/features/hardware-acceleration.png';
+import iconPerformance from '../assets/icons/features/performance-intelligence.png';
+import iconDeployment from '../assets/icons/features/deployment-toolkit.png';
+import iconEnterprise from '../assets/icons/features/enterprise-api.png';
 
 const FEATURES = [
   {
-    icon: Cpu,
+    icon: iconCompilation,
     title: 'Compilation Engine',
     desc: 'LLVM-based intermediate representation transforms any ML framework into hardware-optimized executables with full graph-level optimization and dead-code elimination.',
     stat: '↑ 12.4× AVERAGE INFERENCE SPEEDUP',
     config: '{ "ir": "mlir", "passes": ["fuse", "dce"] }',
   },
   {
-    icon: Layers,
+    icon: iconOptimization,
     title: 'Optimization Layer',
     desc: 'Automated quantization, structured pruning, and operator fusion — applied intelligently with accuracy preservation guarantees and sensitivity analysis.',
     stat: '↓ 67% AVERAGE MEMORY REDUCTION',
     config: '{ "quant": "int8", "prune": 0.3 }',
   },
   {
-    icon: Zap,
+    icon: iconAcceleration,
     title: 'Hardware Acceleration',
     desc: 'Native compilation for NVIDIA TensorRT, Apple ANE, ARM NN, and 150+ cloud GPU targets. One codebase, any hardware target, zero manual tuning.',
     stat: '150+ HARDWARE TARGETS SUPPORTED',
     config: '{ "backend": "auto", "targets": 150 }',
   },
   {
-    icon: BarChart3,
+    icon: iconPerformance,
     title: 'Performance Intelligence',
     desc: 'Real-time profiling, latency decomposition, and bottleneck identification. Know exactly where your model spends compute cycles and why.',
     stat: '3.2ms MEDIAN INFERENCE LATENCY',
     config: '{ "profile": true, "sample_hz": 1000 }',
   },
   {
-    icon: Package,
+    icon: iconDeployment,
     title: 'Deployment Toolkit',
     desc: 'Validated containers, HELM charts, and deployment manifests for AWS, GCP, Azure, and on-premise Kubernetes clusters. Ship in minutes.',
     stat: '✓ 99.8% PRODUCTION UPTIME SLA',
     config: '{ "format": "oci", "helm": true }',
   },
   {
-    icon: Code2,
+    icon: iconEnterprise,
     title: 'Enterprise API',
     desc: 'REST and gRPC APIs with webhooks, CI/CD integrations, audit logs, SSO, and dedicated enterprise SLA support channels for mission-critical workloads.',
     stat: '8,900+ REQ/S THROUGHPUT',
@@ -94,7 +99,6 @@ export default function FeaturesGrid() {
         gap: '24px',
       }} className="features-responsive">
         {FEATURES.map((feat, i) => {
-          const Icon = feat.icon;
           return (
             <div
               key={i}
@@ -137,9 +141,9 @@ export default function FeaturesGrid() {
               </div>
 
               <div style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '10px',
+                width: '68px',
+                height: '68px',
+                borderRadius: '14px',
                 background: 'rgba(0,168,84,0.1)',
                 border: '1px solid var(--green-dark)',
                 display: 'flex',
@@ -147,7 +151,7 @@ export default function FeaturesGrid() {
                 justifyContent: 'center',
                 marginBottom: '20px',
               }}>
-                <Icon size={20} color="var(--green-neon)" strokeWidth={1.5} />
+                <img src={feat.icon} alt={feat.title} style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
               </div>
 
               <div style={{

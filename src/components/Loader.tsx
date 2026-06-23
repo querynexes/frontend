@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import favicon from '../assets/favicons/favicon.png';
 
 interface LoaderProps {
   onComplete: () => void;
@@ -15,12 +16,8 @@ export default function Loader({ onComplete }: LoaderProps) {
   const [line1, setLine1] = useState('');
   const [line2, setLine2] = useState('');
   const [line3, setLine3] = useState('');
-  const [showTitle, setShowTitle] = useState(false);
 
   useEffect(() => {
-    // Title
-    setTimeout(() => setShowTitle(true), 400);
-
     // Typewriter lines
     let idx1 = 0;
     const t1 = setInterval(() => {
@@ -62,52 +59,47 @@ export default function Loader({ onComplete }: LoaderProps) {
         pointerEvents: exiting ? 'none' : 'all',
       }}
     >
-      {/* Hex Logo */}
-      <svg
-        width="88" height="88"
-        viewBox="0 0 88 88"
-        style={{ animation: 'fadeIn 0.4s ease forwards' }}
-      >
-        <path
-          d="M44 8 L76 26 L76 62 L44 80 L12 62 L12 26 Z"
-          stroke="#00FF85" strokeWidth="2" fill="none"
-          strokeDasharray="280" strokeDashoffset="280"
-          style={{ animation: 'drawPath 1.3s 0.1s ease forwards' }}
+      {/* Animated logo container */}
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '220px', height: '220px' }}>
+        {/* Outer rotating ring */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          borderRadius: '50%',
+          border: '2px solid transparent',
+          borderTopColor: 'var(--green-neon)',
+          borderRightColor: 'var(--green-deep)',
+          animation: 'ringRotate 1.4s linear infinite',
+        }} />
+        {/* Inner counter-rotating ring */}
+        <div style={{
+          position: 'absolute', inset: '20px',
+          borderRadius: '50%',
+          border: '1.5px solid transparent',
+          borderBottomColor: 'var(--glow-cyan)',
+          borderLeftColor: 'var(--green-stable)',
+          animation: 'ringRotateReverse 2s linear infinite',
+        }} />
+        {/* Pulsing glow */}
+        <div style={{
+          position: 'absolute', inset: '10px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(0,255,133,0.12) 0%, transparent 70%)',
+          animation: 'pulseGlow 2s ease-in-out infinite',
+        }} />
+        {/* Favicon */}
+        <img
+          src={favicon}
+          alt="QueryNexes"
+          style={{
+            width: '170px',
+            height: '170px',
+            objectFit: 'contain',
+            opacity: 0,
+            animation: 'fadeIn 0.6s 0.15s ease forwards',
+            position: 'relative',
+            zIndex: 1,
+          }}
         />
-        <path
-          d="M44 22 L62 32 L62 52 L44 62 L26 52 L26 32 Z"
-          stroke="#00A854" strokeWidth="1.2" fill="none"
-          strokeDasharray="200" strokeDashoffset="200"
-          style={{ animation: 'drawPath 1.1s 0.4s ease forwards' }}
-        />
-        <circle cx="44" cy="44" r="6" fill="#00FF85" opacity="0"
-          style={{ animation: 'fadeIn 0.5s 1.2s ease forwards' }}
-        />
-        <line x1="44" y1="38" x2="44" y2="8" stroke="#00FF85" strokeWidth="0.5" opacity="0.3"
-          style={{ animation: 'fadeIn 0.5s 1.2s ease forwards' }}
-        />
-        <line x1="50" y1="41" x2="76" y2="26" stroke="#00FF85" strokeWidth="0.5" opacity="0.3"
-          style={{ animation: 'fadeIn 0.5s 1.2s ease forwards' }}
-        />
-        <line x1="50" y1="47" x2="76" y2="62" stroke="#00FF85" strokeWidth="0.5" opacity="0.3"
-          style={{ animation: 'fadeIn 0.5s 1.2s ease forwards' }}
-        />
-      </svg>
-
-      {/* Title */}
-      <div
-        style={{
-          fontFamily: 'Space Grotesk, sans-serif',
-          fontWeight: 700,
-          fontSize: '22px',
-          letterSpacing: '0.32em',
-          color: 'var(--text-primary)',
-          opacity: showTitle ? 1 : 0,
-          transform: showTitle ? 'none' : 'translateY(10px)',
-          transition: 'opacity 0.5s ease, transform 0.5s ease',
-        }}
-      >
-        QUERYNEXES
       </div>
 
       {/* Terminal lines */}

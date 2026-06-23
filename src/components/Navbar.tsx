@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { playTick } from '../utils/audio';
+import logoLight from '../assets/logos/querynexes-logo.png';
 
 const SECTION_IDS = ['hero', 'features', 'simulation', 'pricing', 'faq', 'about', 'contact'];
 
@@ -75,19 +76,7 @@ export default function Navbar({ currentPage, onNavigate }: {
           style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}
           onMouseEnter={playTick}
         >
-          <svg width="28" height="28" viewBox="0 0 28 28">
-            <path d="M14 3 L24 8.5 L24 19.5 L14 25 L4 19.5 L4 8.5 Z" stroke="var(--green-neon)" strokeWidth="1.5" fill="none" />
-            <path d="M14 9 L19 12 L19 18 L14 21 L9 18 L9 12 Z" stroke="var(--green-deep)" strokeWidth="1" fill="none" />
-          </svg>
-          <span style={{
-            fontFamily: 'Space Grotesk, sans-serif',
-            fontWeight: 600,
-            fontSize: '15px',
-            color: 'var(--text-primary)',
-            letterSpacing: '0.02em',
-          }}>
-            QUERYNEXES
-          </span>
+          <img src={logoLight} alt="QueryNexes" style={{ width: '96px', height: '96px', objectFit: 'contain' }} />
         </a>
 
         {/* Center links */}

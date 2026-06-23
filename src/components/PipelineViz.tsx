@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { playTick } from '../utils/audio';
+import intakeIcon from '../assets/icons/pipeline/model-intake.png';
+import compileIcon from '../assets/icons/pipeline/compilation-engine.png';
+import optimizeIcon from '../assets/icons/pipeline/optimization-layer.png';
+import tunerIcon from '../assets/icons/pipeline/hardware-tuner.png';
+import deployIcon from '../assets/icons/pipeline/deploy-ready.png';
 
 const STEPS = [
   {
     num: '01',
-    icon: '⇥',
+    icon: intakeIcon,
     name: 'Model Intake',
     desc: 'Connect your ML repository. Supports PyTorch, TF, ONNX, JAX, CoreML and 18 more frameworks.',
     detail: 'Git integration, S3, GCS, local upload. Automatic format detection and validation.',
@@ -12,7 +17,7 @@ const STEPS = [
   },
   {
     num: '02',
-    icon: '⚙',
+    icon: compileIcon,
     name: 'Compilation Engine',
     desc: 'LLVM-based IR transform. Graph partitioning, operator fusion, and dead-code elimination.',
     detail: 'Full MLIR pipeline. Supports dynamic shapes, mixed precision, and custom ops.',
@@ -20,7 +25,7 @@ const STEPS = [
   },
   {
     num: '03',
-    icon: '◈',
+    icon: optimizeIcon,
     name: 'Optimization Layer',
     desc: 'Quantization, pruning, kernel fusion. 99.97% accuracy preserved across all benchmark models.',
     detail: 'INT8/FP16 calibration with sensitivity analysis. Accuracy-loss budget enforcement.',
@@ -28,7 +33,7 @@ const STEPS = [
   },
   {
     num: '04',
-    icon: '⬡',
+    icon: tunerIcon,
     name: 'Hardware Tuner',
     desc: 'GPU / CPU / Edge targeting. NVIDIA TensorRT, Apple ANE, ARM NN, Intel Gaudi auto-selected.',
     detail: 'Auto-selects optimal backend per operator. Layer-wise hardware assignment.',
@@ -36,7 +41,7 @@ const STEPS = [
   },
   {
     num: '05',
-    icon: '✓',
+    icon: deployIcon,
     name: 'Deploy Ready',
     desc: 'Validated, benchmarked artifact. Ships to cloud, edge, or enterprise targets as signed container.',
     detail: 'Benchmark report attached. Signed OCI image. HELM chart and deployment manifest included.',
@@ -126,12 +131,12 @@ export default function PipelineViz() {
                 </div>
 
                 <div style={{
-                  width: '36px', height: '36px', borderRadius: '6px',
+                  width: '60px', height: '60px', borderRadius: '10px',
                   background: 'rgba(0,168,84,0.1)', border: '1px solid var(--green-dark)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: '14px', fontSize: '17px', color: 'var(--green-neon)',
+                  marginBottom: '16px',
                 }}>
-                  {step.icon}
+                  <img src={step.icon} alt={step.name} style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
                 </div>
 
                 <div style={{

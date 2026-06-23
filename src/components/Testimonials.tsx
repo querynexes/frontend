@@ -119,21 +119,32 @@ export default function Testimonials() {
               {t.quote}
             </p>
 
-            <div style={{ borderTop: '1px solid var(--border-default)', paddingTop: '16px' }}>
+            <div style={{ borderTop: '1px solid var(--border-default)', paddingTop: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{
+                width: '72px', height: '72px', borderRadius: '50%',
+                background: 'linear-gradient(135deg, var(--green-neon), var(--green-dark))',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                flexShrink: 0, fontSize: '28px', fontWeight: 700, color: 'var(--bg-primary)',
                 fontFamily: 'Space Grotesk, sans-serif',
-                fontWeight: 600,
-                fontSize: '14px',
-                color: 'var(--text-primary)',
-                marginBottom: '2px',
               }}>
-                {t.author}
+                {t.author.split(' ').map(n => n[0]).join('')}
               </div>
-              <div style={{
-                fontSize: '13px',
-                color: 'var(--text-muted)',
-              }}>
-                {t.role}
+              <div>
+                <div style={{
+                  fontFamily: 'Space Grotesk, sans-serif',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  color: 'var(--text-primary)',
+                  marginBottom: '2px',
+                }}>
+                  {t.author}
+                </div>
+                <div style={{
+                  fontSize: '13px',
+                  color: 'var(--text-muted)',
+                }}>
+                  {t.role}
+                </div>
               </div>
             </div>
           </div>

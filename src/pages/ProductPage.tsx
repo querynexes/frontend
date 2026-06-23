@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { playTick } from '../utils/audio';
+import logoLight from '../assets/logos/querynexes-logo.png';
 
 type Page = 'home' | 'product' | 'privacy' | 'terms';
 
@@ -24,8 +25,8 @@ export default function ProductPage({ onNavigate }: {
       >
         <div
           style={{
-            width: '64px',
-            height: '64px',
+            width: '96px',
+            height: '96px',
             border: '1.5px solid var(--green-neon)',
             borderRadius: '16px',
             display: 'flex',
@@ -34,10 +35,7 @@ export default function ProductPage({ onNavigate }: {
             marginBottom: '32px',
           }}
         >
-          <svg width="32" height="32" viewBox="0 0 28 28">
-            <path d="M14 3 L24 8.5 L24 19.5 L14 25 L4 19.5 L4 8.5 Z" stroke="var(--green-neon)" strokeWidth="1.5" fill="none" />
-            <path d="M14 9 L19 12 L19 18 L14 21 L9 18 L9 12 Z" stroke="var(--green-deep)" strokeWidth="1" fill="none" />
-          </svg>
+          <img src={logoLight} alt="QueryNexes" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
         </div>
 
         <h1
