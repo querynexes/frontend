@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapPin, Phone, Globe } from 'lucide-react';
+import { MapPin, Phone, Globe, Loader2 } from 'lucide-react';
+
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xdarakoa';
 
 export default function ContactSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -24,9 +29,36 @@ export default function ContactSection() {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setErrorMessage('');
+
+    try {
+      const form = formRef.current;
+      if (!form) throw new Error('Form not found');
+
+      const data = new FormData(form);
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' },
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        form.reset();
+      } else {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || 'Server error');
+      }
+    } catch {
+      setErrorMessage('Something went wrong while sending your message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -84,7 +116,7 @@ export default function ContactSection() {
                   fontSize: '20px',
                   color: 'var(--text-primary)',
                 }}>
-                  Message Received
+                  Thank you!
                 </h3>
                 <p style={{
                   fontSize: '14px',
@@ -92,11 +124,11 @@ export default function ContactSection() {
                   maxWidth: '320px',
                   lineHeight: 1.65,
                 }}>
-                  Our team typically responds within 24 hours. We'll reach out to the provided contact.
+                  Your message has been sent successfully. Our team will contact you soon.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <form ref={formRef} onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <span style={{
                   fontFamily: 'JetBrains Mono, monospace',
                   fontSize: '10px',
@@ -107,6 +139,19 @@ export default function ContactSection() {
                 }}>
                   / SEND A MESSAGE
                 </span>
+                {errorMessage && (
+                  <div style={{
+                    padding: '12px 14px',
+                    background: 'rgba(255, 70, 70, 0.1)',
+                    border: '1px solid rgba(255, 70, 70, 0.3)',
+                    borderRadius: '6px',
+                    fontSize: '13px',
+                    color: '#ff6b6b',
+                    lineHeight: 1.5,
+                  }}>
+                    {errorMessage}
+                  </div>
+                )}
                 <div>
                   <label style={{
                     fontFamily: 'JetBrains Mono, monospace',
@@ -119,6 +164,7 @@ export default function ContactSection() {
                     NAME
                   </label>
                   <input
+                    name="name"
                     required
                     placeholder="Enter your name"
                     style={{
@@ -149,6 +195,7 @@ export default function ContactSection() {
                     EMAIL
                   </label>
                   <input
+                    name="email"
                     type="email"
                     required
                     placeholder="Enter your email"
@@ -180,6 +227,7 @@ export default function ContactSection() {
                     MESSAGE
                   </label>
                   <textarea
+                    name="message"
                     required
                     rows={5}
                     placeholder="Describe your deployment or ask a technical question..."
@@ -203,9 +251,23 @@ export default function ContactSection() {
                 <button
                   type="submit"
                   className="btn-primary"
-                  style={{ padding: '12px 24px', fontSize: '14px', alignSelf: 'flex-start' }}
+                  disabled={isSubmitting}
+                  style={{
+                    padding: '12px 24px',
+                    fontSize: '14px',
+                    alignSelf: 'flex-start',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    opacity: isSubmitting ? 0.7 : 1,
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  }}
                 >
-                  Send Message →
+                  {isSubmitting ? (
+                    <><Loader2 size={16} className="animate-spin" /> Sending...</>
+                  ) : (
+                    'Send Message →'
+                  )}
                 </button>
               </form>
             )}
