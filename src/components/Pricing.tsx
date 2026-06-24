@@ -6,8 +6,12 @@ import { playTick } from '../utils/audio';
 const PLANS = [
   {
     name: 'Starter',
-    prices: { monthly: '299', annually: '239' }, // ~20% discount for annual
+    prices: { monthly: '299', annually: '239' },
     featured: false,
+    url: {
+      monthly: 'https://buy.stripe.com/test_8x200cgj61uP9VvcfH9k400',
+      annually: 'https://buy.stripe.com/test_fZu6oA9UI3CX1oZ1B39k402',
+    },
     features: [
       '500 model compilations/month',
       'GPU Cloud targets',
@@ -23,6 +27,10 @@ const PLANS = [
     name: 'Professional',
     prices: { monthly: '999', annually: '799' },
     featured: true,
+    url: {
+      monthly: 'https://buy.stripe.com/test_9B68wIff28Xh0kV5Rj9k401',
+      annually: 'https://buy.stripe.com/test_bJe7sEeaY8Xh7NngvX9k403',
+    },
     features: [
       '5,000 model compilations/month',
       'GPU Cloud + Edge targets',
@@ -195,6 +203,8 @@ export default function Pricing() {
         {PLANS.map((plan, i) => {
           const price = plan.prices[billingCycle];
           const isCustom = price === 'Custom';
+          const linkUrl = (plan as any).url?.[billingCycle];
+          const Tag = linkUrl ? 'a' : 'button';
 
           return (
             <div
@@ -312,7 +322,8 @@ export default function Pricing() {
                 ))}
               </ul>
 
-              <button
+              <Tag
+                {...(linkUrl ? { href: linkUrl, target: '_blank', rel: 'noopener noreferrer' } : {})}
                 className={plan.ctaStyle === 'primary' ? 'btn-primary' : 'btn-outline'}
                 onMouseEnter={playTick}
                 style={{
@@ -327,12 +338,13 @@ export default function Pricing() {
                   background: plan.ctaStyle === 'primary' ? 'var(--green-neon)' : 'transparent',
                   color: plan.ctaStyle === 'primary' ? 'var(--bg-primary)' : 'var(--text-primary)',
                   cursor: 'pointer',
+                  textDecoration: 'none',
                   transition: 'all 0.2s ease',
                   marginTop: 'auto',
                 }}
               >
                 {plan.cta}
-              </button>
+              </Tag>
             </div>
           );
         })}

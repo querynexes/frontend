@@ -5,12 +5,14 @@ import logoLight from '../assets/logos/querynexes-logo.png';
 
 type Page = 'home' | 'product' | 'privacy' | 'terms';
 
-export default function ProductPage({ onNavigate }: {
+export default function ProductPage({ onNavigate, muted, onMuteToggle }: {
   onNavigate: (page: Page) => void;
+  muted?: boolean;
+  onMuteToggle?: () => void;
 }) {
   return (
     <>
-      <Navbar currentPage="product" onNavigate={onNavigate} />
+      <Navbar currentPage="product" onNavigate={onNavigate} muted={muted} onMuteToggle={onMuteToggle} />
       <main
         style={{
           minHeight: '100vh',

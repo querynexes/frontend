@@ -168,17 +168,13 @@ body {
   pointer-events: none;
 }
 
-/* MUTE BUTTON */
+/* MUTE BUTTON — in navbar */
 .mute-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 9000;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border: 1px solid var(--border-default);
-  border-radius: 8px;
-  background: var(--bg-surface);
+  border-radius: 6px;
+  background: transparent;
   cursor: none;
   display: flex;
   align-items: center;
@@ -189,6 +185,21 @@ body {
 .mute-btn:hover {
   border-color: var(--green-deep);
   color: var(--green-neon);
+  background: rgba(0,255,133,0.06);
+}
+
+/* CHATWOOT THEME OVERRIDES */
+.woot-widget-bubble {
+  background: var(--green-neon) !important;
+  box-shadow: 0 0 14px rgba(0,255,133,0.2) !important;
+}
+.woot-widget-bubble:hover {
+  background: var(--glow-light) !important;
+}
+.woot--widget-holder iframe {
+  border: 1px solid var(--border-default) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
 }
 
 /* BUTTON COMMONS */

@@ -145,12 +145,14 @@ We aim to respond to all inquiries within 5 business days. If you are unsatisfie
   },
 ];
 
-export default function PrivacyPolicy({ onNavigate }: {
+export default function PrivacyPolicy({ onNavigate, muted, onMuteToggle }: {
   onNavigate: (page: Page) => void;
+  muted?: boolean;
+  onMuteToggle?: () => void;
 }) {
   return (
     <>
-      <Navbar currentPage="privacy" onNavigate={onNavigate} />
+      <Navbar currentPage="privacy" onNavigate={onNavigate} muted={muted} onMuteToggle={onMuteToggle} />
       <main>
         <section
           style={{

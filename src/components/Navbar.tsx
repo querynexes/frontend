@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Volume2, VolumeX } from 'lucide-react';
 import { playTick } from '../utils/audio';
 import logoLight from '../assets/logos/querynexes-logo.png';
 
@@ -7,9 +7,11 @@ const SECTION_IDS = ['hero', 'features', 'simulation', 'pricing', 'faq', 'about'
 
 type NavPage = 'home' | 'product' | 'privacy' | 'terms';
 
-export default function Navbar({ currentPage, onNavigate }: {
+export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }: {
   currentPage?: NavPage;
   onNavigate?: (page: NavPage) => void;
+  muted?: boolean;
+  onMuteToggle?: () => void;
 } = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -113,6 +115,17 @@ export default function Navbar({ currentPage, onNavigate }: {
         {/* Actions */}
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }} className="hidden md:flex">
           <button
+            className="mute-btn"
+            onClick={onMuteToggle}
+            title={muted ? 'Unmute sounds' : 'Mute sounds'}
+            aria-label={muted ? 'Unmute' : 'Mute'}
+          >
+            {muted
+              ? <VolumeX size={16} strokeWidth={1.5} />
+              : <Volume2 size={16} strokeWidth={1.5} />
+            }
+          </button>
+          <button
             className="btn-primary"
             onMouseEnter={playTick}
             style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '6px' }}
@@ -187,13 +200,27 @@ export default function Navbar({ currentPage, onNavigate }: {
             </a>
           ))}
 
-          <button
-            className="btn-primary"
-            onClick={() => onNavigate?.(currentPage === 'home' ? 'product' : 'home')}
-            style={{ padding: '14px 32px', fontSize: '16px', marginTop: '12px' }}
-          >
-            {currentPage === 'home' ? 'QN_Core' : 'Dashboard'}
-          </button>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginTop: '12px' }}>
+            <button
+              className="mute-btn"
+              onClick={onMuteToggle}
+              title={muted ? 'Unmute sounds' : 'Mute sounds'}
+              aria-label={muted ? 'Unmute' : 'Mute'}
+              style={{ width: '44px', height: '44px' }}
+            >
+              {muted
+                ? <VolumeX size={18} strokeWidth={1.5} />
+                : <Volume2 size={18} strokeWidth={1.5} />
+              }
+            </button>
+            <button
+              className="btn-primary"
+              onClick={() => onNavigate?.(currentPage === 'home' ? 'product' : 'home')}
+              style={{ padding: '14px 32px', fontSize: '16px' }}
+            >
+              {currentPage === 'home' ? 'QN_Core' : 'Dashboard'}
+            </button>
+          </div>
         </div>
       )}
 

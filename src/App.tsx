@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
 import Loader from './components/Loader';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
@@ -15,6 +14,7 @@ import CTABanner from './components/CTABanner';
 import AboutSection from './components/AboutSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
+import ChatwootWidget from './components/ChatwootWidget';
 import ProductPage from './pages/ProductPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsConditions from './pages/TermsConditions';
@@ -108,15 +108,15 @@ export default function App() {
         transition: 'opacity 0.5s ease',
       }}>
         {page === 'product' ? (
-          <ProductPage onNavigate={navigate} />
+          <ProductPage onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
         ) : page === 'privacy' ? (
-          <PrivacyPolicy onNavigate={navigate} />
+          <PrivacyPolicy onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
         ) : page === 'terms' ? (
-          <TermsConditions onNavigate={navigate} />
+          <TermsConditions onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
         ) : (
           <>
             <ScrollRevealInit />
-            <Navbar currentPage="home" onNavigate={navigate} />
+            <Navbar currentPage="home" onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
             <HeroSection />
             <StatsBar />
             <PipelineViz />
@@ -130,23 +130,10 @@ export default function App() {
             <ContactSection />
             <CTABanner />
             <Footer onNavigate={navigate} />
+            <ChatwootWidget />
           </>
         )}
       </div>
-
-      {/* Mute button */}
-      {loaded && (
-        <button
-          className="mute-btn"
-          onClick={handleMuteToggle}
-          title={muted ? 'Unmute' : 'Mute'}
-        >
-          {muted
-            ? <VolumeX size={18} strokeWidth={1.5} />
-            : <Volume2 size={18} strokeWidth={1.5} />
-          }
-        </button>
-      )}
     </>
   );
 }
