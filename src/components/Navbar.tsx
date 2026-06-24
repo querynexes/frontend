@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Menu, X, Volume2, VolumeX } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { playTick } from '../utils/audio';
+import SoundWaveIcon from './SoundWaveIcon';
 import logoLight from '../assets/logos/querynexes-logo.png';
 
 const SECTION_IDS = ['hero', 'features', 'simulation', 'pricing', 'faq', 'about', 'contact'];
@@ -120,10 +121,7 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
             title={muted ? 'Unmute sounds' : 'Mute sounds'}
             aria-label={muted ? 'Unmute' : 'Mute'}
           >
-            {muted
-              ? <VolumeX size={16} strokeWidth={1.5} />
-              : <Volume2 size={16} strokeWidth={1.5} />
-            }
+            <SoundWaveIcon muted={!!muted} />
           </button>
           <button
             className="btn-primary"
@@ -208,10 +206,7 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
               aria-label={muted ? 'Unmute' : 'Mute'}
               style={{ width: '44px', height: '44px' }}
             >
-              {muted
-                ? <VolumeX size={18} strokeWidth={1.5} />
-                : <Volume2 size={18} strokeWidth={1.5} />
-              }
+              <SoundWaveIcon muted={!!muted} />
             </button>
             <button
               className="btn-primary"
@@ -244,6 +239,41 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
         .nav-link-hover:hover::after {
           width: 100%;
         }
+
+        /* Sound wave animation bars */
+        @keyframes sound-wave-bar {
+          0%, 100% { height: 3px; }
+          25% { height: 14px; }
+          50% { height: 6px; }
+          75% { height: 11px; }
+        }
+
+        .sound-wave-container {
+          opacity: 0.6;
+          transition: opacity 0.25s ease;
+        }
+        .mute-btn:hover .sound-wave-container {
+          opacity: 1;
+        }
+
+        .sound-bar-active {
+          background: var(--green-neon);
+          box-shadow: 0 0 5px color-mix(in srgb, var(--green-neon) 50%, transparent);
+          animation: sound-wave-bar 0.6s ease-in-out infinite;
+          transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                      background 0.35s ease,
+                      box-shadow 0.35s ease;
+        }
+
+        .sound-bar-muted {
+          background: var(--text-disabled);
+          box-shadow: none;
+          animation: none !important;
+          transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                      background 0.35s ease,
+                      box-shadow 0.35s ease;
+        }
+
         @media (max-width: 768px) {
           nav { padding: 0 20px !important; }
         }

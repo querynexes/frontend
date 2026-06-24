@@ -39,7 +39,7 @@ const pageToPath = (page: Page): string => {
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
-  const [muted, setMuted] = useState(() => localStorage.getItem('qn_muted') === 'true');
+  const [muted, setMuted] = useState(true); // always start muted on every page load
   const [page, setPage] = useState<Page>(() =>
     typeof window !== 'undefined' ? pathToPage() : 'home'
   );

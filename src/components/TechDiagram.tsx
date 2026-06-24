@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X, Maximize2 } from 'lucide-react';
+import { playTick } from '../utils/audio';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Interactive Architecture Data
@@ -238,6 +239,7 @@ export default function TechDiagram() {
                   <motion.div 
                     key={item.id} 
                     onClick={() => setActiveGalleryIdx(idx)}
+                    onMouseEnter={() => playTick()}
                     whileHover={{ y: -5, boxShadow: '0 12px 32px rgba(0,255,133,0.15)' }}
                     style={{ 
                       width: '320px', height: '180px', 
@@ -293,7 +295,7 @@ export default function TechDiagram() {
                       return (
                         <div 
                           key={node.id}
-                          onMouseEnter={() => setActiveNode(node)}
+                          onMouseEnter={() => { setActiveNode(node); playTick(); }}
                           style={{
                             background: isActive ? `${layer.color}10` : 'var(--bg-primary)',
                             border: `1px solid ${isActive ? layer.color : 'var(--border-default)'}`,

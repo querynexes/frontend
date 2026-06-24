@@ -172,7 +172,7 @@ body {
 .mute-btn {
   width: 36px;
   height: 36px;
-  border: 1px solid var(--border-default);
+  border: none;
   border-radius: 6px;
   background: transparent;
   cursor: none;
@@ -183,7 +183,6 @@ body {
   color: var(--text-muted);
 }
 .mute-btn:hover {
-  border-color: var(--green-deep);
   color: var(--green-neon);
   background: rgba(0,255,133,0.06);
 }
