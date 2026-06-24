@@ -19,10 +19,10 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
   const [active, setActive] = useState('');
 
   useEffect(() => {
-    if (currentPage !== 'home') return;
-    setActive('hero');
+    setActive(currentPage === 'home' ? 'hero' : '');
     const onScroll = () => {
       setScrolled(window.scrollY > 80);
+      if (currentPage !== 'home') return;
       let current = 'hero';
       for (const id of SECTION_IDS) {
         const el = document.getElementById(id);
@@ -31,6 +31,7 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
       setActive(current);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, [currentPage]);
 
@@ -49,7 +50,7 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
       setTimeout(() => {
         const el = document.querySelector(href);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+      }, 200);
     } else {
       const el = document.querySelector(href);
       if (el) el.scrollIntoView({ behavior: 'smooth' });

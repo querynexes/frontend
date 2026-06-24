@@ -31,7 +31,15 @@ export default function Footer({ onNavigate }: {
 } = {}) {
   const scrollTo = (id: string) => {
     const el = document.querySelector(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else if (onNavigate) {
+      onNavigate('home');
+      setTimeout(() => {
+        const target = document.querySelector(id);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      }, 200);
+    }
   };
 
   return (

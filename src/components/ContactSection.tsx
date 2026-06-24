@@ -156,18 +156,47 @@ export default function ContactSection() {
     return (
       <section id="contact" ref={sectionRef} style={sectionStyle}>
         <div style={innerStyle}>
-          <span className="section-label" style={{ textAlign: 'center', display: 'block' as const }}>
+          <span className="section-label reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', textAlign: 'center', display: 'block' as const }}>
             / CONTACT
           </span>
-          <h2 className="section-title" style={{ textAlign: 'center' }}>
+          <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', textAlign: 'center' }}>
             Thank you!
           </h2>
-          <p style={{
+          <p className="reveal-item" style={{
+            opacity: 0, transition: 'opacity 0.6s ease',
             fontSize: '14px', color: 'var(--text-secondary)',
             textAlign: 'center', maxWidth: '400px', margin: '0 auto', lineHeight: 1.65,
           }}>
             Your message has been sent successfully. Our team will contact you soon.
           </p>
+
+          <div style={gridStyle} className="contact-grid">
+            <div className="card" style={cardStyle}>
+              <span style={labelStyle}>/ MESSAGE SENT</span>
+              <div style={{
+                display: 'flex', flexDirection: 'column', gap: '12px',
+                padding: '24px 0',
+              }}>
+                <div style={{
+                  width: '40px', height: '40px',
+                  border: '1px solid var(--green-neon)', borderRadius: '50%',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: 'var(--green-neon)', fontSize: '18px', fontWeight: 700,
+                }}>✓</div>
+                <h3 style={{
+                  fontFamily: 'Space Grotesk, sans-serif', fontWeight: 600,
+                  fontSize: '16px', color: 'var(--text-primary)', margin: 0,
+                }}>We received your message</h3>
+                <p style={{
+                  fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.65, margin: 0,
+                }}>
+                  A member of our engineering team will review your deployment needs and get back to you within 4 hours.
+                </p>
+              </div>
+            </div>
+
+            <CompanyDetails />
+          </div>
         </div>
       </section>
     );

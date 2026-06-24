@@ -46,6 +46,7 @@ export default function App() {
   const { outerRef, innerRef } = useCustomCursor();
 
   const navigate = (target: Page) => {
+    window.scrollTo(0, 0);
     setPage(target);
     window.history.pushState({ page: target }, '', pageToPath(target));
   };

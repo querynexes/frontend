@@ -159,10 +159,37 @@ export default function PrivacyPolicy({ onNavigate, muted, onMuteToggle }: {
             padding: '120px 48px 64px',
             background: 'var(--bg-primary)',
             borderBottom: '1px solid var(--border-default)',
+            position: 'relative',
+            overflow: 'hidden',
           }}
           className="legal-hero"
         >
-          <span className="section-label" style={{ display: 'block', marginBottom: '12px' }}>
+          {/* Background decorative elements */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden',
+          }}>
+            <div className="legal-grid-bg" />
+            <div style={{
+              position: 'absolute', top: '-40%', right: '-10%',
+              width: '500px', height: '500px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(0,255,133,0.06) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+            <div style={{
+              position: 'absolute', bottom: '-20%', left: '-5%',
+              width: '300px', height: '300px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(45,211,255,0.04) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+            <div className="legal-particle legal-particle-1" />
+            <div className="legal-particle legal-particle-2" />
+            <div className="legal-particle legal-particle-3" />
+          </div>
+          <div className="legal-hero-accent" />
+
+          <span className="section-label" style={{ display: 'block', marginBottom: '12px', position: 'relative', zIndex: 1 }}>
             // LEGAL
           </span>
           <h1
@@ -175,6 +202,7 @@ export default function PrivacyPolicy({ onNavigate, muted, onMuteToggle }: {
               lineHeight: 1.15,
               marginBottom: '16px',
               maxWidth: '720px',
+              position: 'relative', zIndex: 1,
             }}
           >
             Privacy Policy
@@ -187,6 +215,7 @@ export default function PrivacyPolicy({ onNavigate, muted, onMuteToggle }: {
               lineHeight: 1.7,
               maxWidth: '600px',
               marginBottom: 0,
+              position: 'relative', zIndex: 1,
             }}
           >
             How QueryNexes collects, uses, and protects your data across our
@@ -254,6 +283,72 @@ export default function PrivacyPolicy({ onNavigate, muted, onMuteToggle }: {
       <Footer onNavigate={onNavigate} />
 
       <style>{`
+        .legal-hero-accent {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, var(--green-neon), transparent);
+          opacity: 0.3;
+        }
+        .legal-grid-bg {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(0,255,133,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,255,133,0.03) 1px, transparent 1px);
+          background-size: 60px 60px;
+          mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 70%);
+          -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 70%);
+        }
+        .legal-particle {
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: var(--green-neon);
+          opacity: 0;
+          pointer-events: none;
+        }
+        .legal-particle-1 {
+          top: 20%;
+          left: 15%;
+          animation: legal-float 6s ease-in-out infinite;
+          animation-delay: 0s;
+        }
+        .legal-particle-2 {
+          top: 60%;
+          right: 20%;
+          width: 3px;
+          height: 3px;
+          animation: legal-float 8s ease-in-out infinite;
+          animation-delay: 2s;
+        }
+        .legal-particle-3 {
+          top: 35%;
+          left: 60%;
+          width: 5px;
+          height: 5px;
+          animation: legal-float 7s ease-in-out infinite;
+          animation-delay: 4s;
+        }
+        @keyframes legal-float {
+          0%, 100% {
+            opacity: 0;
+            transform: translateY(0) scale(0.5);
+          }
+          25% {
+            opacity: 0.4;
+          }
+          50% {
+            opacity: 0.6;
+            transform: translateY(-20px) scale(1);
+          }
+          75% {
+            opacity: 0.2;
+          }
+        }
         @media (max-width: 768px) {
           .legal-hero { padding: 100px 24px 48px !important; }
           .legal-content { padding: 48px 24px 64px !important; }

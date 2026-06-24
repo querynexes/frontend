@@ -105,7 +105,7 @@ export default function ProductPage({ onNavigate, muted, onMuteToggle }: {
           </a>
         </div>
       </main>
-      <Footer />
+      <Footer onNavigate={onNavigate} />
     </>
   );
 }
