@@ -141,8 +141,8 @@ export default function FeaturesGrid() {
               </div>
 
               <div style={{
-                width: '68px',
-                height: '68px',
+                width: '80px',
+                height: '80px',
                 borderRadius: '14px',
                 background: 'rgba(0,168,84,0.1)',
                 border: '1px solid var(--green-dark)',
@@ -151,7 +151,7 @@ export default function FeaturesGrid() {
                 justifyContent: 'center',
                 marginBottom: '20px',
               }}>
-                <img src={feat.icon} alt={feat.title} style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                <img src={feat.icon} alt={feat.title} style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
               </div>
 
               <div style={{

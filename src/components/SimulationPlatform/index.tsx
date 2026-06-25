@@ -228,11 +228,11 @@ function DesktopSimulation() {
           {MODE_LABELS[mode]}
         </div>
 
-        {/* Hint on overview */}
+        {/* Rotation hint on overview */}
         {mode === 'overview' && !loading && !loadError && (
           <div style={{
             position: 'absolute',
-            bottom: '16px',
+            bottom: '66px',
             left: '50%',
             transform: 'translateX(-50%)',
             fontFamily: 'JetBrains Mono, monospace',
@@ -245,7 +245,29 @@ function DesktopSimulation() {
             whiteSpace: 'nowrap',
             backdropFilter: 'blur(8px)',
           }}>
-            CLICK AN ISLAND TO INSPECT · USE CONTROLS ABOVE TO NAVIGATE
+            CLICK AN ISLAND TO INSPECT
+          </div>
+        )}
+
+        {/* Rotation hint on detail mode */}
+        {mode !== 'overview' && !loading && !loadError && (
+          <div style={{
+            position: 'absolute',
+            bottom: '66px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: '10px',
+            color: 'var(--text-disabled)',
+            letterSpacing: '0.1em',
+            background: 'rgba(5,10,7,0.7)',
+            padding: '6px 14px',
+            borderRadius: '4px',
+            whiteSpace: 'nowrap',
+            backdropFilter: 'blur(8px)',
+            animation: 'fadeIn 0.5s ease',
+          }}>
+            DRAG TO ROTATE · SCROLL TO ZOOM
           </div>
         )}
 
@@ -253,55 +275,54 @@ function DesktopSimulation() {
         {mode !== 'overview' && detailInfo.lines.length > 0 && (
           <div className="sim-detail-panel" style={{
             position: 'absolute',
-            right: '16px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            width: '230px',
-            background: 'rgba(11,20,16,0.92)',
-            border: '1px solid var(--border-default)',
-            borderRadius: '10px',
-            padding: '18px',
+            bottom: '0',
+            left: '0',
+            right: '0',
+            background: 'linear-gradient(0deg, rgba(11,20,16,0.92) 0%, rgba(11,20,16,0.4) 100%)',
+            borderTop: '1px solid var(--border-default)',
+            padding: '12px 16px',
             fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '11px',
-            backdropFilter: 'blur(16px)',
+            fontSize: '10px',
+            backdropFilter: 'blur(12px)',
             animation: 'fadeIn 0.3s ease',
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '14px',
+            flexWrap: 'wrap',
           }}>
             <div style={{
               color: 'var(--green-neon)',
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
-              marginBottom: '14px',
               fontSize: '10px',
               fontWeight: 700,
-              borderBottom: '1px solid var(--border-default)',
-              paddingBottom: '10px',
+              flexShrink: 0,
+              paddingTop: '2px',
             }}>
               {detailInfo.title}
             </div>
 
-            {detailInfo.lines.map(([k, v]) => (
-              <div key={k} style={{
-                color: 'var(--text-secondary)',
-                marginBottom: '7px',
-                lineHeight: 1.5,
-                display: 'flex',
-                justifyContent: 'space-between',
-                gap: '8px',
-              }}>
-                <span style={{ color: 'var(--text-muted)', flexShrink: 0 }}>{k}</span>
-                <span style={{ color: 'var(--green-stable)', textAlign: 'right' }}>{v}</span>
-              </div>
-            ))}
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', flex: 1, alignItems: 'center' }}>
+              {detailInfo.lines.map(([k, v]) => (
+                <div key={k} style={{
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.5,
+                  display: 'flex',
+                  gap: '4px',
+                  whiteSpace: 'nowrap',
+                }}>
+                  <span style={{ color: 'var(--text-muted)' }}>{k}</span>
+                  <span style={{ color: 'var(--green-stable)' }}>{v}</span>
+                </div>
+              ))}
+            </div>
 
             {detailInfo.progress && (
-              <div style={{ marginTop: '14px', borderTop: '1px solid var(--border-default)', paddingTop: '12px' }}>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
                 {detailInfo.progress.map(p => (
-                  <div key={p.label} style={{ marginBottom: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                      <span style={{ fontSize: '10px', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>{p.label}</span>
-                      <span style={{ fontSize: '10px', color: 'var(--green-neon)' }}>{p.pct}%</span>
-                    </div>
-                    <div style={{ height: '4px', background: 'var(--bg-elevated)', borderRadius: '2px', overflow: 'hidden' }}>
+                  <div key={p.label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '9px', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>{p.label}</span>
+                    <div style={{ width: '50px', height: '4px', background: 'var(--bg-elevated)', borderRadius: '2px', overflow: 'hidden' }}>
                       <div style={{
                         height: '100%',
                         width: `${p.pct}%`,
@@ -310,14 +331,15 @@ function DesktopSimulation() {
                         transition: 'width 1s ease',
                       }} />
                     </div>
+                    <span style={{ fontSize: '9px', color: 'var(--green-neon)' }}>{p.pct}%</span>
                   </div>
                 ))}
               </div>
             )}
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '14px', borderTop: '1px solid var(--border-default)', paddingTop: '10px' }}>
-              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--green-neon)', animation: 'pulse 1.5s infinite', flexShrink: 0 }} />
-              <span style={{ fontSize: '9px', color: 'var(--green-stable)', letterSpacing: '0.1em' }}>SYSTEM ACTIVE</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginLeft: 'auto', flexShrink: 0 }}>
+              <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--green-neon)', animation: 'pulse 1.5s infinite', flexShrink: 0 }} />
+              <span style={{ fontSize: '8px', color: 'var(--green-stable)', letterSpacing: '0.1em' }}>ACTIVE</span>
             </div>
           </div>
         )}

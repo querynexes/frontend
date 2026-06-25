@@ -7,7 +7,7 @@ interface LoaderProps {
 
 const LINES = [
   'INITIALIZING OPTIMIZATION ENGINE...',
-  'LOADING NVIDIA SDK INTERFACES...',
+  'LOADING ACCELERATION ENGINE INTERFACES...',
   'CALIBRATING HARDWARE PROFILES...',
 ];
 
@@ -145,7 +145,7 @@ export default function Loader({ onComplete }: LoaderProps) {
         position: 'absolute',
         bottom: '32px',
       }}>
-        POWERED BY NVIDIA SDK · v3.1.0
+        POWERED BY ACCELERATION ENGINE · v3.1.0
       </div>
 
       {/* Scanline effect */}

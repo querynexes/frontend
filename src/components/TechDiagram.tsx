@@ -389,7 +389,16 @@ export default function TechDiagram() {
         
         @media (max-width: 1024px) {
           .command-center-layout { grid-template-columns: 1fr !important; }
-          .gallery-nav { display: none !important; } /* Hide side buttons on mobile, allow tap to close */
+        }
+        @media (max-width: 768px) {
+          .gallery-nav { display: flex !important; }
+          #tech-diagram { padding: 64px 24px !important; }
+        }
+        @media (max-width: 425px) {
+          #tech-diagram { padding: 48px 16px !important; }
+        }
+        @media (max-width: 375px) {
+          #tech-diagram { padding: 40px 12px !important; }
         }
       `}</style>
     </section>

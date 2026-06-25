@@ -173,12 +173,13 @@ export default function AboutSection() {
           >
             <iframe
               title="QueryNexes Office Location"
-              src="https://maps.google.com/maps?q=Colombo&t=&z=13&ie=UTF8&iwloc=&output=embed"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0131710065175!2d-122.401906!3d37.7897311!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858089d1655555%3A0xb38deb60ccb216f3!2s44%20Montgomery%20St%203rd%20floor%2C%20San%20Francisco%2C%20CA%2094104%2C%20USA!5e0!3m2!1sen!2slk!4v1782379853855!5m2!1sen!2slk"
               width="100%"
               height="100%"
               style={{ minHeight: '200px', border: 'none', display: 'block' }}
               loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
             />
           </div>
         </div>
@@ -191,7 +192,13 @@ export default function AboutSection() {
         }
         @media (max-width: 768px) {
           .about-grid { grid-template-columns: 1fr !important; }
-          section { padding-left: 20px !important; padding-right: 20px !important; }
+          #about { padding-left: 20px !important; padding-right: 20px !important; }
+        }
+        @media (max-width: 425px) {
+          #about { padding: 48px 16px !important; }
+        }
+        @media (max-width: 375px) {
+          #about { padding: 40px 12px !important; }
         }
       `}</style>
     </section>

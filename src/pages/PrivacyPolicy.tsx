@@ -6,7 +6,7 @@ type Page = 'home' | 'product' | 'privacy' | 'terms';
 const SECTIONS = [
   {
     title: '1. Introduction',
-    content: `QueryNexes, Inc. ("QueryNexes," "we," "us," or "our") is committed to protecting the privacy of individuals and organizations that interact with our AI Model Compilation & Optimization Platform. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our platform, or engage with our services.
+    content: `QueryNexes, Inc. ("QueryNexes," "we," "us," or "our") is committed to protecting the privacy of individuals and organizations that interact with our Model Compilation and Optimization Platform. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our platform, or engage with our services.
 
 By accessing or using QueryNexes, you acknowledge that you have read, understood, and agree to the practices described in this policy. If you do not agree with any provision herein, you must discontinue use of our services immediately.`,
   },
@@ -108,7 +108,7 @@ Payment Processing: Stripe, Inc. for secure payment handling.
 
 Analytics: First-party and third-party analytics tools to monitor platform performance.
 
-SDK Integrations: NVIDIA SDK, TensorRT, and other ML framework toolkits necessary for model compilation.
+SDK Integrations: GPU compiler SDKs, TensorRT, and other ML framework toolkits necessary for model compilation.
 
 We are not responsible for the privacy practices of these third parties. We encourage you to review their privacy policies independently. Integration with third-party services is governed by your agreement with those providers.`,
   },
@@ -219,7 +219,7 @@ export default function PrivacyPolicy({ onNavigate, muted, onMuteToggle }: {
             }}
           >
             How QueryNexes collects, uses, and protects your data across our
-            AI Model Compilation &amp; Optimization Platform.
+            Model Compilation and Optimization Platform.
           </p>
         </section>
 
@@ -239,7 +239,7 @@ export default function PrivacyPolicy({ onNavigate, muted, onMuteToggle }: {
               gap: '28px',
             }}
           >
-            {SECTIONS.map((section, i) => (
+                {SECTIONS.map((section, i) => (
               <div
                 key={i}
                 style={{

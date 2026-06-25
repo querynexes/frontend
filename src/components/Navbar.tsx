@@ -80,7 +80,7 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
           style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}
           onMouseEnter={playTick}
         >
-          <img src={logoLight} alt="QueryNexes" style={{ width: '96px', height: '96px', objectFit: 'contain' }} />
+          <img src={logoLight} alt="QueryNexes" style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
         </a>
 
         {/* Center links */}
@@ -277,6 +277,12 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
 
         @media (max-width: 768px) {
           nav { padding: 0 20px !important; }
+        }
+        @media (max-width: 425px) {
+          nav { padding: 0 12px !important; }
+        }
+        @media (max-width: 375px) {
+          nav { padding: 0 8px !important; }
         }
       `}</style>
     </>

@@ -389,6 +389,26 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
             height: 18px !important;
           }
         }
+        @media (max-width: 425px) {
+          .hero-fg {
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+          }
+          .hero-glass {
+            padding: 16px !important;
+          }
+          .hero-terminal {
+            height: 80px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .hero-glass {
+            padding: 12px !important;
+          }
+          .hero-terminal {
+            height: 72px !important;
+          }
+        }
       `}</style>
     </div>
   );

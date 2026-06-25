@@ -328,7 +328,7 @@ function CompanyDetails() {
               borderRadius: '6px', display: 'flex', alignItems: 'center',
               justifyContent: 'center', color: 'var(--green-neon)', flexShrink: 0,
             }}>
-              <item.icon size={16} strokeWidth={1.5} />
+              <item.icon size={20} strokeWidth={1.5} />
             </div>
             <div>
               <span style={{

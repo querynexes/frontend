@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { playSimClick, playIslandHover } from '../../utils/audio';
 
 // Drop your downloaded .glb files here: src/assets/models/1.glb, 2.glb, 3.glb
@@ -168,11 +169,7 @@ export default function SimulationScene() {
     orbitMesh: THREE.Points;
     camTarget: { x: number; y: number; z: number };
     camLook: THREE.Vector3;
-    inputDetailGroup: THREE.Group;
-    processDetailGroup: THREE.Group;
-    outputDetailGroup: THREE.Group;
-    processLayerOffsets: Float32Array;
-    outputPackets: { mesh: THREE.Mesh; t: number; speed: number; target: THREE.Vector3 }[];
+    controls: OrbitControls;
   } | null>(null);
 
   const [mode, setMode] = useState<SimMode>('overview');
@@ -196,22 +193,23 @@ export default function SimulationScene() {
     if (!data) return;
 
     if (newMode === 'overview') {
+      data.controls.enabled = false;
+      data.controls.autoRotate = false;
       data.camTarget = { x: 0, y: 6, z: 16 };
       data.camLook.set(0, 0, 0);
-    } else if (newMode === 'input') {
-      data.camTarget = { x: -5.5, y: 3, z: 8 };
-      data.camLook.set(-5.5, 0.5, 0);
-    } else if (newMode === 'process') {
-      data.camTarget = { x: 0, y: 4, z: 8 };
-      data.camLook.set(0, 1, 0);
-    } else if (newMode === 'output') {
-      data.camTarget = { x: 5.5, y: 3, z: 8 };
-      data.camLook.set(5.5, 0.5, 0);
+    } else {
+      let cx = 0, cy = 0, cz = 0;
+      if (newMode === 'input') { cx = -5.5; }
+      else if (newMode === 'process') { cy = 0.6; }
+      else if (newMode === 'output') { cx = 5.5; }
+
+      data.controls.target.set(cx, cy + 0.5, cz);
+      data.controls.enabled = true;
+      data.controls.autoRotate = true;
+      data.camera.position.set(cx + 3.5, cy + 2, cz + 3.5);
+      data.controls.update();
     }
 
-    data.inputDetailGroup.visible = newMode === 'input';
-    data.processDetailGroup.visible = newMode === 'process';
-    data.outputDetailGroup.visible = newMode === 'output';
     data.orbitMesh.visible = newMode !== 'overview';
   }, []);
 
@@ -308,109 +306,6 @@ export default function SimulationScene() {
     orbitMesh.visible = false;
     scene.add(orbitMesh);
 
-    // --- INPUT DETAIL GROUP ---
-    const inputDetailGroup = new THREE.Group();
-    inputDetailGroup.visible = false;
-    const fileFormats = ['model.pt', 'model.onnx', 'model.pb', 'model.tflite'];
-    fileFormats.forEach((_, fi) => {
-      const angle = (fi / fileFormats.length) * Math.PI * 2;
-      const fm = new THREE.Mesh(
-        new THREE.BoxGeometry(0.9, 0.05, 1.2),
-        new THREE.MeshStandardMaterial({ color: 0x111C16, metalness: 0.8, roughness: 0.2, emissive: 0x002210, emissiveIntensity: 0.5 })
-      );
-      fm.position.set(
-        Math.cos(angle) * 2.5 - 5.5,
-        1.5 + Math.sin(fi) * 0.3,
-        Math.sin(angle) * 1.5
-      );
-      fm.rotation.x = -0.3;
-      inputDetailGroup.add(fm);
-
-      const edges = new THREE.EdgesGeometry(new THREE.BoxGeometry(0.9, 0.05, 1.2));
-      const edgeMat = new THREE.LineBasicMaterial({ color: 0x00FF85, transparent: true, opacity: 0.8 });
-      const edgeMesh = new THREE.LineSegments(edges, edgeMat);
-      edgeMesh.position.copy(fm.position);
-      edgeMesh.rotation.copy(fm.rotation);
-      inputDetailGroup.add(edgeMesh);
-    });
-    const funnel = new THREE.Mesh(
-      new THREE.ConeGeometry(0.8, 1.5, 12, 1, true),
-      new THREE.MeshBasicMaterial({ color: 0x00A854, wireframe: true, transparent: true, opacity: 0.6 })
-    );
-    funnel.position.set(-5.5, 0.5, 0);
-    inputDetailGroup.add(funnel);
-    scene.add(inputDetailGroup);
-
-    // --- PROCESS DETAIL GROUP ---
-    const processDetailGroup = new THREE.Group();
-    processDetailGroup.visible = false;
-    const layerColors = [0x001808, 0x002210, 0x003018, 0x00401C];
-    const processLayerOffsets = new Float32Array(4);
-    for (let li = 0; li < 4; li++) {
-      const layer = new THREE.Mesh(
-        new THREE.BoxGeometry(2.0 - li * 0.1, 0.08, 2.0 - li * 0.1),
-        new THREE.MeshStandardMaterial({ color: 0x111C16, emissive: layerColors[li], emissiveIntensity: 1.5, transparent: true, opacity: 0.9 })
-      );
-      layer.position.y = li * 0.4;
-      processDetailGroup.add(layer);
-      processLayerOffsets[li] = li * 0.4;
-    }
-    const nodeCount = 12;
-    const nodeMat = new THREE.MeshStandardMaterial({ color: 0x00FF85, emissive: 0x00FF85, emissiveIntensity: 1.5 });
-    const nodePositions: THREE.Vector3[] = [];
-    for (let ni = 0; ni < nodeCount; ni++) {
-      const nMesh = new THREE.Mesh(new THREE.SphereGeometry(0.07, 8, 8), nodeMat);
-      const np = new THREE.Vector3(
-        (Math.random() - 0.5) * 1.6,
-        Math.random() * 1.2 + 0.2,
-        (Math.random() - 0.5) * 1.6
-      );
-      nMesh.position.copy(np);
-      nodePositions.push(np);
-      processDetailGroup.add(nMesh);
-    }
-    for (let ni = 0; ni < nodeCount - 1; ni++) {
-      const pts = [nodePositions[ni], nodePositions[ni + 1]];
-      const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
-      processDetailGroup.add(new THREE.Line(lineGeo, new THREE.LineBasicMaterial({ color: 0x00A854, transparent: true, opacity: 0.5 })));
-    }
-    processDetailGroup.position.set(0, 0, 0);
-    scene.add(processDetailGroup);
-
-    // --- OUTPUT DETAIL GROUP ---
-    const outputDetailGroup = new THREE.Group();
-    outputDetailGroup.visible = false;
-    const deployTargets = [
-      { x: -1.8, y: 0.8, z: -1, color: 0x2ED3FF, label: 'CLOUD' },
-      { x: 0, y: 1.2, z: 0.5, color: 0x00FF85, label: 'EDGE' },
-      { x: 1.8, y: 0.8, z: -1, color: 0xFFB020, label: 'ENTERPRISE' },
-    ];
-    deployTargets.forEach(dt => {
-      const zone = new THREE.Mesh(
-        new THREE.BoxGeometry(0.9, 0.6, 0.9),
-        new THREE.MeshStandardMaterial({ color: 0x111C16, emissive: new THREE.Color(dt.color).multiplyScalar(0.3).getHex(), emissiveIntensity: 1 })
-      );
-      zone.position.set(dt.x + 5.5, dt.y, dt.z);
-      outputDetailGroup.add(zone);
-      const led = new THREE.Mesh(
-        new THREE.SphereGeometry(0.1, 8, 8),
-        new THREE.MeshBasicMaterial({ color: dt.color })
-      );
-      led.position.set(dt.x + 5.5, dt.y + 0.5, dt.z);
-      outputDetailGroup.add(led);
-    });
-
-    const outputPackets: { mesh: THREE.Mesh; t: number; speed: number; target: THREE.Vector3 }[] = [];
-    deployTargets.forEach(dt => {
-      const pkg = new THREE.Mesh(
-        new THREE.BoxGeometry(0.18, 0.18, 0.18),
-        new THREE.MeshStandardMaterial({ color: 0x00FF85, emissive: 0x00FF85, emissiveIntensity: 1.5 })
-      );
-      outputPackets.push({ mesh: pkg, t: Math.random(), speed: 0.008 + Math.random() * 0.006, target: new THREE.Vector3(dt.x + 5.5, dt.y, dt.z) });
-      scene.add(pkg);
-    });
-    scene.add(outputDetailGroup);
-
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     const camTarget = { x: 0, y: 6, z: 16 };
@@ -443,6 +338,16 @@ export default function SimulationScene() {
       return () => { renderer.dispose(); };
     }
 
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 3;
+    controls.maxDistance = 12;
+    controls.autoRotate = false;
+    controls.autoRotateSpeed = 2.0;
+    controls.enabled = false;
+    controls.target.set(0, 0, 0);
+
     Promise.all(
       islandDefs.map(d => loader.loadAsync(MODEL_URLS[d.modelKey]))
     ).then((gltfs) => {
@@ -460,9 +365,7 @@ export default function SimulationScene() {
         dpT, dpSeg,
         orbitGeo, orbitAngles, orbitRadii, orbitMesh,
         camTarget, camLook,
-        inputDetailGroup, processDetailGroup, outputDetailGroup,
-        processLayerOffsets,
-        outputPackets,
+        controls,
       };
 
       onClick = (e: MouseEvent) => {
@@ -504,10 +407,14 @@ export default function SimulationScene() {
         const now = Date.now();
         const data = sceneDataRef.current!;
 
-        camera.position.x += (data.camTarget.x - camera.position.x) * 0.05;
-        camera.position.y += (data.camTarget.y - camera.position.y) * 0.05;
-        camera.position.z += (data.camTarget.z - camera.position.z) * 0.05;
-        camera.lookAt(data.camLook);
+        if (data.controls.enabled) {
+          data.controls.update();
+        } else {
+          camera.position.x += (data.camTarget.x - camera.position.x) * 0.05;
+          camera.position.y += (data.camTarget.y - camera.position.y) * 0.05;
+          camera.position.z += (data.camTarget.z - camera.position.z) * 0.05;
+          camera.lookAt(data.camLook);
+        }
 
         islands.forEach((isl, i) => {
           (isl.ring.material as THREE.MeshBasicMaterial).opacity = 0.25 + Math.sin(now * 0.0018 + i * 2.1) * 0.18;
@@ -548,27 +455,6 @@ export default function SimulationScene() {
           orbitGeo.attributes.position.needsUpdate = true;
         }
 
-        if (data.inputDetailGroup.visible) {
-          data.inputDetailGroup.children.forEach((c, ci) => {
-            if (ci < 8) c.rotation.y += 0.004;
-          });
-          (data.inputDetailGroup.children[data.inputDetailGroup.children.length - 1] as THREE.Mesh).rotation.y += 0.01;
-        }
-
-        if (data.processDetailGroup.visible) {
-          data.processDetailGroup.children.slice(0, 4).forEach((c, li) => {
-            c.position.y = data.processLayerOffsets[li] + Math.sin(now * 0.001 + li) * 0.06;
-          });
-        }
-
-        outputPackets.forEach(pkt => {
-          pkt.t += pkt.speed;
-          if (pkt.t > 1) pkt.t = 0;
-          const origin = new THREE.Vector3(5.5, 1, 0);
-          pkt.mesh.position.lerpVectors(origin, pkt.target, pkt.t);
-          pkt.mesh.visible = data.outputDetailGroup.visible;
-        });
-
         fillLight.intensity = 1.8 + Math.sin(now * 0.0008) * 0.5;
         renderer.render(scene, camera);
       };
@@ -598,6 +484,7 @@ export default function SimulationScene() {
       canvas.removeEventListener('click', onClick);
       canvas.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', onResize);
+      controls.dispose();
       renderer.dispose();
     };
   }, [switchMode]);

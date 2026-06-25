@@ -224,6 +224,12 @@ export default function ProductPage({ onNavigate, muted, onMuteToggle }: {
           .product-grid { grid-template-columns: 1fr !important; }
           .section-sub { margin-bottom: 40px !important; }
         }
+        @media (max-width: 425px) {
+          section { padding: 48px 16px !important; }
+        }
+        @media (max-width: 375px) {
+          section { padding: 40px 12px !important; }
+        }
       `}</style>
     </>
   );

@@ -131,12 +131,12 @@ export default function PipelineViz() {
                 </div>
 
                 <div style={{
-                  width: '60px', height: '60px', borderRadius: '10px',
+                  width: '72px', height: '72px', borderRadius: '10px',
                   background: 'rgba(0,168,84,0.1)', border: '1px solid var(--green-dark)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   marginBottom: '16px',
                 }}>
-                  <img src={step.icon} alt={step.name} style={{ width: '36px', height: '36px', objectFit: 'contain' }} />
+                  <img src={step.icon} alt={step.name} style={{ width: '44px', height: '44px', objectFit: 'contain' }} />
                 </div>
 
                 <div style={{

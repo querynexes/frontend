@@ -6,7 +6,7 @@ import { playTick } from '../utils/audio';
 const PLANS = [
   {
     name: 'Starter',
-    prices: { monthly: '299', annually: '99' },
+    prices: { monthly: '99', annually: '79' },
     featured: false,
     url: {
       monthly: 'https://buy.stripe.com/test_8x200cgj61uP9VvcfH9k400',
@@ -25,7 +25,7 @@ const PLANS = [
   },
   {
     name: 'Professional',
-    prices: { monthly: '999', annually: '249' },
+    prices: { monthly: '245', annually: '199' },
     featured: true,
     url: {
       monthly: 'https://buy.stripe.com/test_9B68wIff28Xh0kV5Rj9k401',
@@ -364,6 +364,10 @@ export default function Pricing() {
             grid-template-columns: 1fr !important; 
             max-width: 450px !important; 
           }
+        }
+        @media (max-width: 425px) {
+          #pricing { padding: 48px 12px !important; }
+          .pricing-responsive { max-width: 100% !important; }
         }
         @media (max-width: 425px) {
           #pricing { padding: 48px 16px !important; }

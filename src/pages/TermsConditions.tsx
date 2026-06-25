@@ -6,13 +6,13 @@ type Page = 'home' | 'product' | 'privacy' | 'terms';
 const SECTIONS = [
   {
     title: '1. Acceptance of Terms',
-    content: `By accessing or using the QueryNexes AI Model Compilation & Optimization Platform ("Platform"), including any associated websites, APIs, SDKs, documentation, and services (collectively, the "Services"), you agree to be bound by these Terms and Conditions ("Terms"). If you are using the Services on behalf of an organization, you represent and warrant that you have the authority to bind that organization to these Terms.
+    content: `By accessing or using the QueryNexes Model Compilation and Optimization Platform ("Platform"), including any associated websites, APIs, SDKs, documentation, and services (collectively, the "Services"), you agree to be bound by these Terms and Conditions ("Terms"). If you are using the Services on behalf of an organization, you represent and warrant that you have the authority to bind that organization to these Terms.
 
 If you do not agree to all provisions of these Terms, you must not access or use the Services. Continued use of the Services following any modification to these Terms constitutes your acceptance of the modified Terms.`,
   },
   {
     title: '2. Description of Service',
-    content: `QueryNexes provides an AI model compilation and optimization platform that transforms experimental machine learning models into production-ready, hardware-optimized assets. The Platform supports multiple ML frameworks and hardware targets, offering compilation, benchmarking, and deployment capabilities.
+    content: `QueryNexes provides a model compilation and optimization platform that transforms experimental machine learning models into production-ready, hardware-optimized assets. The Platform supports multiple ML frameworks and hardware targets, offering compilation, benchmarking, and deployment capabilities.
 
 The Services are provided on a subscription basis with varying tiers of functionality, performance, and support. Specific service levels, feature availability, and usage limits are defined in your selected plan and corresponding Service Level Agreement (SLA), which is incorporated herein by reference.
 
@@ -207,8 +207,8 @@ export default function TermsConditions({ onNavigate, muted, onMuteToggle }: {
               position: 'relative', zIndex: 1,
             }}
           >
-            The terms governing your use of the QueryNexes AI Model Compilation
-            &amp; Optimization Platform and related services.
+            The terms governing your use of the QueryNexes Model Compilation
+            and Optimization Platform and related services.
           </p>
         </section>
 

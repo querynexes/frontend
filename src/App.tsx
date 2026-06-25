@@ -15,6 +15,7 @@ import AboutSection from './components/AboutSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import ChatwootWidget from './components/ChatwootWidget';
+import CookieConsent from './components/CookieConsent';
 import ProductPage from './pages/ProductPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsConditions from './pages/TermsConditions';
@@ -134,6 +135,7 @@ export default function App() {
             <CTABanner />
             <Footer onNavigate={navigate} />
             <ChatwootWidget />
+            <CookieConsent />
           </>
         )}
       </div>

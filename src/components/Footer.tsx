@@ -1,20 +1,18 @@
-import { Github, Linkedin, Twitter } from 'lucide-react';
+import { Linkedin, Facebook, Twitter, Youtube } from 'lucide-react';
 import { playTick } from '../utils/audio';
 import logoLight from '../assets/logos/querynexes-logo.png';
 
 type Page = 'home' | 'product' | 'privacy' | 'terms';
 
 const LINKS = {
-  Platform: ['Features', 'Simulation', 'API'],
-  Resources: ['Documentation', 'FAQ', 'Testimonials'],
+  Platform: ['Features', 'Simulation'],
+  Resources: ['FAQ', 'Testimonials'],
   Company: ['About', 'Contact', 'Privacy Policy', 'Terms & Conditions'],
 };
 
 const HREF_MAP: Record<string, string> = {
   Features: '#features',
   Simulation: '#simulation',
-  API: '#faq',
-  Documentation: '#faq',
   FAQ: '#faq',
   Testimonials: '#testimonials',
   About: '#about',
@@ -67,7 +65,7 @@ export default function Footer({ onNavigate }: {
             alignItems: 'center',
             gap: '10px',
           }}>
-            <img src={logoLight} alt="QueryNexes" style={{ width: '100px', height: '100px', objectFit: 'contain' }} />
+            <img src={logoLight} alt="QueryNexes" style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
           </div>
 
           <p style={{
@@ -82,10 +80,12 @@ export default function Footer({ onNavigate }: {
 
           <div style={{ display: 'flex', gap: '10px' }}>
             {[
-              { Icon: Github, label: 'GitHub' },
               { Icon: Linkedin, label: 'LinkedIn' },
-              { Icon: Twitter, label: 'Twitter' },
-            ].map(({ Icon, label }) => (
+              { Icon: Facebook, label: 'Facebook' },
+              { Icon: Twitter, label: 'X' },
+              { icon: 'Pinterest', label: 'Pinterest' },
+              { Icon: Youtube, label: 'YouTube' },
+            ].map(({ Icon, label, icon }) => Icon ? (
               <a
                 key={label}
                 href="#"
@@ -113,7 +113,39 @@ export default function Footer({ onNavigate }: {
                   (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
                 }}
               >
-                <Icon size={16} strokeWidth={1.5} />
+                <Icon size={20} strokeWidth={1.5} />
+              </a>
+            ) : (
+              <a
+                key={label}
+                href="#"
+                aria-label={label}
+                onMouseEnter={playTick}
+                style={{
+                  width: '36px',
+                  height: '36px',
+                  border: '1px solid var(--border-default)',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-muted)',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s',
+                  cursor: 'none',
+                }}
+                onMouseOver={e => {
+                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--green-deep)';
+                  (e.currentTarget as HTMLElement).style.color = 'var(--green-neon)';
+                }}
+                onMouseOut={e => {
+                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-default)';
+                  (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
+                }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.5 2C9.48 2 7 4.48 7 7.5c0 1.88 1.03 3.52 2.56 4.4C6.62 12.44 4 15.36 4 19c0 .28.22.5.5.5h16c.28 0 .5-.22.5-.5 0-3.64-2.62-6.56-5.56-7.1A5.48 5.48 0 0 0 18 7.5 5.5 5.5 0 0 0 12.5 2z"/>
+                </svg>
               </a>
             ))}
           </div>
@@ -198,7 +230,7 @@ export default function Footer({ onNavigate }: {
           color: 'var(--text-disabled)',
           letterSpacing: '0.05em',
         }}>
-          POWERED BY NVIDIA SDK
+          POWERED BY ACCELERATION ENGINE
         </span>
       </div>
 
