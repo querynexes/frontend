@@ -19,7 +19,9 @@ const LOG_LINES = [
   { text: 'Latency 118.4ms -> 11.6ms (10.2x)', cls: 'ok' },
 ];
 
-export default function CinematicHero() {
+type Page = 'home' | 'product' | 'privacy' | 'terms';
+
+export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page) => void } = {}) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const pinWrapRef = useRef<HTMLDivElement>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -241,15 +243,14 @@ export default function CinematicHero() {
             </p>
 
             <div style={{ display: 'flex', gap: '12px', marginBottom: '18px', flexWrap: 'wrap' }}>
-              <a
-                href="#pricing"
-                onClick={e => { e.preventDefault(); document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' }); }}
+              <button
                 className="btn-primary"
                 onMouseEnter={playTick}
-                style={{ padding: '11px 22px', fontSize: '13px', textDecoration: 'none' }}
+                onClick={() => onNavigate?.('product')}
+                style={{ padding: '11px 22px', fontSize: '13px' }}
               >
-                Start Optimizing
-              </a>
+                Explore QueryNex One
+              </button>
               <a
                 href="#simulation"
                 onClick={e => { e.preventDefault(); scrollToSim(); }}
