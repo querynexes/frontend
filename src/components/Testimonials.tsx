@@ -56,12 +56,14 @@ export default function Testimonials() {
         background: 'var(--bg-secondary)',
       }}
     >
-      <span className="section-label">// WHAT TEAMS ARE SAYING</span>
-      <h2 className="section-title reveal">Trusted by Model Engineering Teams at Scale</h2>
-      <p className="section-sub reveal">
-        Production teams across cloud, edge, and enterprise deployments rely on
-        QueryNexes every day.
-      </p>
+      <div style={{ textAlign: 'center' }}>
+        <span className="section-label">// WHAT TEAMS ARE SAYING</span>
+        <h2 className="section-title reveal">Trusted by Model Engineering Teams at Scale</h2>
+        <p className="section-sub reveal" style={{ margin: '0 auto 64px' }}>
+          Production teams across cloud, edge, and enterprise deployments rely on
+          QueryNexes every day.
+        </p>
+      </div>
 
       <div style={{
         display: 'grid',

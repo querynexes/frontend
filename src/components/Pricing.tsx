@@ -366,11 +366,8 @@ export default function Pricing() {
           }
         }
         @media (max-width: 425px) {
-          #pricing { padding: 48px 12px !important; }
-          .pricing-responsive { max-width: 100% !important; }
-        }
-        @media (max-width: 425px) {
           #pricing { padding: 48px 16px !important; }
+          .pricing-responsive { max-width: 100% !important; }
         }
         @media (max-width: 375px) {
           #pricing { padding: 40px 12px !important; }

@@ -24,6 +24,14 @@ const PAGE_MAP: Record<string, Page> = {
   'Terms & Conditions': 'terms',
 };
 
+const SOCIALS = [
+  { Icon: Linkedin, label: 'LinkedIn', href: '#' },
+  { Icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/QueryNexes/' },
+  { Icon: Twitter, label: 'X', href: 'https://x.com/QueryNexes' },
+  { Icon: null, label: 'Pinterest', href: 'https://www.pinterest.com/QueyNexes/' },
+  { Icon: Youtube, label: 'YouTube', href: 'https://www.youtube.com/@QueryNexes' },
+];
+
 export default function Footer({ onNavigate }: {
   onNavigate?: (page: Page) => void;
 } = {}) {
@@ -78,20 +86,16 @@ export default function Footer({ onNavigate }: {
             The Model Compilation and Optimization Platform. Powered by a high-performance acceleration engine.
           </p>
 
-          <div style={{ display: 'flex', gap: '10px' }}>
-            {[
-              { Icon: Linkedin, label: 'LinkedIn' },
-              { Icon: Facebook, label: 'Facebook' },
-              { Icon: Twitter, label: 'X' },
-              { icon: 'Pinterest', label: 'Pinterest' },
-              { Icon: Youtube, label: 'YouTube' },
-            ].map(({ Icon, label, icon }) => Icon ? (
-              <a
-                key={label}
-                href="#"
-                aria-label={label}
-                onMouseEnter={playTick}
-                style={{
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            {SOCIALS.map(({ Icon, label, href }) => {
+              const linkProps = {
+                key: label,
+                href,
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                'aria-label': label,
+                onMouseEnter: playTick,
+                style: {
                   width: '36px',
                   height: '36px',
                   border: '1px solid var(--border-default)',
@@ -102,52 +106,29 @@ export default function Footer({ onNavigate }: {
                   color: 'var(--text-muted)',
                   textDecoration: 'none',
                   transition: 'all 0.2s',
-                  cursor: 'none',
-                }}
-                onMouseOver={e => {
+                  cursor: 'none' as const,
+                },
+                onMouseOver: (e: React.MouseEvent<HTMLAnchorElement>) => {
                   (e.currentTarget as HTMLElement).style.borderColor = 'var(--green-deep)';
                   (e.currentTarget as HTMLElement).style.color = 'var(--green-neon)';
-                }}
-                onMouseOut={e => {
+                },
+                onMouseOut: (e: React.MouseEvent<HTMLAnchorElement>) => {
                   (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-default)';
                   (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
-                }}
-              >
-                <Icon size={20} strokeWidth={1.5} />
-              </a>
-            ) : (
-              <a
-                key={label}
-                href="#"
-                aria-label={label}
-                onMouseEnter={playTick}
-                style={{
-                  width: '36px',
-                  height: '36px',
-                  border: '1px solid var(--border-default)',
-                  borderRadius: '6px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--text-muted)',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s',
-                  cursor: 'none',
-                }}
-                onMouseOver={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--green-deep)';
-                  (e.currentTarget as HTMLElement).style.color = 'var(--green-neon)';
-                }}
-                onMouseOut={e => {
-                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-default)';
-                  (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)';
-                }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12.5 2C9.48 2 7 4.48 7 7.5c0 1.88 1.03 3.52 2.56 4.4C6.62 12.44 4 15.36 4 19c0 .28.22.5.5.5h16c.28 0 .5-.22.5-.5 0-3.64-2.62-6.56-5.56-7.1A5.48 5.48 0 0 0 18 7.5 5.5 5.5 0 0 0 12.5 2z"/>
-                </svg>
-              </a>
-            ))}
+                },
+              };
+              return Icon ? (
+                <a {...linkProps}>
+                  <Icon size={20} strokeWidth={1.5} />
+                </a>
+              ) : (
+                <a {...linkProps}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.372 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.628 0 12-5.372 12-12S18.628 0 12 0z"/>
+                  </svg>
+                </a>
+              );
+            })}
           </div>
         </div>
 

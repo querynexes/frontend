@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { playTick } from '../utils/audio';
 import SoundWaveIcon from './SoundWaveIcon';
@@ -17,7 +17,9 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [active, setActive] = useState('');
+  const overlayRef = useRef<HTMLDivElement>(null);
 
+  /* ── Scroll / section tracking ────────────────────────────── */
   useEffect(() => {
     setActive(currentPage === 'home' ? 'hero' : '');
     const onScroll = () => {
@@ -34,6 +36,31 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, [currentPage]);
+
+  /* ── Body scroll lock when mobile menu is open ────────────── */
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
+  /* ── Escape key closes the mobile menu ────────────────────── */
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [mobileOpen]);
+
+  /* ── Close menu when overlay backdrop is clicked ──────────── */
+  const onOverlayClick = useCallback((e: React.MouseEvent) => {
+    if (e.target === overlayRef.current) setMobileOpen(false);
+  }, []);
 
   const navLinks = [
     { label: 'Platform', href: '#features' },
@@ -77,19 +104,24 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
         <a
           href="#hero"
           onClick={e => { e.preventDefault(); scrollTo('#hero'); }}
-          style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}
+          style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', flexShrink: 0 }}
           onMouseEnter={playTick}
         >
-          <img src={logoLight} alt="QueryNexes" style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
+          <img
+            src={logoLight}
+            alt="QueryNexes"
+            className="nav-logo-img"
+            style={{ width: '120px', height: '120px', objectFit: 'contain' }}
+          />
         </a>
 
-        {/* Center links */}
+        {/* Center links — hidden on mobile */}
         <ul style={{
           display: 'flex',
           gap: '36px',
           listStyle: 'none',
           alignItems: 'center',
-        }} className="hidden md:flex">
+        }} className="nav-desktop-links">
           {navLinks.map(link => (
             <li key={link.label}>
               <a
@@ -114,8 +146,8 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
           ))}
         </ul>
 
-        {/* Actions */}
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }} className="hidden md:flex">
+        {/* Actions — hidden on mobile */}
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }} className="nav-desktop-actions">
           <button
             className="mute-btn"
             onClick={onMuteToggle}
@@ -137,7 +169,8 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
         {/* Mobile hamburger */}
         <button
           onClick={() => setMobileOpen(true)}
-          className="md:hidden"
+          className="nav-hamburger"
+          aria-label="Open navigation menu"
           style={{
             background: 'none',
             border: 'none',
@@ -152,67 +185,50 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
 
       {/* Mobile Overlay */}
       {mobileOpen && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'var(--bg-primary)',
-          zIndex: 9998,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '40px',
-          animation: 'fadeIn 0.3s ease',
-        }}>
+        <div
+          ref={overlayRef}
+          onClick={onOverlayClick}
+          className="nav-mobile-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
+        >
           <button
             onClick={() => setMobileOpen(false)}
-            style={{
-              position: 'absolute',
-              top: '24px',
-              right: '24px',
-              background: 'none',
-              border: 'none',
-              color: 'var(--text-secondary)',
-              cursor: 'pointer',
-            }}
+            className="nav-overlay-close"
+            aria-label="Close navigation menu"
           >
             <X size={28} />
           </button>
 
-          {navLinks.map((link, i) => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={e => { e.preventDefault(); scrollTo(link.href); }}
-              style={{
-                fontFamily: 'Space Grotesk, sans-serif',
-                fontSize: '28px',
-                fontWeight: 600,
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-                opacity: 0,
-                animation: `fadeInUp 0.4s ${i * 0.07}s ease forwards`,
-                transition: 'color 0.2s',
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
+          <div className="nav-overlay-links">
+            {navLinks.map((link, i) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={e => { e.preventDefault(); scrollTo(link.href); }}
+                className="nav-overlay-link"
+                style={{
+                  animationDelay: `${i * 0.07}s`,
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
 
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginTop: '12px' }}>
+          <div className="nav-overlay-actions">
             <button
               className="mute-btn"
               onClick={onMuteToggle}
               title={muted ? 'Unmute sounds' : 'Mute sounds'}
               aria-label={muted ? 'Unmute' : 'Mute'}
-              style={{ width: '44px', height: '44px' }}
             >
               <SoundWaveIcon muted={!!muted} />
             </button>
             <button
               className="btn-primary"
               onClick={() => onNavigate?.('product')}
-              style={{ padding: '14px 32px', fontSize: '16px' }}
             >
               QueryNex One
             </button>
@@ -221,6 +237,43 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
       )}
 
       <style>{`
+        /* ── Desktop vs mobile nav visibility ───────────────── */
+        .nav-desktop-links { display: flex; }
+        .nav-desktop-actions { display: flex; }
+        .nav-hamburger { display: none; }
+
+        @media (max-width: 767px) {
+          .nav-desktop-links { display: none !important; }
+          .nav-desktop-actions { display: none !important; }
+          .nav-hamburger { display: inline-flex; }
+          nav { padding: 0 20px !important; }
+        }
+        @media (max-width: 425px) {
+          nav { padding: 0 12px !important; }
+        }
+        @media (max-width: 375px) {
+          nav { padding: 0 8px !important; }
+        }
+
+        /* ── Responsive logo ────────────────────────────────── */
+        .nav-logo-img {
+          width: 120px !important;
+          height: 120px !important;
+        }
+        @media (max-width: 425px) {
+          .nav-logo-img {
+            width: 96px !important;
+            height: 96px !important;
+          }
+        }
+        @media (max-width: 375px) {
+          .nav-logo-img {
+            width: 80px !important;
+            height: 80px !important;
+          }
+        }
+
+        /* ── Desktop link underline hover ───────────────────── */
         .nav-link-hover {
           position: relative;
         }
@@ -241,7 +294,101 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
           width: 100%;
         }
 
-        /* Sound wave animation bars */
+        /* ── Mobile overlay — slide-in from right ───────────── */
+        .nav-mobile-overlay {
+          position: fixed;
+          inset: 0;
+          background: var(--bg-primary);
+          z-index: 9998;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          animation: navSlideIn 0.3s ease;
+        }
+
+        @keyframes navSlideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to   { transform: translateX(0);    opacity: 1; }
+        }
+
+        .nav-overlay-close {
+          position: absolute;
+          top: 24px;
+          right: 24px;
+          background: none;
+          border: none;
+          color: var(--text-secondary);
+          cursor: pointer;
+          padding: 12px; /* larger touch target */
+          transition: color 0.2s;
+        }
+        .nav-overlay-close:hover {
+          color: var(--text-primary);
+        }
+
+        .nav-overlay-links {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 40px;
+          padding: 80px 24px 40px;
+          width: 100%;
+        }
+
+        .nav-overlay-link {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 28px;
+          font-weight: 600;
+          color: var(--text-primary);
+          text-decoration: none;
+          transition: color 0.2s;
+          opacity: 0;
+          animation: fadeInUp 0.4s ease forwards;
+          cursor: pointer;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .nav-overlay-link:hover {
+          color: var(--green-neon);
+        }
+
+        .nav-overlay-actions {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          margin-top: 12px;
+          padding-bottom: 40px;
+        }
+        .nav-overlay-actions .mute-btn {
+          width: 44px;
+          height: 44px;
+        }
+        .nav-overlay-actions .btn-primary {
+          padding: 14px 32px;
+          font-size: 16px;
+        }
+
+        /* ── Overlay responsive tweaks ──────────────────────── */
+        @media (max-width: 425px) {
+          .nav-overlay-links { gap: 32px; }
+          .nav-overlay-link  { font-size: 24px; }
+        }
+        @media (max-width: 375px) {
+          .nav-overlay-links { gap: 24px; padding-top: 64px; }
+          .nav-overlay-link  { font-size: 20px; }
+          .nav-overlay-actions .btn-primary {
+            padding: 12px 24px;
+            font-size: 14px;
+          }
+          .nav-overlay-actions .mute-btn {
+            width: 38px;
+            height: 38px;
+          }
+        }
+
+        /* ── Sound wave bars (unchanged) ────────────────────── */
         @keyframes sound-wave-bar {
           0%, 100% { height: 3px; }
           25% { height: 14px; }
@@ -275,14 +422,10 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
                       box-shadow 0.35s ease;
         }
 
-        @media (max-width: 768px) {
-          nav { padding: 0 20px !important; }
-        }
-        @media (max-width: 425px) {
-          nav { padding: 0 12px !important; }
-        }
-        @media (max-width: 375px) {
-          nav { padding: 0 8px !important; }
+        /* ── Keyframes used by overlay ──────────────────────── */
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </>

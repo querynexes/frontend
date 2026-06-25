@@ -33,15 +33,17 @@ export default function AboutSection() {
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <span className="section-label reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
-          / ABOUT
-        </span>
-        <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', marginBottom: '16px' }}>
-          The Model Compilation Engine
-        </h2>
-        <p className="section-sub reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', marginBottom: '48px', maxWidth: '800px' }}>
-          From research prototype to production deployment — QueryNexes bridges the gap with a hardware-aware compilation pipeline designed for the modern model optimization stack.
-        </p>
+        <div style={{ textAlign: 'center' }}>
+          <span className="section-label reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
+            // ABOUT
+          </span>
+          <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', marginBottom: '16px' }}>
+            The Model Compilation Engine
+          </h2>
+          <p className="section-sub reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', marginBottom: '48px', maxWidth: '800px', margin: '0 auto 48px' }}>
+            From research prototype to production deployment — QueryNexes bridges the gap with a hardware-aware compilation pipeline designed for the modern model optimization stack.
+          </p>
+        </div>
 
         {/* The New Interactive Gallery Component */}
         <div className="reveal-item" style={{ opacity: 0, transition: 'opacity 0.8s ease' }}>

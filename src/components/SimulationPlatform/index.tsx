@@ -101,58 +101,71 @@ function DesktopSimulation() {
         pointerEvents: 'none',
       }} />
 
-      <span className="section-label">// LIVE SIMULATION</span>
-      <h2 className="section-title reveal">See The Optimization Engine<br />in Action</h2>
-      <p className="section-sub reveal">
-        An interactive real-time 3D simulation of QueryNexes' model compilation
-        and inference acceleration pipeline. Click any island to zoom in.
-      </p>
+      <div style={{ textAlign: 'center' }}>
+        <span className="section-label">// LIVE SIMULATION</span>
+        <h2 className="section-title reveal">See The Optimization Engine<br />in Action</h2>
+        <p className="section-sub reveal" style={{ margin: '0 auto 48px' }}>
+          An interactive real-time 3D simulation of QueryNexes' model compilation
+          and inference acceleration pipeline. Click any island to zoom in.
+        </p>
+      </div>
 
       {/* Controls */}
-      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }} className="sim-controls">
+      <div style={{
+        display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px',
+        justifyContent: 'center',
+      }} className="sim-controls">
         {([
           { id: 'overview' as SimMode, label: '▶ OVERVIEW' },
-          { id: 'input' as SimMode, label: '⇥ INPUT NODE' },
-          { id: 'process' as SimMode, label: '⚙ PROCESS NODE' },
-          { id: 'output' as SimMode, label: '✓ OUTPUT NODE' },
-        ] as { id: SimMode; label: string }[]).map(btn => (
-          <button
-            key={btn.id}
-            onClick={() => switchMode(btn.id)}
-            disabled={loading}
-            style={{
-              fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '12px',
-              letterSpacing: '0.05em',
-              padding: '10px 18px',
-              borderRadius: '6px',
-              border: mode === btn.id ? '1px solid var(--green-deep)' : '1px solid var(--border-default)',
-              background: mode === btn.id ? 'rgba(0,255,133,0.07)' : 'var(--bg-surface)',
-              color: mode === btn.id ? 'var(--green-neon)' : 'var(--text-secondary)',
-              cursor: loading ? 'default' : 'none',
-              opacity: loading ? 0.5 : 1,
-              transition: 'border-color 0.12s ease, background 0.12s ease, color 0.12s ease',
-            }}
-          >
-            {btn.label}
-          </button>
-        ))}
+          { id: 'input' as SimMode, label: '⇥ INPUT' },
+          { id: 'process' as SimMode, label: '⚙ PROCESS' },
+          { id: 'output' as SimMode, label: '✓ OUTPUT' },
+        ] as { id: SimMode; label: string }[]).map(btn => {
+          const isActive = mode === btn.id;
+          return (
+            <button
+              key={btn.id}
+              onClick={() => switchMode(btn.id)}
+              disabled={loading}
+              style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '11px',
+                letterSpacing: '0.08em',
+                padding: '10px 16px',
+                borderRadius: '6px',
+                border: isActive ? '1px solid var(--green-neon)' : '1px solid var(--border-default)',
+                background: isActive ? 'rgba(0,255,133,0.1)' : 'var(--bg-surface)',
+                color: isActive ? 'var(--green-neon)' : 'var(--text-secondary)',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.4 : 1,
+                transition: 'all 0.15s ease',
+                fontWeight: isActive ? 600 : 400,
+              }}
+              onMouseOver={e => { if (!loading && !isActive) { e.currentTarget.style.borderColor = 'var(--green-deep)'; e.currentTarget.style.background = 'rgba(0,168,84,0.06)'; }}}
+              onMouseOut={e => { if (!isActive) { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.background = 'var(--bg-surface)'; }}}
+            >
+              {btn.label}
+            </button>
+          );
+        })}
         <button
           onClick={togglePause}
           disabled={loading}
           style={{
             fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '12px',
-            letterSpacing: '0.05em',
-            padding: '10px 18px',
+            fontSize: '11px',
+            letterSpacing: '0.08em',
+            padding: '10px 16px',
             borderRadius: '6px',
             border: '1px solid var(--border-default)',
             background: 'var(--bg-surface)',
-            color: 'var(--text-secondary)',
-            cursor: loading ? 'default' : 'none',
-            opacity: loading ? 0.5 : 1,
-            transition: 'border-color 0.12s ease, background 0.12s ease, color 0.12s ease',
+            color: 'var(--text-muted)',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            opacity: loading ? 0.4 : 1,
+            transition: 'all 0.15s ease',
           }}
+          onMouseOver={e => { if (!loading) { e.currentTarget.style.borderColor = 'var(--green-deep)'; e.currentTarget.style.background = 'rgba(0,168,84,0.06)'; }}}
+          onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--border-default)'; e.currentTarget.style.background = 'var(--bg-surface)'; }}
         >
           {paused ? '▶ PLAY' : '⏸ PAUSE'}
         </button>
@@ -161,18 +174,21 @@ function DesktopSimulation() {
             onClick={() => switchMode('overview')}
             style={{
               fontFamily: 'JetBrains Mono, monospace',
-              fontSize: '12px',
-              letterSpacing: '0.05em',
-              padding: '10px 18px',
+              fontSize: '11px',
+              letterSpacing: '0.08em',
+              padding: '10px 16px',
               borderRadius: '6px',
               border: '1px solid var(--green-dark)',
-              background: 'rgba(0,168,84,0.05)',
-              color: 'var(--green-neon)',
-              cursor: 'none',
-              transition: 'border-color 0.12s ease, background 0.12s ease',
+              background: 'rgba(0,168,84,0.08)',
+              color: 'var(--green-stable)',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+              fontWeight: 600,
             }}
+            onMouseOver={e => { e.currentTarget.style.borderColor = 'var(--green-neon)'; e.currentTarget.style.background = 'rgba(0,255,133,0.12)'; }}
+            onMouseOut={e => { e.currentTarget.style.borderColor = 'var(--green-dark)'; e.currentTarget.style.background = 'rgba(0,168,84,0.08)'; }}
           >
-            ← BACK TO OVERVIEW
+            ← BACK
           </button>
         )}
       </div>

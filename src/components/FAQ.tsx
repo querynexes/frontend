@@ -48,11 +48,13 @@ export default function FAQ() {
         background: 'var(--bg-primary)',
       }}
     >
-      <span className="section-label">// FREQUENTLY ASKED</span>
-      <h2 className="section-title reveal">Common Questions</h2>
-      <p className="section-sub reveal">
-        Everything you need to know about integrating QueryNexes into your ML workflow.
-      </p>
+      <div style={{ textAlign: 'center' }}>
+        <span className="section-label">// FREQUENTLY ASKED</span>
+        <h2 className="section-title reveal">Common Questions</h2>
+        <p className="section-sub reveal" style={{ margin: '0 auto 64px' }}>
+          Everything you need to know about integrating QueryNexes into your ML workflow.
+        </p>
+      </div>
 
       <div style={{
         border: '1px solid var(--border-default)',

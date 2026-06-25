@@ -83,12 +83,14 @@ export default function PipelineViz() {
       id="pipeline"
       style={{ padding: '96px 48px', background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden' }}
     >
-      <span className="section-label">// HOW IT WORKS</span>
-      <h2 className="section-title reveal">From Raw Model to<br />Production-Ready Asset</h2>
-      <p className="section-sub reveal">
-        Five deterministic stages transform your experimental checkpoint into a deployment-validated,
-        hardware-tuned inference engine.
-      </p>
+      <div style={{ textAlign: 'center' }}>
+        <span className="section-label">// HOW IT WORKS</span>
+        <h2 className="section-title reveal">From Raw Model to<br />Production-Ready Asset</h2>
+        <p className="section-sub reveal" style={{ margin: '0 auto 64px' }}>
+          Five deterministic stages transform your experimental checkpoint into a deployment-validated,
+          hardware-tuned inference engine.
+        </p>
+      </div>
 
       {/* Steps */}
       <div style={{
@@ -187,12 +189,12 @@ export default function PipelineViz() {
 
             {/* Connector */}
             {i < STEPS.length - 1 && (
-              <div style={{
-                display: 'flex', alignItems: 'center', padding: '0 4px', marginTop: '46px',
+              <div className="pipeline-connector" style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', marginTop: '46px',
                 flexShrink: 0, opacity: visibleSteps[i] && visibleSteps[i + 1] ? 1 : 0,
                 transition: 'opacity 0.3s ease',
               }}>
-                <svg width="44" height="2" viewBox="0 0 44 2" overflow="visible">
+                <svg width="44" height="2" viewBox="0 0 44 2" overflow="visible" className="pipeline-arrow-svg">
                   <line
                     x1="0" y1="1" x2="44" y2="1"
                     stroke="var(--border-strong)" strokeWidth="1" fill="none"
@@ -238,7 +240,9 @@ export default function PipelineViz() {
       <style>{`
         @media (max-width: 768px) {
           .pipeline-scroll { flex-direction: column !important; overflow-x: visible !important; }
-          .pipeline-scroll > div { flex-direction: column !important; }
+          .pipeline-scroll > div { flex-direction: column !important; align-items: center !important; }
+          .pipeline-connector { margin-top: 0 !important; padding: 8px 0 !important; width: 100% !important; justify-content: center !important; }
+          .pipeline-arrow-svg { transform: rotate(90deg); width: 24px !important; height: 24px !important; }
           #pipeline { padding: 64px 24px !important; }
         }
         @media (max-width: 425px) {

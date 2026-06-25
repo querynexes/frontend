@@ -86,12 +86,14 @@ export default function FeaturesGrid() {
         position: 'relative',
       }}
     >
-      <span className="section-label">// PLATFORM CAPABILITIES</span>
-      <h2 className="section-title reveal">Engineering-Grade Model Optimization Infrastructure</h2>
-      <p className="section-sub reveal">
-        Every component of QueryNexes is built for production workloads at enterprise scale.
-        No compromises on accuracy, speed, or reliability.
-      </p>
+      <div style={{ textAlign: 'center' }}>
+        <span className="section-label">// PLATFORM CAPABILITIES</span>
+        <h2 className="section-title reveal">Engineering-Grade Model Optimization Infrastructure</h2>
+        <p className="section-sub reveal" style={{ margin: '0 auto 64px' }}>
+          Every component of QueryNexes is built for production workloads at enterprise scale.
+          No compromises on accuracy, speed, or reliability.
+        </p>
+      </div>
 
       <div style={{
         display: 'grid',

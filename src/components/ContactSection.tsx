@@ -157,7 +157,7 @@ export default function ContactSection() {
       <section id="contact" ref={sectionRef} style={sectionStyle}>
         <div style={innerStyle}>
           <span className="section-label reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', textAlign: 'center', display: 'block' as const }}>
-            / CONTACT
+            // CONTACT
           </span>
           <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', textAlign: 'center' }}>
             Thank you!
@@ -172,7 +172,7 @@ export default function ContactSection() {
 
           <div style={gridStyle} className="contact-grid">
             <div className="card" style={cardStyle}>
-              <span style={labelStyle}>/ MESSAGE SENT</span>
+              <span style={labelStyle}>// MESSAGE SENT</span>
               <div style={{
                 display: 'flex', flexDirection: 'column', gap: '12px',
                 padding: '24px 0',
@@ -205,15 +205,17 @@ export default function ContactSection() {
   return (
     <section id="contact" ref={sectionRef} style={sectionStyle}>
       <div style={innerStyle}>
-        <span className="section-label reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
-          / CONTACT
-        </span>
-        <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
-          Get in Touch
-        </h2>
-        <p className="section-sub reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
-          Have a deployment in mind? Reach out to our engineering team for a technical assessment and platform demo.
-        </p>
+        <div style={{ textAlign: 'center' }}>
+          <span className="section-label reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
+            // CONTACT
+          </span>
+          <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease' }}>
+            Get in Touch
+          </h2>
+          <p className="section-sub reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', margin: '0 auto 64px' }}>
+            Have a deployment in mind? Reach out to our engineering team for a technical assessment and platform demo.
+          </p>
+        </div>
 
         <div style={gridStyle} className="contact-grid">
           <div className="card reveal-item" style={cardStyle}>

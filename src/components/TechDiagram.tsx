@@ -173,8 +173,15 @@ export default function TechDiagram() {
             {/* Main Image Container */}
             <div style={{ position: 'relative', width: '100%', maxWidth: '1000px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={e => e.stopPropagation()}>
               
-              <button onClick={handlePrev} style={{ position: 'absolute', left: '-60px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', padding: '12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }} className="gallery-nav">
-                <ChevronLeft size={24} />
+              <button onClick={handlePrev} style={{
+                position: 'absolute', left: '16px', zIndex: 10,
+                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.15)', borderRadius: '50%',
+                padding: '10px', color: '#fff', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'background 0.2s, border-color 0.2s',
+              }} className="gallery-nav">
+                <ChevronLeft size={22} />
               </button>
 
               <motion.img
@@ -187,8 +194,15 @@ export default function TechDiagram() {
                 style={{ width: '100%', maxHeight: '70vh', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 24px 64px rgba(0,255,133,0.1)' }}
               />
 
-              <button onClick={handleNext} style={{ position: 'absolute', right: '-60px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '50%', padding: '12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }} className="gallery-nav">
-                <ChevronRight size={24} />
+              <button onClick={handleNext} style={{
+                position: 'absolute', right: '16px', zIndex: 10,
+                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.15)', borderRadius: '50%',
+                padding: '10px', color: '#fff', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'background 0.2s, border-color 0.2s',
+              }} className="gallery-nav">
+                <ChevronRight size={22} />
               </button>
             </div>
 
@@ -393,6 +407,16 @@ export default function TechDiagram() {
         @media (max-width: 768px) {
           .gallery-nav { display: flex !important; }
           #tech-diagram { padding: 64px 24px !important; }
+        }
+        @media (max-width: 480px) {
+          .gallery-nav { padding: 8px !important; }
+          .gallery-nav svg { width: 18px !important; height: 18px !important; }
+        }
+        @media (max-width: 425px) {
+          #tech-diagram { padding: 48px 16px !important; }
+        }
+        @media (max-width: 375px) {
+          #tech-diagram { padding: 40px 12px !important; }
         }
         @media (max-width: 425px) {
           #tech-diagram { padding: 48px 16px !important; }
