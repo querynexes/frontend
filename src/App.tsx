@@ -26,14 +26,16 @@ type Page = 'home' | 'product' | 'privacy' | 'terms';
 
 const PATH_MAP: Record<string, Page> = {
   '/product': 'product',
+  '/Product': 'product',
   '/privacy': 'privacy',
   '/terms': 'terms',
 };
 
-const pathToPage = (): Page => PATH_MAP[window.location.pathname] || 'home';
+const pathToPage = (): Page => PATH_MAP[window.location.pathname.toLowerCase()] || 'home';
 
 const pageToPath = (page: Page): string => {
   if (page === 'home') return '/';
+  if (page === 'product') return '/Product';
   return `/${page}`;
 };
 
@@ -118,7 +120,7 @@ export default function App() {
           <>
             <ScrollRevealInit />
             <Navbar currentPage="home" onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
-            <HeroSection />
+            <HeroSection onNavigate={navigate} />
             <StatsBar />
             <PipelineViz />
             <SimulationPlatform />

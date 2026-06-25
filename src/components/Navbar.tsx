@@ -128,9 +128,9 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
             className="btn-primary"
             onMouseEnter={playTick}
             style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '6px' }}
-            onClick={() => onNavigate?.(currentPage === 'home' ? 'product' : 'home')}
+            onClick={() => onNavigate?.('product')}
           >
-            {currentPage === 'home' ? 'QN_Core' : 'Dashboard'}
+            QueryNex One
           </button>
         </div>
 
@@ -211,10 +211,10 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
             </button>
             <button
               className="btn-primary"
-              onClick={() => onNavigate?.(currentPage === 'home' ? 'product' : 'home')}
+              onClick={() => onNavigate?.('product')}
               style={{ padding: '14px 32px', fontSize: '16px' }}
             >
-              {currentPage === 'home' ? 'QN_Core' : 'Dashboard'}
+              QueryNex One
             </button>
           </div>
         </div>
