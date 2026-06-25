@@ -316,7 +316,7 @@ function CompanyDetails() {
           fontSize: '18px', color: 'var(--text-primary)', marginBottom: '6px',
         }}>QueryNexes Data Systems Inc.</h3>
         <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.65 }}>
-          AI Model Compilation &amp; Optimization Platform
+          Model Compilation and Optimization Platform
         </p>
       </div>
 

@@ -6,7 +6,7 @@ import { playTick } from '../utils/audio';
 const PLANS = [
   {
     name: 'Starter',
-    prices: { monthly: '299', annually: '239' },
+    prices: { monthly: '299', annually: '99' },
     featured: false,
     url: {
       monthly: 'https://buy.stripe.com/test_8x200cgj61uP9VvcfH9k400',
@@ -25,7 +25,7 @@ const PLANS = [
   },
   {
     name: 'Professional',
-    prices: { monthly: '999', annually: '799' },
+    prices: { monthly: '999', annually: '249' },
     featured: true,
     url: {
       monthly: 'https://buy.stripe.com/test_9B68wIff28Xh0kV5Rj9k401',

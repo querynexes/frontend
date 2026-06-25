@@ -25,7 +25,7 @@ const FEATURES = [
   {
     icon: iconAcceleration,
     title: 'Hardware Acceleration',
-    desc: 'Native compilation for NVIDIA TensorRT, Apple ANE, ARM NN, and 150+ cloud GPU targets. One codebase, any hardware target, zero manual tuning.',
+    desc: 'Native compilation for TensorRT, Apple ANE, ARM NN, and 150+ cloud GPU targets. One codebase, any hardware target, zero manual tuning.',
     stat: '150+ HARDWARE TARGETS SUPPORTED',
     config: '{ "backend": "auto", "targets": 150 }',
   },
@@ -39,7 +39,7 @@ const FEATURES = [
   {
     icon: iconDeployment,
     title: 'Deployment Toolkit',
-    desc: 'Validated containers, HELM charts, and deployment manifests for AWS, GCP, Azure, and on-premise Kubernetes clusters. Ship in minutes.',
+    desc: 'Validated containers, HELM charts, and deployment manifests for cloud, GCP, Azure, and on-premise Kubernetes clusters. Ship in minutes.',
     stat: '✓ 99.8% PRODUCTION UPTIME SLA',
     config: '{ "format": "oci", "helm": true }',
   },
@@ -87,7 +87,7 @@ export default function FeaturesGrid() {
       }}
     >
       <span className="section-label">// PLATFORM CAPABILITIES</span>
-      <h2 className="section-title reveal">Engineering-Grade AI<br />Infrastructure</h2>
+      <h2 className="section-title reveal">Engineering-Grade Model Optimization Infrastructure</h2>
       <p className="section-sub reveal">
         Every component of QueryNexes is built for production workloads at enterprise scale.
         No compromises on accuracy, speed, or reliability.

@@ -37,10 +37,10 @@ export default function AboutSection() {
           / ABOUT
         </span>
         <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', marginBottom: '16px' }}>
-          The AI Compilation Engine
+          The Model Compilation Engine
         </h2>
         <p className="section-sub reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', marginBottom: '48px', maxWidth: '800px' }}>
-          From research prototype to production deployment — QueryNexes bridges the gap with a hardware-aware compilation pipeline designed for the modern AI stack.
+          From research prototype to production deployment — QueryNexes bridges the gap with a hardware-aware compilation pipeline designed for the modern model optimization stack.
         </p>
 
         {/* The New Interactive Gallery Component */}
@@ -57,8 +57,8 @@ export default function AboutSection() {
           {[
             {
               label: 'VISION',
-              title: 'Universal AI Optimization',
-              desc: 'Make every AI model run at peak efficiency on any hardware, from cloud GPUs to edge NPUs, without manual tuning or framework lock-in.',
+              title: 'Universal Model Optimization',
+              desc: 'Make every model run at peak efficiency on any hardware, from cloud GPUs to edge NPUs, without manual tuning or framework lock-in.',
             },
             {
               label: '01. PIPELINE',
@@ -68,7 +68,7 @@ export default function AboutSection() {
             {
               label: '02. IMPACT',
               title: 'Solving the Latency Wall',
-              desc: 'Modern AI models waste 40-60% of compute cycles on redundant operations. QueryNexes eliminates that overhead through intelligent graph rewriting and memory planning.',
+              desc: 'Modern models waste 40 to 60% of compute cycles on redundant operations. QueryNexes eliminates that overhead through intelligent graph rewriting and memory planning.',
             },
           ].map((item, i) => (
             <div

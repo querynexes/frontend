@@ -77,8 +77,7 @@ export default function Footer({ onNavigate }: {
             marginBottom: '24px',
             maxWidth: '260px',
           }}>
-            The AI Model Compilation &amp; Optimization Platform. Powered by NVIDIA SDK.
-            Transform experimental models into production assets.
+            The Model Compilation and Optimization Platform. Powered by a high-performance acceleration engine.
           </p>
 
           <div style={{ display: 'flex', gap: '10px' }}>

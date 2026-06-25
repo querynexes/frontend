@@ -117,7 +117,7 @@ export default function CTABanner() {
           margin: '0 auto 44px',
           lineHeight: 1.6,
         }}>
-          Deploy optimized AI models in minutes, not weeks.
+          Deploy optimized models in minutes, not weeks.
           Zero configuration required.
         </p>
 

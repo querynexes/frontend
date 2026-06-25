@@ -1,20 +1,26 @@
 import { useEffect, useRef } from 'react';
+import teamPriya from '../assets/team/Team Priya Nair.png';
+import teamMarcus from '../assets/team/Team Marcus Chen.png';
+import teamElena from '../assets/team/Team Elena Kovac.png';
 
 const TESTIMONIALS = [
   {
     quote: '"QueryNexes reduced our LLM inference latency from 340ms to 28ms. It\'s the only optimization platform that actually understands our hardware constraints and delivers on its promises."',
     author: 'Priya Nair',
     role: 'VP of AI Engineering, Axion Technologies',
+    photo: teamPriya,
   },
   {
     quote: '"We deployed optimized models to 12 different edge targets in a single afternoon. The compilation engine is genuinely remarkable engineering — nothing else comes close."',
     author: 'Marcus Chen',
     role: 'Head of MLOps, DeepScale Systems',
+    photo: teamMarcus,
   },
   {
     quote: '"Enterprise AI deployments went from taking weeks to hours. QueryNexes is now a mandatory step in every production pipeline we operate at NovaStar."',
     author: 'Elena Kovač',
     role: 'Chief AI Officer, NovaStar Corp',
+    photo: teamElena,
   },
 ];
 
@@ -51,7 +57,7 @@ export default function Testimonials() {
       }}
     >
       <span className="section-label">// WHAT TEAMS ARE SAYING</span>
-      <h2 className="section-title reveal">Trusted by AI Engineering<br />Teams at Scale</h2>
+      <h2 className="section-title reveal">Trusted by Model Engineering Teams at Scale</h2>
       <p className="section-sub reveal">
         Production teams across cloud, edge, and enterprise deployments rely on
         QueryNexes every day.
@@ -122,12 +128,10 @@ export default function Testimonials() {
             <div style={{ borderTop: '1px solid var(--border-default)', paddingTop: '16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{
                 width: '72px', height: '72px', borderRadius: '50%',
-                background: 'linear-gradient(135deg, var(--green-neon), var(--green-dark))',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0, fontSize: '28px', fontWeight: 700, color: 'var(--bg-primary)',
-                fontFamily: 'Space Grotesk, sans-serif',
+                overflow: 'hidden', flexShrink: 0,
+                border: '2px solid var(--green-dark)',
               }}>
-                {t.author.split(' ').map(n => n[0]).join('')}
+                <img src={t.photo} alt={t.author} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <div style={{

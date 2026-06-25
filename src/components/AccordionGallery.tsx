@@ -1,26 +1,29 @@
 import { useState } from 'react';
+import graphTransformation from '../assets/gallery/Graph Transformation.png';
+import hardwareCalibration from '../assets/gallery/Hardware Calibration.png';
+import memoryPlanning from '../assets/gallery/Memory Planning.png';
+import edgeDeployment from '../assets/gallery/Edge Deployment.png';
 
-// Using placeholder images that fit the AI/Tech theme. Replace these URLs with your actual assets.
 const galleryItems = [
   {
     id: 1,
     title: 'Graph Transformations',
-    image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=800&auto=format&fit=crop',
+    image: graphTransformation,
   },
   {
     id: 2,
     title: 'Hardware Calibration',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop',
+    image: hardwareCalibration,
   },
   {
     id: 3,
     title: 'Memory Planning',
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop',
+    image: memoryPlanning,
   },
   {
     id: 4,
     title: 'Edge Deployment',
-    image: 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=800&auto=format&fit=crop',
+    image: edgeDeployment,
   },
 ];
 

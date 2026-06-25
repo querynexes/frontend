@@ -35,9 +35,9 @@ const STEPS = [
     num: '04',
     icon: tunerIcon,
     name: 'Hardware Tuner',
-    desc: 'GPU / CPU / Edge targeting. NVIDIA TensorRT, Apple ANE, ARM NN, Intel Gaudi auto-selected.',
+    desc: 'GPU, CPU, and Edge targeting. TensorRT, Apple ANE, ARM NN, and Intel Gaudi auto-selected.',
     detail: 'Auto-selects optimal backend per operator. Layer-wise hardware assignment.',
-    config: '{ "target": "auto", "backend": "tensorrt" }',
+    config: '{ "ir": "mlir", "passes": ["fuse", "dce"] }',
   },
   {
     num: '05',

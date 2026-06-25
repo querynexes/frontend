@@ -12,15 +12,15 @@ const FAQS = [
   },
   {
     q: 'What hardware targets are supported?',
-    a: '150+ targets including NVIDIA A100/H100/RTX series, AMD MI300, Apple M-series (ANE), ARM Cortex, NVIDIA Jetson (Orin/Xavier), Intel Gaudi, AWS Inferentia, and all major cloud GPU instances across AWS, GCP, and Azure.',
+    a: '150+ targets including A100, H100, and RTX series, AMD MI300, Apple M-series (ANE), ARM Cortex, Jetson (Orin and Xavier), Intel Gaudi, cloud inferencing accelerators, and all major cloud GPU instances across GCP and Azure.',
   },
   {
     q: 'Is QueryNexes compatible with NVIDIA TensorRT?',
-    a: 'Yes. QueryNexes is built on NVIDIA SDK primitives including TensorRT 10.x, cuDNN, and NCCL. Our compilation engine outputs natively optimized TensorRT engines as first-class artifacts for any supported NVIDIA hardware target.',
+    a: 'Yes. QueryNexes is built on high-performance runtime primitives including TensorRT 10.x, cuDNN, and NCCL. Our compilation engine outputs natively optimized TensorRT engines as first-class artifacts for any supported hardware target.',
   },
   {
     q: 'How does the API work for CI/CD pipeline integration?',
-    a: 'QueryNexes provides REST and gRPC APIs with SDKs for Python, Node.js, Go, and Java. Native integrations for GitHub Actions, GitLab CI, Jenkins, and ArgoCD are available. Each compilation job returns a signed artifact URL and benchmark report.',
+    a: 'QueryNexes provides REST and gRPC APIs with client libraries for Python, Node.js, Go, and Java. Native integrations for GitHub Actions, GitLab CI, Jenkins, and ArgoCD are available. Each compilation job returns a signed artifact URL and benchmark report.',
   },
   {
     q: 'What performance improvement can I expect?',

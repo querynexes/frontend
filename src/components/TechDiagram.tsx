@@ -38,7 +38,7 @@ const PIPELINE_DATA = [
         details: 'Applies Post-Training Quantization (PTQ) using KL-divergence calibration to reduce model footprint by 4x with near-zero accuracy degradation.'
       },
       { 
-        id: 'fusion', label: 'Kernel Fusion', tech: 'NVIDIA TensorRT', badge: 'GPU',
+        id: 'fusion', label: 'Kernel Fusion', tech: 'TensorRT', badge: 'GPU',
         details: 'Fuses vertical and horizontal operations (e.g., Conv2D + BatchNorm + ReLU) into singular, highly optimized CUDA kernels to eliminate memory bandwidth bottlenecks.'
       },
       { 
@@ -68,16 +68,24 @@ const PIPELINE_DATA = [
   }
 ];
 
-// Replace these URLs with your actual real-world images
+import siliconArchitecture from '../assets/gallery/Silicon Architecture.png';
+import gpuCluster from '../assets/gallery/GPU Cluster.png';
+import codeCompilation from '../assets/gallery/Code Compilation.png';
+import archEdgeDeployment from '../assets/gallery/Edge Deployment_AO.png';
+import neuralNetworkMapping from '../assets/gallery/Neural network Mapping.png';
+import hardwareLab from '../assets/gallery/hardware Lab.png';
+import serverTelemetry from '../assets/gallery/Server Telemetry.png';
+import querynexesInterface from '../assets/gallery/Queynexes Interface.png';
+
 const GALLERY_ITEMS = [
-  { id: 1, title: 'Silicon Architecture', desc: 'H100 Tensor Core microscopic view', img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800' },
-  { id: 2, title: 'GPU Cluster', desc: 'Enterprise A100 data center', img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800' },
-  { id: 3, title: 'Code Compilation', desc: 'IR Graph lowering process', img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800' },
-  { id: 4, title: 'Edge Deployment', desc: 'Jetson Orin inference testing', img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800' },
-  { id: 5, title: 'Neural Network Mapping', desc: 'Visualizing node activations', img: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800' },
-  { id: 6, title: 'Hardware Lab', desc: 'Testing physical NPU limits', img: 'https://images.unsplash.com/photo-1581092921461-7031e4bf0e5e?auto=format&fit=crop&q=80&w=800' },
-  { id: 7, title: 'Server Telemetry', desc: 'Live monitoring of memory bandwidth', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800' },
-  { id: 8, title: 'QueryNexes Interface', desc: 'The optimization dashboard', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800' },
+  { id: 1, title: 'Silicon Architecture', desc: 'H100 Tensor Core microscopic view', img: siliconArchitecture },
+  { id: 2, title: 'GPU Cluster', desc: 'Enterprise A100 data center', img: gpuCluster },
+  { id: 3, title: 'Code Compilation', desc: 'IR Graph lowering process', img: codeCompilation },
+  { id: 4, title: 'Edge Deployment', desc: 'Jetson Orin inference testing', img: archEdgeDeployment },
+  { id: 5, title: 'Neural Network Mapping', desc: 'Visualizing node activations', img: neuralNetworkMapping },
+  { id: 6, title: 'Hardware Lab', desc: 'Testing physical NPU limits', img: hardwareLab },
+  { id: 7, title: 'Server Telemetry', desc: 'Live monitoring of memory bandwidth', img: serverTelemetry },
+  { id: 8, title: 'QueryNexes Interface', desc: 'The optimization dashboard', img: querynexesInterface },
 ];
 
 export default function TechDiagram() {

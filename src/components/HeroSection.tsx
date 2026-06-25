@@ -218,15 +218,14 @@ export default function CinematicHero() {
               marginBottom: '12px',
               color: 'var(--text-primary)',
             }}>
-              The AI Model<br />
-              Compilation &amp;<br />
+              The Model Compilation and{' '}
               <span style={{ position: 'relative', display: 'inline-block' }}>
                 <span className="gradient-text">Optimization</span>
                 <span style={{
                   position: 'absolute', bottom: '-3px', left: 0, right: 0, height: '1px',
                   background: 'linear-gradient(90deg, var(--green-neon), transparent)',
                 }} />
-              </span><br />
+              </span>{' '}
               Platform.
             </h1>
 
