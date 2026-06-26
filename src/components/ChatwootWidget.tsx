@@ -13,19 +13,17 @@ export default function ChatwootWidget() {
       launcherTitle: '',
     };
 
-    (function (d, t) {
-      const BASE_URL = 'https://app.chatwoot.com';
-      const g = d.createElement(t), s = d.getElementsByTagName(t)[0];
-      g.src = BASE_URL + '/packs/js/sdk.js';
-      g.async = true;
-      s.parentNode.insertBefore(g, s);
-      g.onload = function () {
-        window.chatwootSDK.run({
-          websiteToken: 'khtyxzTy9Rgx4sMAiYQLJdHu',
-          baseUrl: BASE_URL,
-        });
-      };
-    })(document, 'script');
+    const BASE_URL = 'https://app.chatwoot.com';
+    const script = document.createElement('script');
+    script.src = BASE_URL + '/packs/js/sdk.js';
+    script.async = true;
+    script.onload = () => {
+      window.chatwootSDK?.run({
+        websiteToken: 'khtyxzTy9Rgx4sMAiYQLJdHu',
+        baseUrl: BASE_URL,
+      });
+    };
+    document.head.appendChild(script);
   }, []);
 
   return null;

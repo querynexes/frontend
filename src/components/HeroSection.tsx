@@ -3,12 +3,10 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
 import { playTick } from '../utils/audio';
-import img1 from '../assets/backgrounds/hero-1.png';
-import img2 from '../assets/backgrounds/hero-2.png';
-import img3 from '../assets/backgrounds/hero-3.png';
-import img4 from '../assets/backgrounds/hero-4.png';
-
-gsap.registerPlugin(ScrollTrigger, TextPlugin);
+import img1 from '../assets/backgrounds/hero-1.webp';
+import img2 from '../assets/backgrounds/hero-2.webp';
+import img3 from '../assets/backgrounds/hero-3.webp';
+import img4 from '../assets/backgrounds/hero-4.webp';
 
 const IMAGES = [img1, img2, img3, img4];
 
@@ -31,6 +29,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
   const metric3Ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger, TextPlugin);
     const ctx = gsap.context(() => {
       const section = sectionRef.current;
       const pinWrap = pinWrapRef.current;

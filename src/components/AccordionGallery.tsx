@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import graphTransformation from '../assets/gallery/Graph Transformation.png';
-import hardwareCalibration from '../assets/gallery/Hardware Calibration.png';
-import memoryPlanning from '../assets/gallery/Memory Planning.png';
-import edgeDeployment from '../assets/gallery/Edge Deployment.png';
+import graphTransformation from '../assets/gallery/Graph Transformation.webp';
+import hardwareCalibration from '../assets/gallery/Hardware Calibration.webp';
+import memoryPlanning from '../assets/gallery/Memory Planning.webp';
+import edgeDeployment from '../assets/gallery/Edge Deployment.webp';
 
 const galleryItems = [
   {
@@ -62,6 +62,8 @@ export default function AccordionGallery() {
             <img
               src={item.image}
               alt={item.title}
+              loading="lazy"
+              decoding="async"
               style={{
                 width: '100%',
                 height: '100%',

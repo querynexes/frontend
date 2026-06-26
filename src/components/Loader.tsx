@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import favicon from '../assets/favicons/favicon.png';
+import favicon from '../assets/favicons/favicon.webp';
 
 interface LoaderProps {
   onComplete: () => void;
@@ -18,36 +18,39 @@ export default function Loader({ onComplete }: LoaderProps) {
   const [line3, setLine3] = useState('');
 
   useEffect(() => {
-    // Typewriter lines
-    let idx1 = 0;
-    const t1 = setInterval(() => {
-      setLine1(LINES[0].slice(0, ++idx1));
-      if (idx1 >= LINES[0].length) clearInterval(t1);
-    }, 22);
+    // Typewriter using requestAnimationFrame for smoothness
+    let disposed = false;
+    const totalChars = LINES.reduce((s, l) => s + l.length, 0);
+    let typed = 0;
+    const TYPING_SPEED = 18;
 
-    setTimeout(() => {
-      let idx2 = 0;
-      const t2 = setInterval(() => {
-        setLine2(LINES[1].slice(0, ++idx2));
-        if (idx2 >= LINES[1].length) clearInterval(t2);
-      }, 22);
-    }, LINES[0].length * 22 + 200);
+    const tick = () => {
+      if (disposed) return;
+      let remaining = typed;
+      for (let i = 0; i < LINES.length; i++) {
+        const len = LINES[i].length;
+        if (remaining <= len) {
+          if (i === 0) setLine1(LINES[0].slice(0, remaining));
+          else if (i === 1) setLine2(LINES[1].slice(0, remaining));
+          else if (i === 2) setLine3(LINES[2].slice(0, remaining));
+          break;
+        }
+        remaining -= len;
+      }
+      typed++;
+      if (typed <= totalChars + 6) {
+        setTimeout(tick, TYPING_SPEED);
+      }
+    };
+    tick();
 
-    setTimeout(() => {
-      let idx3 = 0;
-      const t3 = setInterval(() => {
-        setLine3(LINES[2].slice(0, ++idx3));
-        if (idx3 >= LINES[2].length) clearInterval(t3);
-      }, 22);
-    }, (LINES[0].length + LINES[1].length) * 22 + 400);
-
-    // Exit
+    // Exit after all lines typed + brief pause
     const exitTimer = setTimeout(() => {
       setExiting(true);
-      setTimeout(onComplete, 850);
-    }, 2800);
+      setTimeout(onComplete, 650);
+    }, totalChars * TYPING_SPEED + 600);
 
-    return () => clearTimeout(exitTimer);
+    return () => { disposed = true; clearTimeout(exitTimer); };
   }, [onComplete]);
 
   return (

@@ -68,14 +68,14 @@ const PIPELINE_DATA = [
   }
 ];
 
-import siliconArchitecture from '../assets/gallery/Silicon Architecture.png';
-import gpuCluster from '../assets/gallery/GPU Cluster.png';
-import codeCompilation from '../assets/gallery/Code Compilation.png';
-import archEdgeDeployment from '../assets/gallery/Edge Deployment_AO.png';
-import neuralNetworkMapping from '../assets/gallery/Neural network Mapping.png';
-import hardwareLab from '../assets/gallery/hardware Lab.png';
-import serverTelemetry from '../assets/gallery/Server Telemetry.png';
-import querynexesInterface from '../assets/gallery/Queynexes Interface.png';
+import siliconArchitecture from '../assets/gallery/Silicon Architecture.webp';
+import gpuCluster from '../assets/gallery/GPU Cluster.webp';
+import codeCompilation from '../assets/gallery/Code Compilation.webp';
+import archEdgeDeployment from '../assets/gallery/Edge Deployment_AO.webp';
+import neuralNetworkMapping from '../assets/gallery/Neural network Mapping.webp';
+import hardwareLab from '../assets/gallery/hardware Lab.webp';
+import serverTelemetry from '../assets/gallery/Server Telemetry.webp';
+import querynexesInterface from '../assets/gallery/Queynexes Interface.webp';
 
 const GALLERY_ITEMS = [
   { id: 1, title: 'Silicon Architecture', desc: 'H100 Tensor Core microscopic view', img: siliconArchitecture },
@@ -191,6 +191,8 @@ export default function TechDiagram() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
+                loading="lazy"
+                decoding="async"
                 style={{ width: '100%', maxHeight: '70vh', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 24px 64px rgba(0,255,133,0.1)' }}
               />
 
@@ -271,7 +273,7 @@ export default function TechDiagram() {
                     }}
                     className="gallery-card"
                   >
-                    <img src={item.img} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, transition: 'opacity 0.3s' }} className="gallery-img" />
+                    <img src={item.img} alt={item.title} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, transition: 'opacity 0.3s' }} className="gallery-img" />
                     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)', pointerEvents: 'none' }} />
                     <div style={{ position: 'absolute', bottom: '16px', left: '16px', pointerEvents: 'none' }}>
                       <div style={{ fontSize: '10px', color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', marginBottom: '4px' }}>{item.id.toString().padStart(2, '0')} //</div>

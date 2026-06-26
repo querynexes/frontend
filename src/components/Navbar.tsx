@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { playTick } from '../utils/audio';
 import SoundWaveIcon from './SoundWaveIcon';
-import logoLight from '../assets/logos/querynexes-logo.png';
+import logoLight from '../assets/logos/querynexes-logo.webp';
 
 const SECTION_IDS = ['hero', 'features', 'simulation', 'pricing', 'faq', 'about', 'contact'];
 

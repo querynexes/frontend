@@ -1,7 +1,7 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { playTick } from '../utils/audio';
-import logoLight from '../assets/logos/querynexes-logo.png';
+import logoLight from '../assets/logos/querynexes-logo.webp';
 
 type Page = 'home' | 'product' | 'privacy' | 'terms';
 
@@ -77,7 +77,7 @@ export default function ProductPage({ onNavigate, muted, onMuteToggle }: {
           <div style={{ maxWidth: '860px', margin: '0 auto' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', marginBottom: '16px', justifyContent: 'center' }}>
               <div style={{ width: '48px', height: '48px', borderRadius: '14px', border: '1px solid rgba(0,255,133,0.18)', display: 'grid', placeItems: 'center', background: 'rgba(0,0,0,0.24)' }}>
-                <img src={logoLight} alt="QueryNex One" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+                <img src={logoLight} alt="QueryNex One" loading="lazy" decoding="async" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
               </div>
               <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', letterSpacing: '0.18em', color: 'var(--green-deep)' }}>ENTERPRISE PLATFORM</span>
             </div>

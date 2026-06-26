@@ -1,6 +1,6 @@
 import { Linkedin, Facebook, Twitter, Youtube } from 'lucide-react';
 import { playTick } from '../utils/audio';
-import logoLight from '../assets/logos/querynexes-logo.png';
+import logoLight from '../assets/logos/querynexes-logo.webp';
 
 type Page = 'home' | 'product' | 'privacy' | 'terms';
 
@@ -25,7 +25,7 @@ const PAGE_MAP: Record<string, Page> = {
 };
 
 const SOCIALS = [
-  { Icon: Linkedin, label: 'LinkedIn', href: '#' },
+  { Icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/query-nexes/' },
   { Icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/QueryNexes/' },
   { Icon: Twitter, label: 'X', href: 'https://x.com/QueryNexes' },
   { Icon: null, label: 'Pinterest', href: 'https://www.pinterest.com/QueyNexes/' },
@@ -73,7 +73,7 @@ export default function Footer({ onNavigate }: {
             alignItems: 'center',
             gap: '10px',
           }}>
-            <img src={logoLight} alt="QueryNexes" style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
+            <img src={logoLight} alt="QueryNexes" loading="lazy" decoding="async" style={{ width: '120px', height: '120px', objectFit: 'contain' }} />
           </div>
 
           <p style={{

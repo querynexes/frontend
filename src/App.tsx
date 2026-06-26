@@ -1,27 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import Loader from './components/Loader';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
-import StatsBar from './components/StatsBar';
-import PipelineViz from './components/PipelineViz';
-import SimulationPlatform from './components/SimulationPlatform';
-import FeaturesGrid from './components/FeaturesGrid';
-import TechDiagram from './components/TechDiagram';
-import Pricing from './components/Pricing';
-import Testimonials from './components/Testimonials';
-import FAQ from './components/FAQ';
-import CTABanner from './components/CTABanner';
-import AboutSection from './components/AboutSection';
-import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import ChatwootWidget from './components/ChatwootWidget';
 import CookieConsent from './components/CookieConsent';
-import ProductPage from './pages/ProductPage';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsConditions from './pages/TermsConditions';
 import { useCustomCursor } from './hooks/useCustomCursor';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import { initAudio, toggleMute } from './utils/audio';
+
+const StatsBar = lazy(() => import('./components/StatsBar'));
+const PipelineViz = lazy(() => import('./components/PipelineViz'));
+const SimulationPlatform = lazy(() => import('./components/SimulationPlatform'));
+const FeaturesGrid = lazy(() => import('./components/FeaturesGrid'));
+const TechDiagram = lazy(() => import('./components/TechDiagram'));
+const Pricing = lazy(() => import('./components/Pricing'));
+const Testimonials = lazy(() => import('./components/Testimonials'));
+const FAQ = lazy(() => import('./components/FAQ'));
+const CTABanner = lazy(() => import('./components/CTABanner'));
+const AboutSection = lazy(() => import('./components/AboutSection'));
+const ContactSection = lazy(() => import('./components/ContactSection'));
+const ProductPage = lazy(() => import('./pages/ProductPage'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsConditions = lazy(() => import('./pages/TermsConditions'));
 
 type Page = 'home' | 'product' | 'privacy' | 'terms';
 
@@ -76,21 +77,30 @@ export default function App() {
     setMuted(nowMuted);
   };
 
-  // Register interactive element hover effects for cursor
+  // Register interactive element hover effects for cursor (event delegation)
   useEffect(() => {
     if (window.innerWidth <= 768) return;
     const outer = outerRef.current;
     if (!outer) return;
 
-    const addHover = () => {
-      document.querySelectorAll('a, button, [data-interactive]').forEach(el => {
-        el.addEventListener('mouseenter', () => outer.classList.add('hover'));
-        el.addEventListener('mouseleave', () => outer.classList.remove('hover'));
-      });
+    const onEnter = () => outer.classList.add('hover');
+    const onLeave = () => outer.classList.remove('hover');
+
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.matches('a, button, [data-interactive], a *, button *')) {
+        if (e.type === 'mouseover') onEnter();
+        else onLeave();
+      }
     };
 
-    // Delay slightly to let DOM settle
-    setTimeout(addHover, 600);
+    document.addEventListener('mouseover', handler, { passive: true });
+    document.addEventListener('mouseout', handler, { passive: true });
+
+    return () => {
+      document.removeEventListener('mouseover', handler);
+      document.removeEventListener('mouseout', handler);
+    };
   }, [loaded, outerRef]);
 
   return (
@@ -111,6 +121,7 @@ export default function App() {
         opacity: loaded ? 1 : 0,
         transition: 'opacity 0.5s ease',
       }}>
+        <Suspense fallback={null}>
         {page === 'product' ? (
           <ProductPage onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
         ) : page === 'privacy' ? (
@@ -138,6 +149,7 @@ export default function App() {
             <CookieConsent />
           </>
         )}
+        </Suspense>
       </div>
     </>
   );

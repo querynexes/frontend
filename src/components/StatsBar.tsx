@@ -3,8 +3,8 @@
 // No Three.js. Pure React + framer-motion + bespoke SVG charts.
 // Every number ticks live. Every chart breathes. Looks like a real engineering dashboard.
 
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data & config
@@ -112,7 +112,6 @@ function LatencyDualChart() {
     return () => { clearTimeout(t); clearInterval(iv); };
   }, []);
 
-  const allVals = [...baselineHist, ...optHist];
   const minV = 0, maxV = 160;
 
   const basePath = buildSVGLine(baselineHist, CW, CH, minV, maxV);

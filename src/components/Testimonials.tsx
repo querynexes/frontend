@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import teamPriya from '../assets/team/Team Priya Nair.png';
-import teamMarcus from '../assets/team/Team Marcus Chen.png';
-import teamElena from '../assets/team/Team Elena Kovac.png';
+import teamPriya from '../assets/team/Team Priya Nair.webp';
+import teamMarcus from '../assets/team/Team Marcus Chen.webp';
+import teamElena from '../assets/team/Team Elena Kovac.webp';
 
 const TESTIMONIALS = [
   {
@@ -133,7 +133,7 @@ export default function Testimonials() {
                 overflow: 'hidden', flexShrink: 0,
                 border: '2px solid var(--green-dark)',
               }}>
-                <img src={t.photo} alt={t.author} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={t.photo} alt={t.author} loading="lazy" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div>
                 <div style={{

@@ -6,7 +6,6 @@ type ConsentChoice = 'accepted' | 'declined' | null;
 
 export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
-  const [choice, setChoice] = useState<ConsentChoice>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem(COOKIE_CONSENT_KEY) as ConsentChoice | null;
@@ -14,18 +13,15 @@ export default function CookieConsent() {
       const timer = setTimeout(() => setVisible(true), 1000);
       return () => clearTimeout(timer);
     }
-    setChoice(stored);
   }, []);
 
   const handleAccept = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
-    setChoice('accepted');
     setVisible(false);
   };
 
   const handleDecline = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'declined');
-    setChoice('declined');
     setVisible(false);
   };
 

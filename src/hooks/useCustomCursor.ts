@@ -8,17 +8,19 @@ export function useCustomCursor() {
 
   useEffect(() => {
     if (window.innerWidth <= 768) return;
+    let disposed = false;
 
     const onMove = (e: MouseEvent) => {
       posRef.current.mx = e.clientX;
       posRef.current.my = e.clientY;
     };
-    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mousemove', onMove, { passive: true });
 
     const animate = () => {
+      if (disposed) return;
       const { mx, my } = posRef.current;
-      posRef.current.ox += (mx - posRef.current.ox) * 0.1;
-      posRef.current.oy += (my - posRef.current.oy) * 0.1;
+      posRef.current.ox += (mx - posRef.current.ox) * 0.15;
+      posRef.current.oy += (my - posRef.current.oy) * 0.15;
       if (outerRef.current) {
         outerRef.current.style.left = posRef.current.ox + 'px';
         outerRef.current.style.top = posRef.current.oy + 'px';
@@ -32,6 +34,7 @@ export function useCustomCursor() {
     animRef.current = requestAnimationFrame(animate);
 
     return () => {
+      disposed = true;
       document.removeEventListener('mousemove', onMove);
       cancelAnimationFrame(animRef.current);
     };

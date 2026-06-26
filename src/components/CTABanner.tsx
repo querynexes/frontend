@@ -4,12 +4,20 @@ import { playTick } from '../utils/audio';
 export default function CTABanner() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<number>(0);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    const section = sectionRef.current;
+    if (!canvas || !section) return;
+    
+    let running = false;
+    const resizeCanvas = () => {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+    };
+    resizeCanvas();
+    
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -22,6 +30,7 @@ export default function CTABanner() {
     }));
 
     const draw = () => {
+      if (!running) return;
       frameRef.current = requestAnimationFrame(draw);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       circles.forEach((c, i) => {
@@ -34,14 +43,33 @@ export default function CTABanner() {
       });
       t += 0.008;
     };
+
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        running = true;
+        resizeCanvas();
+        draw();
+      } else {
+        running = false;
+        cancelAnimationFrame(frameRef.current);
+      }
+    }, { threshold: 0 });
+    obs.observe(section);
+    
+    running = true;
     draw();
 
-    return () => cancelAnimationFrame(frameRef.current);
+    return () => {
+      running = false;
+      cancelAnimationFrame(frameRef.current);
+      obs.disconnect();
+    };
   }, []);
 
   return (
     <section
       id="cta-banner"
+      ref={sectionRef}
       style={{
         minHeight: '60vh',
         background: 'var(--green-neon)',

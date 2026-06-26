@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { playTick } from '../utils/audio';
-import intakeIcon from '../assets/icons/pipeline/model-intake.png';
-import compileIcon from '../assets/icons/pipeline/compilation-engine.png';
-import optimizeIcon from '../assets/icons/pipeline/optimization-layer.png';
-import tunerIcon from '../assets/icons/pipeline/hardware-tuner.png';
-import deployIcon from '../assets/icons/pipeline/deploy-ready.png';
+import intakeIcon from '../assets/icons/pipeline/model-intake.webp';
+import compileIcon from '../assets/icons/pipeline/compilation-engine.webp';
+import optimizeIcon from '../assets/icons/pipeline/optimization-layer.webp';
+import tunerIcon from '../assets/icons/pipeline/hardware-tuner.webp';
+import deployIcon from '../assets/icons/pipeline/deploy-ready.webp';
 
 const STEPS = [
   {
@@ -138,7 +138,7 @@ export default function PipelineViz() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   marginBottom: '16px',
                 }}>
-                  <img src={step.icon} alt={step.name} style={{ width: '44px', height: '44px', objectFit: 'contain' }} />
+                  <img src={step.icon} alt={step.name} loading="lazy" decoding="async" style={{ width: '44px', height: '44px', objectFit: 'contain' }} />
                 </div>
 
                 <div style={{

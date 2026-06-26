@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { playTick } from '../utils/audio';
-import iconCompilation from '../assets/icons/features/compilation-engine.png';
-import iconOptimization from '../assets/icons/features/optimization-layer.png';
-import iconAcceleration from '../assets/icons/features/hardware-acceleration.png';
-import iconPerformance from '../assets/icons/features/performance-intelligence.png';
-import iconDeployment from '../assets/icons/features/deployment-toolkit.png';
-import iconEnterprise from '../assets/icons/features/enterprise-api.png';
+import iconCompilation from '../assets/icons/features/compilation-engine.webp';
+import iconOptimization from '../assets/icons/features/optimization-layer.webp';
+import iconAcceleration from '../assets/icons/features/hardware-acceleration.webp';
+import iconPerformance from '../assets/icons/features/performance-intelligence.webp';
+import iconDeployment from '../assets/icons/features/deployment-toolkit.webp';
+import iconEnterprise from '../assets/icons/features/enterprise-api.webp';
 
 const FEATURES = [
   {
@@ -153,7 +153,7 @@ export default function FeaturesGrid() {
                 justifyContent: 'center',
                 marginBottom: '20px',
               }}>
-                <img src={feat.icon} alt={feat.title} style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
+                <img src={feat.icon} alt={feat.title} loading="lazy" decoding="async" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
               </div>
 
               <div style={{
