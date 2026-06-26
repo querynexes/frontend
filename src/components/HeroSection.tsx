@@ -41,10 +41,13 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
       gsap.set(images[0], { opacity: 1 });
       images.slice(1).forEach(img => gsap.set(img, { opacity: 0 }));
 
+      const isMobile = window.innerWidth <= 768;
+      const endMult = isMobile ? 40 : 60;
+
       const st = ScrollTrigger.create({
         trigger: section,
         start: 'top top',
-        end: `+=${images.length * 100}%`,
+        end: `+=${images.length * endMult}%`,
         pin: pinWrap,
         pinSpacing: true,
         scrub: true,
@@ -57,9 +60,9 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
 
           images.forEach((img, i) => {
             if (i === activeIdx) {
-              gsap.set(img, { opacity: 1 - localT, scale: 1 + localT * 0.15, zIndex: 2 });
+              gsap.set(img, { opacity: 1 - localT, scale: 1 + localT * 0.1, zIndex: 2 });
             } else if (i === activeIdx + 1) {
-              gsap.set(img, { opacity: localT, scale: 1.05 - localT * 0.05, zIndex: 1 });
+              gsap.set(img, { opacity: localT, scale: 1.03 - localT * 0.03, zIndex: 1 });
             } else {
               gsap.set(img, { opacity: 0 });
             }
@@ -126,6 +129,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
       <div
         ref={pinWrapRef}
         id="hero"
+        className="hero-pin-wrap"
         style={{
           height: '100dvh',
           width: '100%',
@@ -134,11 +138,12 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
           background: 'var(--bg-primary)',
         }}
       >
-        <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
+        <div className="hero-bg" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
           {IMAGES.map((src, i) => (
             <div
               key={i}
               ref={el => (imageRefs.current[i] = el)}
+              className="hero-bg-img"
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -151,14 +156,14 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
           ))}
         </div>
 
-        <div style={{
+        <div className="hero-gradient-bottom" style={{
           position: 'absolute', inset: 0, zIndex: 1,
-          background: 'linear-gradient(to top, var(--bg-primary) 0%, rgba(5,10,7,0.75) 38%, rgba(5,10,7,0.35) 60%, transparent 85%)',
+          background: 'linear-gradient(to top, var(--bg-primary) 0%, rgba(5,10,7,0.5) 30%, rgba(5,10,7,0.12) 50%, transparent 75%)',
           pointerEvents: 'none',
         }} />
-        <div style={{
+        <div className="hero-gradient-side" style={{
           position: 'absolute', inset: 0, zIndex: 1,
-          background: 'linear-gradient(to right, rgba(5,10,7,0.55) 0%, transparent 55%)',
+          background: 'linear-gradient(to right, rgba(5,10,7,0.5) 0%, transparent 50%)',
           pointerEvents: 'none',
         }} />
 
@@ -184,15 +189,16 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
               maxHeight: 'calc(100dvh - 72px - 32px)',
               overflowY: 'auto',
               scrollbarWidth: 'none',
-              background: 'rgba(5,10,7,0.6)',
+              background: 'rgba(5,10,7,0.35)',
               backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
               border: '1px solid var(--border-default)',
               borderRadius: '12px',
               padding: '28px 32px',
               boxSizing: 'border-box',
             }}
           >
-            <div style={{
+            <div className="hero-badge" style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
@@ -213,7 +219,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
             <h1 style={{
               fontFamily: 'Space Grotesk, sans-serif',
               fontWeight: 700,
-              fontSize: 'clamp(28px, 3.6vw, 52px)',
+              fontSize: 'clamp(24px, 3.6vw, 52px)',
               lineHeight: 1.08,
               letterSpacing: '-0.03em',
               marginBottom: '12px',
@@ -230,7 +236,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
               Platform.
             </h1>
 
-            <p style={{
+            <p className="hero-desc" style={{
               fontSize: '13.5px',
               color: 'var(--text-secondary)',
               lineHeight: 1.65,
@@ -241,7 +247,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
               hardware-optimized assets for cloud, edge, and enterprise deployment.
             </p>
 
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '18px', flexWrap: 'wrap' }}>
+            <div className="hero-ctas" style={{ display: 'flex', gap: '12px', marginBottom: '18px', flexWrap: 'wrap' }}>
               <button
                 className="btn-primary"
                 onMouseEnter={playTick}
@@ -261,7 +267,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
               </a>
             </div>
 
-            <div style={{
+            <div className="hero-terminal-wrap" style={{
               border: '1px solid var(--border-default)',
               borderRadius: '6px',
               background: 'rgba(11,20,16,0.7)',
@@ -313,7 +319,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
                     }}
                   />
                 ))}
-                <span style={{
+                <span className="hero-cursor" style={{
                   display: 'inline-block',
                   width: '6px',
                   height: '10px',
@@ -325,7 +331,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '28px', flexWrap: 'wrap' }}>
+            <div className="hero-metrics" style={{ display: 'flex', gap: '28px', flexWrap: 'wrap' }}>
               {[
                 { ref: metric1Ref, suffix: '%', label: 'FASTER INFERENCE' },
                 { ref: metric2Ref, suffix: '%', label: 'MEMORY REDUCTION' },
@@ -346,7 +352,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
           </div>
         </div>
 
-        <div style={{
+        <div className="hero-scroll-hint" style={{
           position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
           zIndex: 10,
           fontFamily: 'JetBrains Mono, monospace', fontSize: '10px',
@@ -362,6 +368,13 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
 
         .hero-glass::-webkit-scrollbar { display: none; }
 
+        @media (min-width: 1921px) {
+          .hero-bg-img {
+            background-size: 100% auto !important;
+            background-position: center top !important;
+          }
+        }
+
         @media (max-width: 1024px) {
           .hero-glass {
             max-width: 440px !important;
@@ -370,6 +383,15 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
         }
 
         @media (max-width: 768px) {
+          .hero-pin-wrap {
+            height: 100dvh !important;
+          }
+          .hero-gradient-bottom {
+            background: linear-gradient(to top, var(--bg-primary) 0%, rgba(5,10,7,0.3) 25%, transparent 65%) !important;
+          }
+          .hero-gradient-side {
+            background: linear-gradient(to right, rgba(5,10,7,0.3) 0%, transparent 40%) !important;
+          }
           .hero-fg {
             padding-left: 16px !important;
             padding-right: 16px !important;
@@ -380,6 +402,9 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
             max-width: 100% !important;
             padding: 20px !important;
             max-height: calc(100dvh - 64px - 16px) !important;
+            background: rgba(5,10,7,0.08) !important;
+            backdropFilter: blur(4px) !important;
+            -webkit-backdrop-filter: blur(4px) !important;
           }
           .hero-terminal {
             height: 96px !important;
@@ -387,22 +412,46 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
           .hero-terminal [data-log-line] {
             height: 18px !important;
           }
+          .hero-scroll-hint {
+            bottom: 16px !important;
+            font-size: 8px !important;
+          }
         }
+
         @media (max-width: 425px) {
           .hero-fg {
             padding-left: 12px !important;
             padding-right: 12px !important;
           }
           .hero-glass {
-            padding: 16px !important;
+            padding: 14px !important;
+            background: rgba(5,10,7,0.04) !important;
+            backdropFilter: blur(3px) !important;
+            -webkit-backdrop-filter: blur(3px) !important;
           }
           .hero-terminal {
             height: 80px !important;
           }
+          .hero-badge {
+            font-size: 8px !important;
+            padding: 4px 10px !important;
+          }
+          .hero-desc {
+            font-size: 12px !important;
+          }
+          .hero-ctas button, .hero-ctas a {
+            font-size: 12px !important;
+            padding: 9px 16px !important;
+          }
+          .hero-scroll-hint {
+            display: none !important;
+          }
         }
+
         @media (max-width: 375px) {
           .hero-glass {
-            padding: 12px !important;
+            padding: 10px !important;
+            background: rgba(5,10,7,0.02) !important;
           }
           .hero-terminal {
             height: 72px !important;

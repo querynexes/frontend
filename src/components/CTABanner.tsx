@@ -204,7 +204,7 @@ export default function CTABanner() {
             onMouseOver={e => (e.currentTarget as HTMLElement).style.background = 'rgba(5,10,7,0.1)'}
             onMouseOut={e => (e.currentTarget as HTMLElement).style.background = 'none'}
           >
-            View Documentation
+            View FAQ
           </a>
         </div>
 

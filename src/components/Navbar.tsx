@@ -97,6 +97,7 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
         justifyContent: 'space-between',
         background: scrolled ? 'rgba(5,10,7,0.88)' : 'rgba(5,10,7,0)',
         backdropFilter: scrolled ? 'blur(20px)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
         borderBottom: scrolled ? '1px solid var(--border-default)' : '1px solid transparent',
         transition: 'all 0.3s ease',
       }}>
@@ -202,19 +203,23 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
           </button>
 
           <div className="nav-overlay-links">
-            {navLinks.map((link, i) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={e => { e.preventDefault(); scrollTo(link.href); }}
-                className="nav-overlay-link"
-                style={{
-                  animationDelay: `${i * 0.07}s`,
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link, i) => {
+              const isActive = active === link.href.slice(1);
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={e => { e.preventDefault(); scrollTo(link.href); }}
+                  className="nav-overlay-link"
+                  style={{
+                    animationDelay: `${i * 0.07}s`,
+                    color: isActive ? 'var(--green-neon)' : undefined,
+                  }}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </div>
 
           <div className="nav-overlay-actions">
@@ -386,6 +391,12 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
             width: 38px;
             height: 38px;
           }
+        }
+        @media (max-width: 320px) {
+          nav { padding: 0 6px !important; }
+          .nav-logo-img { width: 72px !important; height: 72px !important; }
+          .nav-overlay-link { font-size: 18px; }
+          .nav-overlay-links { gap: 20px; }
         }
 
         /* ── Sound wave bars (unchanged) ────────────────────── */

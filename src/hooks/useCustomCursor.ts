@@ -19,8 +19,8 @@ export function useCustomCursor() {
     const animate = () => {
       if (disposed) return;
       const { mx, my } = posRef.current;
-      posRef.current.ox += (mx - posRef.current.ox) * 0.15;
-      posRef.current.oy += (my - posRef.current.oy) * 0.15;
+      posRef.current.ox += (mx - posRef.current.ox) * 0.18;
+      posRef.current.oy += (my - posRef.current.oy) * 0.18;
       if (outerRef.current) {
         outerRef.current.style.left = posRef.current.ox + 'px';
         outerRef.current.style.top = posRef.current.oy + 'px';

@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { Component, useState, useEffect, lazy, Suspense } from 'react';
 import Loader from './components/Loader';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
@@ -8,6 +8,28 @@ import CookieConsent from './components/CookieConsent';
 import { useCustomCursor } from './hooks/useCustomCursor';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import { initAudio, toggleMute } from './utils/audio';
+
+class ErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
+  state = { error: null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  componentDidCatch(error: Error) { console.error('[App] Unhandled error:', error); }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: '40px', color: 'var(--text-primary)', background: 'var(--bg-primary)', minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px' }}>
+          <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: 'var(--status-error)' }}>RUNTIME ERROR</span>
+          <p style={{ fontSize: '14px', color: 'var(--text-secondary)', maxWidth: '400px', textAlign: 'center' }}>
+            {this.state.error.message}
+          </p>
+          <button onClick={() => window.location.reload()} className="btn-primary" style={{ padding: '10px 20px', fontSize: '13px' }}>
+            Reload Page
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 const StatsBar = lazy(() => import('./components/StatsBar'));
 const PipelineViz = lazy(() => import('./components/PipelineViz'));
@@ -56,7 +78,10 @@ export default function App() {
   };
 
   useEffect(() => {
-    const handlePopState = () => setPage(pathToPage());
+    const handlePopState = () => {
+      setPage(pathToPage());
+      window.scrollTo(0, 0);
+    };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
@@ -121,7 +146,8 @@ export default function App() {
         opacity: loaded ? 1 : 0,
         transition: 'opacity 0.5s ease',
       }}>
-        <Suspense fallback={null}>
+        <ErrorBoundary>
+        <Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: 'var(--text-muted)' }}>Loading…</div>}>
         {page === 'product' ? (
           <ProductPage onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
         ) : page === 'privacy' ? (
@@ -150,6 +176,7 @@ export default function App() {
           </>
         )}
         </Suspense>
+        </ErrorBoundary>
       </div>
     </>
   );

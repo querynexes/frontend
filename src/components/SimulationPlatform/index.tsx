@@ -211,6 +211,7 @@ function DesktopSimulation() {
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             background: 'rgba(5,10,7,0.9)',
             backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
           }}>
             <div style={{
               fontFamily: 'JetBrains Mono, monospace',
@@ -240,6 +241,7 @@ function DesktopSimulation() {
           borderRadius: '4px',
           letterSpacing: '0.1em',
           backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
         }}>
           {MODE_LABELS[mode]}
         </div>
@@ -260,6 +262,7 @@ function DesktopSimulation() {
             borderRadius: '4px',
             whiteSpace: 'nowrap',
             backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
           }}>
             CLICK AN ISLAND TO INSPECT
           </div>
@@ -281,6 +284,7 @@ function DesktopSimulation() {
             borderRadius: '4px',
             whiteSpace: 'nowrap',
             backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             animation: 'fadeIn 0.5s ease',
           }}>
             DRAG TO ROTATE · SCROLL TO ZOOM
@@ -300,6 +304,7 @@ function DesktopSimulation() {
             fontFamily: 'JetBrains Mono, monospace',
             fontSize: '10px',
             backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
             animation: 'fadeIn 0.3s ease',
             display: 'flex',
             alignItems: 'flex-start',
@@ -402,11 +407,21 @@ function DesktopSimulation() {
         @media (max-width: 1024px) {
           .sim-section { padding-left: 32px !important; padding-right: 32px !important; }
         }
+        @media (max-width: 1024px) {
+          .sim-section { padding-top: 64px !important; padding-bottom: 64px !important; }
+        }
         @media (max-width: 768px) {
-          .sim-section { padding-left: 20px !important; padding-right: 20px !important; padding-top: 64px !important; }
+          .sim-section { padding: 48px 20px !important; }
           .sim-controls button { flex: 1 1 auto; font-size: 11px !important; padding: 9px 12px !important; }
           .sim-canvas-wrap { height: 420px !important; }
           .sim-detail-panel { width: 180px !important; right: 10px !important; padding: 14px !important; }
+        }
+        @media (max-width: 425px) {
+          .sim-section { padding: 40px 16px !important; }
+          .sim-canvas-wrap { height: 340px !important; }
+        }
+        @media (max-width: 375px) {
+          .sim-section { padding: 32px 12px !important; }
         }
       `}</style>
     </section>

@@ -242,6 +242,7 @@ body {
 .card {
   background: rgba(11,20,16,0.6);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-default);
   border-radius: 6px;
   transition: border-color 0.12s ease, background 0.12s ease;
@@ -264,9 +265,26 @@ canvas { display: block; }
   background-clip: text;
 }
 
+/* FOCUS VISIBLE — keyboard accessibility */
+:focus-visible {
+  outline: 2px solid var(--green-neon);
+  outline-offset: 2px;
+}
+
+/* Remove focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* BUTTON / LINK DEFAULT CURSOR OVERRIDE */
+a, button, [role="button"], input, textarea, select {
+  cursor: none;
+}
+
 /* MOBILE */
 @media (max-width: 768px) {
   body { cursor: auto; }
   .cursor-outer, .cursor-inner { display: none; }
   .section-sub { margin-bottom: 40px; }
+  a, button, [role="button"], input, textarea, select { cursor: auto; }
 }

@@ -175,7 +175,7 @@ export default function AboutSection() {
           >
             <iframe
               title="QueryNexes Office Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0131710065175!2d-122.401906!3d37.7897311!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858089d1655555%3A0xb38deb60ccb216f3!2s44%20Montgomery%20St%203rd%20floor%2C%20San%20Francisco%2C%20CA%2094104%2C%20USA!5e0!3m2!1sen!2slk!4v1782379853855!5m2!1sen!2slk"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.00946248!2d-122.40439712524643!3d37.78981801129519!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858089d14d169d%3A0x330b755d51ac86ec!2s44%20Montgomery%20St%2C%20San%20Francisco%2C%20CA%2094104%2C%20USA!5e0!3m2!1sen!2slk!4v1782467287047!5m2!1sen!2slk"
               width="100%"
               height="100%"
               style={{ minHeight: '200px', border: 'none', display: 'block' }}
@@ -201,6 +201,9 @@ export default function AboutSection() {
         }
         @media (max-width: 375px) {
           #about { padding: 40px 12px !important; }
+        }
+        @media (max-width: 320px) {
+          #about { padding: 32px 8px !important; }
         }
       `}</style>
     </section>

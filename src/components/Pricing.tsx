@@ -61,7 +61,7 @@ const PLANS = [
 
 export default function Pricing() {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annually'>('annually');
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annually'>('monthly');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -203,8 +203,7 @@ export default function Pricing() {
         {PLANS.map((plan, i) => {
           const price = plan.prices[billingCycle];
           const isCustom = price === 'Custom';
-          const linkUrl = (plan as any).url?.[billingCycle];
-          const Tag = linkUrl ? 'a' : 'button';
+          const linkUrl = plan.url?.[billingCycle] as string | undefined;
 
           return (
             <div
@@ -322,29 +321,59 @@ export default function Pricing() {
                 ))}
               </ul>
 
-              <Tag
-                {...(linkUrl ? { href: linkUrl, target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className={plan.ctaStyle === 'primary' ? 'btn-primary' : 'btn-outline'}
-                onMouseEnter={playTick}
-                style={{
-                  width: '100%',
-                  padding: '16px',
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  borderRadius: '8px',
-                  border: plan.ctaStyle === 'outline' ? '1px solid var(--border-default)' : 'none',
-                  background: plan.ctaStyle === 'primary' ? 'var(--green-neon)' : 'transparent',
-                  color: plan.ctaStyle === 'primary' ? 'var(--bg-primary)' : 'var(--text-primary)',
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                  marginTop: 'auto',
-                }}
-              >
-                {plan.cta}
-              </Tag>
+              {linkUrl ? (
+                <a
+                  href={linkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={plan.ctaStyle === 'primary' ? 'btn-primary' : 'btn-outline'}
+                  onMouseEnter={playTick}
+                  style={{
+                    width: '100%',
+                    padding: '16px',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    borderRadius: '8px',
+                    border: plan.ctaStyle === 'outline' ? '1px solid var(--border-default)' : 'none',
+                    background: plan.ctaStyle === 'primary' ? 'var(--green-neon)' : 'transparent',
+                    color: plan.ctaStyle === 'primary' ? 'var(--bg-primary)' : 'var(--text-primary)',
+                    cursor: 'pointer',
+                    textDecoration: 'none',
+                    transition: 'all 0.2s ease',
+                    marginTop: 'auto',
+                  }}
+                >
+                  {plan.cta}
+                </a>
+              ) : (
+                <button
+                  onClick={() => {
+                    const el = document.getElementById('contact');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="btn-outline"
+                  onMouseEnter={playTick}
+                  style={{
+                    width: '100%',
+                    padding: '16px',
+                    fontSize: '16px',
+                    fontWeight: 600,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border-default)',
+                    background: 'transparent',
+                    color: 'var(--text-primary)',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    marginTop: 'auto',
+                  }}
+                >
+                  {plan.cta}
+                </button>
+              )}
             </div>
           );
         })}
@@ -371,6 +400,9 @@ export default function Pricing() {
         }
         @media (max-width: 375px) {
           #pricing { padding: 40px 12px !important; }
+        }
+        @media (max-width: 320px) {
+          #pricing { padding: 32px 8px !important; }
         }
       `}</style>
     </section>

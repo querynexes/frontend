@@ -563,15 +563,16 @@ function StatCounter({ stat, index }: { stat: StatDef; index: number }) {
 function FrameworkStrip() {
   const doubled = [...FRAMEWORKS, ...FRAMEWORKS];
   return (
-    <div style={{ overflow: 'hidden', position: 'relative' }}>
+    <div style={{ overflow: 'hidden', position: 'relative', width: '100%' }}>
       {/* Fade edges */}
       <div style={{
         position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-        background: 'linear-gradient(90deg, var(--bg-secondary) 0%, transparent 120px, transparent calc(100% - 120px), var(--bg-secondary) 100%)',
+        background: 'linear-gradient(90deg, var(--bg-secondary) 0%, transparent 80px, transparent calc(100% - 80px), var(--bg-secondary) 100%)',
       }} />
       <motion.div
+        initial={false}
         animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
+        transition={{ duration: 28, repeat: Infinity, ease: 'linear', repeatType: 'loop' }}
         style={{ display: 'flex', gap: 10, width: 'max-content' }}
       >
         {doubled.map((fw, i) => (

@@ -8,7 +8,9 @@ export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem(COOKIE_CONSENT_KEY) as ConsentChoice | null;
+    let stored: ConsentChoice = null;
+    try { stored = localStorage.getItem(COOKIE_CONSENT_KEY) as ConsentChoice | null; }
+    catch { /* localStorage unavailable (private browsing, permissions, etc.) */ }
     if (!stored) {
       const timer = setTimeout(() => setVisible(true), 1000);
       return () => clearTimeout(timer);
@@ -43,6 +45,7 @@ export default function CookieConsent() {
         padding: '20px 24px',
         boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
         backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
         display: 'flex',
         flexDirection: 'column',
         gap: '14px',
@@ -96,7 +99,7 @@ export default function CookieConsent() {
             We use essential cookies to ensure our platform functions properly and analytics cookies to improve your experience.{' '}
             <a
               href="/privacy"
-              onClick={e => { e.preventDefault(); window.location.href = '/privacy'; }}
+              onClick={e => { e.preventDefault(); window.history.pushState({ page: 'privacy' }, '', '/privacy'); window.dispatchEvent(new PopStateEvent('popstate')); }}
               style={{
                 color: 'var(--green-neon)',
                 textDecoration: 'underline',

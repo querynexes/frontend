@@ -142,6 +142,9 @@ export default function FAQ() {
         @media (max-width: 375px) {
           #faq { padding: 40px 12px !important; }
         }
+        @media (max-width: 320px) {
+          #faq { padding: 32px 8px !important; }
+        }
       `}</style>
     </section>
   );

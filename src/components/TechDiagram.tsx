@@ -157,7 +157,7 @@ export default function TechDiagram() {
             onClick={() => setActiveGalleryIdx(null)}
             style={{
               position: 'fixed', inset: 0, zIndex: 9999,
-              background: 'rgba(0, 0, 0, 0.9)', backdropFilter: 'blur(10px)',
+              background: 'rgba(0, 0, 0, 0.9)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
               display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
               padding: '40px'
             }}
@@ -175,7 +175,7 @@ export default function TechDiagram() {
               
               <button onClick={handlePrev} style={{
                 position: 'absolute', left: '16px', zIndex: 10,
-                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)',
+                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
                 border: '1px solid rgba(255,255,255,0.15)', borderRadius: '50%',
                 padding: '10px', color: '#fff', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -198,7 +198,7 @@ export default function TechDiagram() {
 
               <button onClick={handleNext} style={{
                 position: 'absolute', right: '16px', zIndex: 10,
-                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)',
+                background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
                 border: '1px solid rgba(255,255,255,0.15)', borderRadius: '50%',
                 padding: '10px', color: '#fff', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -279,7 +279,7 @@ export default function TechDiagram() {
                       <div style={{ fontSize: '10px', color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', marginBottom: '4px' }}>{item.id.toString().padStart(2, '0')} //</div>
                       <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'Space Grotesk, sans-serif' }}>{item.title}</div>
                     </div>
-                    <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0,0,0,0.5)', padding: '6px', borderRadius: '4px', backdropFilter: 'blur(4px)' }} className="maximize-icon">
+                    <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0,0,0,0.5)', padding: '6px', borderRadius: '4px', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }} className="maximize-icon">
                       <Maximize2 size={14} style={{ color: 'var(--green-neon)' }} />
                     </div>
                   </motion.div>

@@ -142,7 +142,7 @@ export default function FeaturesGrid() {
                 </code>
               </div>
 
-              <div style={{
+              <div className="feat-icon-wrap" style={{
                 width: '80px',
                 height: '80px',
                 borderRadius: '14px',
@@ -193,6 +193,17 @@ export default function FeaturesGrid() {
       <style>{`
         @media (max-width: 1024px) {
           .features-responsive { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 768px) {
+          #features .card .feat-icon-wrap {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 12px !important;
+          }
+          #features .card .feat-icon-wrap img {
+            width: 36px !important;
+            height: 36px !important;
+          }
         }
         @media (max-width: 640px) {
           .features-responsive { grid-template-columns: 1fr !important; }

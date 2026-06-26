@@ -156,22 +156,21 @@ export default function ContactSection() {
     return (
       <section id="contact" ref={sectionRef} style={sectionStyle}>
         <div style={innerStyle}>
-          <span className="section-label reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', textAlign: 'center', display: 'block' as const }}>
+          <span className="section-label" style={{ textAlign: 'center', display: 'block' as const }}>
             // CONTACT
           </span>
-          <h2 className="section-title reveal-item" style={{ opacity: 0, transition: 'opacity 0.6s ease', textAlign: 'center' }}>
+          <h2 className="section-title" style={{ textAlign: 'center' }}>
             Thank you!
           </h2>
-          <p className="reveal-item" style={{
-            opacity: 0, transition: 'opacity 0.6s ease',
+          <p style={{
             fontSize: '14px', color: 'var(--text-secondary)',
-            textAlign: 'center', maxWidth: '400px', margin: '0 auto', lineHeight: 1.65,
+            textAlign: 'center', maxWidth: '400px', margin: '0 auto 48px', lineHeight: 1.65,
           }}>
             Your message has been sent successfully. Our team will contact you soon.
           </p>
 
           <div style={gridStyle} className="contact-grid">
-            <div className="card" style={cardStyle}>
+            <div className="card" style={{ padding: '36px' }}>
               <span style={labelStyle}>// MESSAGE SENT</span>
               <div style={{
                 display: 'flex', flexDirection: 'column', gap: '12px',
@@ -198,6 +197,21 @@ export default function ContactSection() {
             <CompanyDetails />
           </div>
         </div>
+
+        <style>{`
+          .animate-spin { animation: spin 1s linear infinite; }
+          @keyframes spin { to { transform: rotate(360deg); } }
+          @media (max-width: 768px) {
+            .contact-grid { grid-template-columns: 1fr !important; }
+            #contact { padding: 64px 24px !important; }
+          }
+          @media (max-width: 425px) {
+            #contact { padding: 48px 16px !important; }
+          }
+          @media (max-width: 375px) {
+            #contact { padding: 40px 12px !important; }
+          }
+        `}</style>
       </section>
     );
   }

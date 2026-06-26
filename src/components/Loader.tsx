@@ -121,8 +121,9 @@ export default function Loader({ onComplete }: LoaderProps) {
       </div>
 
       {/* Progress bar */}
-      <div style={{
+      <div className="loader-progress" style={{
         width: '300px',
+        maxWidth: '80vw',
         height: '2px',
         background: 'var(--bg-surface)',
         borderRadius: '2px',
@@ -158,6 +159,25 @@ export default function Loader({ onComplete }: LoaderProps) {
         background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,133,0.012) 2px, rgba(0,255,133,0.012) 4px)',
         pointerEvents: 'none',
       }} />
+
+      <style>{`
+        @media (max-width: 425px) {
+          .loader-overlay img { width: 130px !important; height: 130px !important; }
+          .loader-overlay > div:first-child { width: 170px !important; height: 170px !important; }
+          .loader-overlay > div:first-child > div:nth-child(2) { inset: 14px !important; }
+        }
+        @media (max-width: 375px) {
+          .loader-overlay img { width: 110px !important; height: 110px !important; }
+          .loader-overlay > div:first-child { width: 140px !important; height: 140px !important; }
+          .loader-overlay > div:first-child > div:nth-child(2) { inset: 12px !important; }
+        }
+        @media (max-width: 320px) {
+          .loader-overlay img { width: 90px !important; height: 90px !important; }
+          .loader-overlay > div:first-child { width: 120px !important; height: 120px !important; }
+          .loader-overlay > div:first-child > div:nth-child(2) { inset: 10px !important; }
+          .loader-overlay > div:nth-child(2) { font-size: 10px !important; }
+        }
+      `}</style>
     </div>
   );
 }

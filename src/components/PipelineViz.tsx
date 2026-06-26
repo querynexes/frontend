@@ -251,6 +251,9 @@ export default function PipelineViz() {
         @media (max-width: 375px) {
           #pipeline { padding: 40px 12px !important; }
         }
+        @media (max-width: 320px) {
+          #pipeline { padding: 32px 8px !important; }
+        }
       `}</style>
     </section>
   );

@@ -28,7 +28,7 @@ const SOCIALS = [
   { Icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/query-nexes/' },
   { Icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/QueryNexes/' },
   { Icon: Twitter, label: 'X', href: 'https://x.com/QueryNexes' },
-  { Icon: null, label: 'Pinterest', href: 'https://www.pinterest.com/QueyNexes/' },
+  { Icon: null, label: 'Pinterest', href: 'https://www.pinterest.com/QueryNexes/' },
   { Icon: Youtube, label: 'YouTube', href: 'https://www.youtube.com/@QueryNexes' },
 ];
 
@@ -233,6 +233,9 @@ export default function Footer({ onNavigate }: {
         }
         @media (max-width: 375px) {
           footer { padding: 32px 12px 20px !important; }
+        }
+        @media (max-width: 320px) {
+          footer { padding: 24px 8px 16px !important; }
         }
       `}</style>
     </footer>
