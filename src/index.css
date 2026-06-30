@@ -173,7 +173,6 @@ body {
   border: none;
   border-radius: 6px;
   background: transparent;
-  cursor: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -276,15 +275,17 @@ canvas { display: block; }
   outline: none;
 }
 
-/* BUTTON / LINK DEFAULT CURSOR OVERRIDE */
-a, button, [role="button"], input, textarea, select {
-  cursor: none;
-}
+/* CURSOR — custom cursor handles desktop; native cursors for input areas */
+a, button, [role="button"] { cursor: none; }
+input, textarea, select { cursor: text; }
 
 /* MOBILE */
 @media (max-width: 768px) {
   body { cursor: auto; }
   .cursor-outer, .cursor-inner { display: none; }
   .section-sub { margin-bottom: 40px; }
-  a, button, [role="button"], input, textarea, select { cursor: auto; }
+  a, button, [role="button"] { cursor: pointer; }
+  input, textarea, select { cursor: auto; }
+  button.mute-btn, .mute-btn { cursor: pointer; }
+  .btn-primary, .btn-outline { cursor: pointer; }
 }

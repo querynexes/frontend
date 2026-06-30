@@ -43,6 +43,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
 
       const isMobile = window.innerWidth <= 768;
       const endMult = isMobile ? 40 : 60;
+      const scaleRange = isMobile ? 0 : 0.1;
 
       const st = ScrollTrigger.create({
         trigger: section,
@@ -60,9 +61,9 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
 
           images.forEach((img, i) => {
             if (i === activeIdx) {
-              gsap.set(img, { opacity: 1 - localT, scale: 1 + localT * 0.1, zIndex: 2 });
+              gsap.set(img, { opacity: 1 - localT, scale: 1 + localT * scaleRange, zIndex: 2 });
             } else if (i === activeIdx + 1) {
-              gsap.set(img, { opacity: localT, scale: 1.03 - localT * 0.03, zIndex: 1 });
+              gsap.set(img, { opacity: localT, scale: 1 + scaleRange * 0.3 - localT * scaleRange * 0.3, zIndex: 1 });
             } else {
               gsap.set(img, { opacity: 0 });
             }
@@ -216,10 +217,10 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
               LIVE SYSTEM &nbsp;—&nbsp; COMPILER v2.4.1
             </div>
 
-            <h1 style={{
+            <h1 className="hero-heading" style={{
               fontFamily: 'Space Grotesk, sans-serif',
               fontWeight: 700,
-              fontSize: 'clamp(24px, 3.6vw, 52px)',
+              fontSize: 'clamp(20px, 3.6vw, 52px)',
               lineHeight: 1.08,
               letterSpacing: '-0.03em',
               marginBottom: '12px',
@@ -387,24 +388,24 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
             height: 100dvh !important;
           }
           .hero-gradient-bottom {
-            background: linear-gradient(to top, var(--bg-primary) 0%, rgba(5,10,7,0.3) 25%, transparent 65%) !important;
+            background: linear-gradient(to top, var(--bg-primary) 0%, rgba(5,10,7,0.08) 15%, transparent 50%) !important;
           }
           .hero-gradient-side {
-            background: linear-gradient(to right, rgba(5,10,7,0.3) 0%, transparent 40%) !important;
+            background: linear-gradient(to right, rgba(5,10,7,0.08) 0%, transparent 30%) !important;
           }
           .hero-fg {
             padding-left: 16px !important;
             padding-right: 16px !important;
-            padding-top: 64px !important;
-            align-items: flex-start !important;
+            padding-top: 56px !important;
+            align-items: center !important;
           }
           .hero-glass {
             max-width: 100% !important;
             padding: 20px !important;
-            max-height: calc(100dvh - 64px - 16px) !important;
-            background: rgba(5,10,7,0.08) !important;
-            backdropFilter: blur(4px) !important;
-            -webkit-backdrop-filter: blur(4px) !important;
+            max-height: calc(100dvh - 56px - 24px) !important;
+            background: rgba(5,10,7,0.02) !important;
+            backdropFilter: none !important;
+            -webkit-backdrop-filter: none !important;
           }
           .hero-terminal {
             height: 96px !important;
@@ -412,9 +413,38 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
           .hero-terminal [data-log-line] {
             height: 18px !important;
           }
+          .hero-metrics {
+            gap: 20px !important;
+          }
           .hero-scroll-hint {
             bottom: 16px !important;
             font-size: 8px !important;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .hero-bg-img {
+            background-size: 100% auto !important;
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
+          }
+          .hero-metrics {
+            gap: 16px !important;
+          }
+          .hero-metrics > div {
+            font-size: 10px !important;
+          }
+          .hero-metrics > div > span:first-child {
+            font-size: 13px !important;
+          }
+          .hero-ctas {
+            flex-direction: column !important;
+            align-items: stretch !important;
+          }
+          .hero-ctas button,
+          .hero-ctas a {
+            justify-content: center !important;
+            text-align: center !important;
           }
         }
 
@@ -422,12 +452,14 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
           .hero-fg {
             padding-left: 12px !important;
             padding-right: 12px !important;
+            padding-top: 48px !important;
           }
           .hero-glass {
             padding: 14px !important;
-            background: rgba(5,10,7,0.04) !important;
-            backdropFilter: blur(3px) !important;
-            -webkit-backdrop-filter: blur(3px) !important;
+            background: transparent !important;
+            backdropFilter: none !important;
+            -webkit-backdrop-filter: none !important;
+            max-height: calc(100dvh - 48px - 20px) !important;
           }
           .hero-terminal {
             height: 80px !important;
@@ -451,10 +483,57 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
         @media (max-width: 375px) {
           .hero-glass {
             padding: 10px !important;
-            background: rgba(5,10,7,0.02) !important;
+            background: transparent !important;
+            max-height: calc(100dvh - 48px - 16px) !important;
           }
           .hero-terminal {
             height: 72px !important;
+          }
+          .hero-metrics {
+            gap: 12px !important;
+          }
+          .hero-heading {
+            font-size: clamp(18px, 5.5vw, 24px) !important;
+          }
+        }
+
+        @media (max-width: 320px) {
+          .hero-fg {
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+            padding-top: 44px !important;
+          }
+          .hero-glass {
+            padding: 8px !important;
+            max-height: calc(100dvh - 44px - 12px) !important;
+          }
+          .hero-badge {
+            font-size: 7px !important;
+            padding: 3px 8px !important;
+            margin-bottom: 10px !important;
+          }
+          .hero-desc {
+            font-size: 11px !important;
+          }
+          .hero-ctas button, .hero-ctas a {
+            font-size: 11px !important;
+            padding: 8px 14px !important;
+          }
+          .hero-terminal {
+            height: 64px !important;
+          }
+          .hero-terminal [data-log-line] {
+            height: 16px !important;
+            font-size: 10px !important;
+          }
+          .hero-metrics {
+            gap: 8px !important;
+          }
+          .hero-metrics > div > span:first-child {
+            font-size: 12px !important;
+          }
+          .hero-metrics > div > span:last-child {
+            font-size: 8px !important;
           }
         }
       `}</style>

@@ -137,7 +137,6 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
                   position: 'relative',
                   paddingBottom: '4px',
                   transition: 'color 0.2s',
-                  cursor: 'none',
                 }}
                 className="nav-link-hover"
               >

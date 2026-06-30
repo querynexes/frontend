@@ -113,7 +113,7 @@ export default function App() {
 
     const handler = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.matches('a, button, [data-interactive], a *, button *')) {
+      if (target.matches('a, button, [data-interactive], a *, button *, input, textarea, select')) {
         if (e.type === 'mouseover') onEnter();
         else onLeave();
       }

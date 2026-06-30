@@ -104,7 +104,11 @@ export default function CookieConsent() {
                 color: 'var(--green-neon)',
                 textDecoration: 'underline',
                 textUnderlineOffset: '2px',
+                cursor: 'pointer',
+                transition: 'color 0.2s',
               }}
+              onMouseOver={e => { (e.currentTarget as HTMLElement).style.color = 'var(--glow-light)'; }}
+              onMouseOut={e => { (e.currentTarget as HTMLElement).style.color = 'var(--green-neon)'; }}
             >
               Learn more
             </a>
