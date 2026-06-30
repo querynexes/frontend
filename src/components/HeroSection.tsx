@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
@@ -17,6 +17,8 @@ const LOG_LINES = [
   { text: 'Latency 118.4ms -> 11.6ms (10.2x)', cls: 'ok' },
 ];
 
+const MOBILE_BREAKPOINT = 768;
+
 type Page = 'home' | 'product' | 'privacy' | 'terms';
 
 export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page) => void } = {}) {
@@ -28,7 +30,25 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
   const metric2Ref = useRef<HTMLSpanElement>(null);
   const metric3Ref = useRef<HTMLSpanElement>(null);
 
+  // Track mobile vs desktop/tablet so we can render a completely
+  // different (lighter) background system on small screens instead of
+  // just hiding the desktop one with CSS.
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT
+  );
+
   useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+    const onChange = () => setIsMobile(mq.matches);
+    onChange();
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  // Desktop/tablet only: GSAP pinned scroll + multi-image crossfade.
+  useEffect(() => {
+    if (isMobile) return;
+
     gsap.registerPlugin(ScrollTrigger, TextPlugin);
     const ctx = gsap.context(() => {
       const section = sectionRef.current;
@@ -41,14 +61,12 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
       gsap.set(images[0], { opacity: 1 });
       images.slice(1).forEach(img => gsap.set(img, { opacity: 0 }));
 
-      const isMobile = window.innerWidth <= 768;
-      const endMult = isMobile ? 40 : 60;
-      const scaleRange = isMobile ? 0 : 0.1;
+      const scaleRange = 0.1;
 
       const st = ScrollTrigger.create({
         trigger: section,
         start: 'top top',
-        end: `+=${images.length * endMult}%`,
+        end: `+=${images.length * 60}%`,
         pin: pinWrap,
         pinSpacing: true,
         scrub: true,
@@ -75,7 +93,7 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -140,21 +158,35 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
         }}
       >
         <div className="hero-bg" style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-          {IMAGES.map((src, i) => (
+          {isMobile ? (
+            // Mobile: a single static image, no GSAP, nothing else mounted/loaded.
             <div
-              key={i}
-              ref={el => (imageRefs.current[i] = el)}
-              className="hero-bg-img"
+              className="hero-bg-img hero-bg-img-mobile"
               style={{
                 position: 'absolute',
                 inset: 0,
-                backgroundImage: `url(${src})`,
+                backgroundImage: `url(${IMAGES[0]})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                willChange: 'transform, opacity',
               }}
             />
-          ))}
+          ) : (
+            IMAGES.map((src, i) => (
+              <div
+                key={i}
+                ref={el => (imageRefs.current[i] = el)}
+                className="hero-bg-img"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `url(${src})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  willChange: 'transform, opacity',
+                }}
+              />
+            ))
+          )}
         </div>
 
         <div className="hero-gradient-bottom" style={{
@@ -353,15 +385,17 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
           </div>
         </div>
 
-        <div className="hero-scroll-hint" style={{
-          position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
-          zIndex: 10,
-          fontFamily: 'JetBrains Mono, monospace', fontSize: '10px',
-          color: 'var(--text-disabled)', letterSpacing: '0.1em',
-          whiteSpace: 'nowrap',
-        }}>
-          SCROLL — SEQUENCE {IMAGES.length} FRAMES
-        </div>
+        {!isMobile && (
+          <div className="hero-scroll-hint" style={{
+            position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
+            zIndex: 10,
+            fontFamily: 'JetBrains Mono, monospace', fontSize: '10px',
+            color: 'var(--text-disabled)', letterSpacing: '0.1em',
+            whiteSpace: 'nowrap',
+          }}>
+            SCROLL — SEQUENCE {IMAGES.length} FRAMES
+          </div>
+        )}
       </div>
 
       <style>{`
@@ -383,29 +417,41 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
           }
         }
 
+        /*
+          Mobile (<=768px): the JS above already swaps in a single static
+          background image and skips GSAP/ScrollTrigger entirely, so there's
+          no animation/pin to neutralize here. This block only handles
+          layout: a compact, non-pinned, no-extra-space hero.
+        */
         @media (max-width: 768px) {
+          .hero-bg-img-mobile {
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
+          }
           .hero-pin-wrap {
-            height: 100dvh !important;
+            height: 100svh !important;
+            min-height: 560px !important;
           }
           .hero-gradient-bottom {
-            background: linear-gradient(to top, var(--bg-primary) 0%, rgba(5,10,7,0.08) 15%, transparent 50%) !important;
+            background: linear-gradient(to top, var(--bg-primary) 0%, rgba(5,10,7,0.1) 18%, transparent 50%) !important;
           }
           .hero-gradient-side {
-            background: linear-gradient(to right, rgba(5,10,7,0.08) 0%, transparent 30%) !important;
+            background: linear-gradient(to right, rgba(5,10,7,0.1) 0%, transparent 30%) !important;
           }
           .hero-fg {
             padding-left: 16px !important;
             padding-right: 16px !important;
-            padding-top: 56px !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
             align-items: center !important;
           }
           .hero-glass {
             max-width: 100% !important;
             padding: 20px !important;
-            max-height: calc(100dvh - 56px - 24px) !important;
-            background: rgba(5,10,7,0.02) !important;
-            backdropFilter: none !important;
-            -webkit-backdrop-filter: none !important;
+            max-height: calc(100svh - 32px) !important;
+            background: rgba(5,10,7,0.28) !important;
+            backdrop-filter: blur(4px) !important;
+            -webkit-backdrop-filter: blur(4px) !important;
           }
           .hero-terminal {
             height: 96px !important;
@@ -416,18 +462,9 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
           .hero-metrics {
             gap: 20px !important;
           }
-          .hero-scroll-hint {
-            bottom: 16px !important;
-            font-size: 8px !important;
-          }
         }
 
         @media (max-width: 600px) {
-          .hero-bg-img {
-            background-size: 100% auto !important;
-            background-position: center center !important;
-            background-repeat: no-repeat !important;
-          }
           .hero-metrics {
             gap: 16px !important;
           }
@@ -449,17 +486,12 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
         }
 
         @media (max-width: 425px) {
-          .hero-fg {
-            padding-left: 12px !important;
-            padding-right: 12px !important;
-            padding-top: 48px !important;
+          .hero-pin-wrap {
+            min-height: 520px !important;
           }
           .hero-glass {
             padding: 14px !important;
-            background: transparent !important;
-            backdropFilter: none !important;
-            -webkit-backdrop-filter: none !important;
-            max-height: calc(100dvh - 48px - 20px) !important;
+            max-height: calc(100svh - 24px) !important;
           }
           .hero-terminal {
             height: 80px !important;
@@ -475,16 +507,12 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
             font-size: 12px !important;
             padding: 9px 16px !important;
           }
-          .hero-scroll-hint {
-            display: none !important;
-          }
         }
 
         @media (max-width: 375px) {
           .hero-glass {
             padding: 10px !important;
-            background: transparent !important;
-            max-height: calc(100dvh - 48px - 16px) !important;
+            max-height: calc(100svh - 16px) !important;
           }
           .hero-terminal {
             height: 72px !important;
@@ -498,14 +526,16 @@ export default function CinematicHero({ onNavigate }: { onNavigate?: (page: Page
         }
 
         @media (max-width: 320px) {
+          .hero-pin-wrap {
+            min-height: 480px !important;
+          }
           .hero-fg {
             padding-left: 8px !important;
             padding-right: 8px !important;
-            padding-top: 44px !important;
           }
           .hero-glass {
             padding: 8px !important;
-            max-height: calc(100dvh - 44px - 12px) !important;
+            max-height: calc(100svh - 12px) !important;
           }
           .hero-badge {
             font-size: 7px !important;

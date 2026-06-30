@@ -38,45 +38,6 @@ body {
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
-  cursor: none;
-}
-
-/* CUSTOM CURSOR */
-.cursor-outer {
-  position: fixed;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--green-deep);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99999;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, background 0.2s, border-color 0.2s;
-  mix-blend-mode: normal;
-}
-.cursor-inner {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  background: var(--green-neon);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 99999;
-  transform: translate(-50%, -50%);
-  transition: transform 0.05s;
-}
-.cursor-outer.hover {
-  width: 56px;
-  height: 56px;
-  background: rgba(0,255,133,0.08);
-  border-color: var(--green-neon);
-}
-.cursor-outer.sim {
-  width: 48px;
-  height: 48px;
-  border-color: var(--green-neon);
-  background: rgba(0,255,133,0.05);
-  border-radius: 4px;
 }
 
 /* SCROLLBAR */
@@ -166,24 +127,6 @@ body {
   pointer-events: none;
 }
 
-/* MUTE BUTTON — in navbar */
-.mute-btn {
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  color: var(--text-muted);
-}
-.mute-btn:hover {
-  color: var(--green-neon);
-  background: rgba(0,255,133,0.06);
-}
-
 /* CHATWOOT THEME OVERRIDES */
 .woot-widget-bubble {
   background: var(--green-neon) !important;
@@ -206,7 +149,7 @@ body {
   font-weight: 600;
   border: none;
   border-radius: 4px;
-  cursor: none;
+  cursor: pointer;
   transition: background 0.12s ease, transform 0.1s ease;
   display: inline-flex;
   align-items: center;
@@ -226,7 +169,7 @@ body {
   font-weight: 500;
   border: 1px solid var(--border-strong);
   border-radius: 4px;
-  cursor: none;
+  cursor: pointer;
   transition: border-color 0.12s ease, background 0.12s ease;
   display: inline-flex;
   align-items: center;
@@ -275,17 +218,10 @@ canvas { display: block; }
   outline: none;
 }
 
-/* CURSOR — custom cursor handles desktop; native cursors for input areas */
-a, button, [role="button"] { cursor: none; }
-input, textarea, select { cursor: text; }
-
 /* MOBILE */
 @media (max-width: 768px) {
-  body { cursor: auto; }
-  .cursor-outer, .cursor-inner { display: none; }
   .section-sub { margin-bottom: 40px; }
   a, button, [role="button"] { cursor: pointer; }
   input, textarea, select { cursor: auto; }
-  button.mute-btn, .mute-btn { cursor: pointer; }
   .btn-primary, .btn-outline { cursor: pointer; }
 }

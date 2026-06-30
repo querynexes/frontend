@@ -115,7 +115,7 @@ export default function FeaturesGrid() {
                 opacity: 0,
                 transform: 'translateY(24px)',
                 transition: 'opacity 0.45s ease, transform 0.45s ease, border-color 0.12s ease, background 0.12s ease',
-                cursor: 'default',
+                cursor: 'pointer',
               }}
               onMouseOver={e => {
                 const el = e.currentTarget as HTMLElement;

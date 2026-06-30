@@ -64,14 +64,12 @@ const STATS = [
   { label: 'Targeted Speedup', value: '12×+ inference acceleration' },
 ];
 
-export default function ProductPage({ onNavigate, muted, onMuteToggle }: {
+export default function ProductPage({ onNavigate }: {
   onNavigate: (page: Page) => void;
-  muted?: boolean;
-  onMuteToggle?: () => void;
 }) {
   return (
     <>
-      <Navbar currentPage="product" onNavigate={onNavigate} muted={muted} onMuteToggle={onMuteToggle} />
+      <Navbar currentPage="product" onNavigate={onNavigate} />
       <main style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
         <section style={{ padding: '120px 48px 64px', textAlign: 'center', position: 'relative' }}>
           <div style={{ maxWidth: '860px', margin: '0 auto' }}>

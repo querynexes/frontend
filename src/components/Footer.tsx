@@ -106,7 +106,7 @@ export default function Footer({ onNavigate }: {
                   color: 'var(--text-muted)',
                   textDecoration: 'none',
                   transition: 'all 0.2s',
-                  cursor: 'none' as const,
+                  cursor: 'pointer' as const,
                 },
                 onMouseOver: (e: React.MouseEvent<HTMLAnchorElement>) => {
                   (e.currentTarget as HTMLElement).style.borderColor = 'var(--green-deep)';
@@ -169,7 +169,7 @@ export default function Footer({ onNavigate }: {
                         color: 'var(--text-muted)',
                         textDecoration: 'none',
                         transition: 'color 0.2s',
-                        cursor: 'none',
+                        cursor: 'pointer',
                         position: 'relative',
                         display: 'inline-block',
                         paddingBottom: '1px',

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SimulationScene from './SimScene';
 
 type SimMode = 'overview' | 'input' | 'process' | 'output';
@@ -44,10 +44,25 @@ export default function SimulationPlatform() {
 }
 
 function MobileNotice() {
+  useEffect(() => {
+    const el = document.getElementById('simulation');
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    el.querySelectorAll('.reveal, .reveal-left').forEach(r => observer.observe(r));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       id="simulation"
-      style={{ padding: '64px 20px', background: 'var(--bg-secondary)' }}
+      style={{ padding: '64px 20px', background: 'var(--bg-secondary)', textAlign: 'center' }}
     >
       <span className="section-label">// LIVE SIMULATION</span>
       <h2 className="section-title reveal">See The Optimization Engine<br />in Action</h2>
@@ -76,6 +91,21 @@ function MobileNotice() {
 
 function DesktopSimulation() {
   const { canvasRef, mode, paused, switchMode, togglePause, detailInfo, loading, loadError } = SimulationScene();
+
+  useEffect(() => {
+    const el = document.getElementById('simulation');
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    el.querySelectorAll('.reveal, .reveal-left').forEach(r => observer.observe(r));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section

@@ -5,9 +5,8 @@ import HeroSection from './components/HeroSection';
 import Footer from './components/Footer';
 import ChatwootWidget from './components/ChatwootWidget';
 import CookieConsent from './components/CookieConsent';
-import { useCustomCursor } from './hooks/useCustomCursor';
 import { useScrollReveal } from './hooks/useScrollReveal';
-import { initAudio, toggleMute } from './utils/audio';
+
 
 class ErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
   state = { error: null };
@@ -65,11 +64,9 @@ const pageToPath = (page: Page): string => {
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
-  const [muted, setMuted] = useState(true); // always start muted on every page load
   const [page, setPage] = useState<Page>(() =>
     typeof window !== 'undefined' ? pathToPage() : 'home'
   );
-  const { outerRef, innerRef } = useCustomCursor();
 
   const navigate = (target: Page) => {
     window.scrollTo(0, 0);
@@ -86,58 +83,8 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Initialize audio on first interaction
-  useEffect(() => {
-    const handler = () => initAudio();
-    document.addEventListener('click', handler, { once: true });
-    document.addEventListener('keydown', handler, { once: true });
-    return () => {
-      document.removeEventListener('click', handler);
-      document.removeEventListener('keydown', handler);
-    };
-  }, []);
-
-  const handleMuteToggle = () => {
-    const nowMuted = toggleMute();
-    setMuted(nowMuted);
-  };
-
-  // Register interactive element hover effects for cursor (event delegation)
-  useEffect(() => {
-    if (window.innerWidth <= 768) return;
-    const outer = outerRef.current;
-    if (!outer) return;
-
-    const onEnter = () => outer.classList.add('hover');
-    const onLeave = () => outer.classList.remove('hover');
-
-    const handler = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.matches('a, button, [data-interactive], a *, button *, input, textarea, select')) {
-        if (e.type === 'mouseover') onEnter();
-        else onLeave();
-      }
-    };
-
-    document.addEventListener('mouseover', handler, { passive: true });
-    document.addEventListener('mouseout', handler, { passive: true });
-
-    return () => {
-      document.removeEventListener('mouseover', handler);
-      document.removeEventListener('mouseout', handler);
-    };
-  }, [loaded, outerRef]);
-
   return (
     <>
-      {/* Custom cursor */}
-      {typeof window !== 'undefined' && window.innerWidth > 768 && (
-        <>
-          <div ref={outerRef} className="cursor-outer" />
-          <div ref={innerRef} className="cursor-inner" />
-        </>
-      )}
-
       {/* Loader */}
       {!loaded && <Loader onComplete={() => setLoaded(true)} />}
 
@@ -149,15 +96,15 @@ export default function App() {
         <ErrorBoundary>
         <Suspense fallback={<div style={{ padding: '40px', textAlign: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: 'var(--text-muted)' }}>Loading…</div>}>
         {page === 'product' ? (
-          <ProductPage onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
+          <ProductPage onNavigate={navigate} />
         ) : page === 'privacy' ? (
-          <PrivacyPolicy onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
+          <PrivacyPolicy onNavigate={navigate} />
         ) : page === 'terms' ? (
-          <TermsConditions onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
+          <TermsConditions onNavigate={navigate} />
         ) : (
           <>
             <ScrollRevealInit />
-            <Navbar currentPage="home" onNavigate={navigate} muted={muted} onMuteToggle={handleMuteToggle} />
+            <Navbar currentPage="home" onNavigate={navigate} />
             <HeroSection onNavigate={navigate} />
             <StatsBar />
             <PipelineViz />

@@ -80,7 +80,7 @@ export default function FAQ() {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                cursor: 'none',
+                cursor: 'pointer',
                 textAlign: 'left',
                 transition: 'background 0.2s',
                 borderLeft: openIdx === i ? '3px solid var(--green-neon)' : '3px solid transparent',

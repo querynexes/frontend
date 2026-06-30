@@ -120,7 +120,7 @@ export default function PipelineViz() {
                 onMouseLeave={() => setHoverStep(null)}
                 style={{
                   padding: '20px 18px',
-                  cursor: 'none',
+                  cursor: 'pointer',
                   borderColor: isActive ? 'var(--green-neon)' : isHover ? 'var(--green-deep)' : 'var(--border-default)',
                   background: isActive ? 'var(--bg-elevated)' : isHover ? 'rgba(17,28,22,0.7)' : 'rgba(11,20,16,0.6)',
                 }}

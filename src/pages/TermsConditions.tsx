@@ -134,14 +134,12 @@ Notices to QueryNexes must be sent to the mailing address above with a copy to l
   },
 ];
 
-export default function TermsConditions({ onNavigate, muted, onMuteToggle }: {
+export default function TermsConditions({ onNavigate }: {
   onNavigate: (page: Page) => void;
-  muted?: boolean;
-  onMuteToggle?: () => void;
 }) {
   return (
     <>
-      <Navbar currentPage="terms" onNavigate={onNavigate} muted={muted} onMuteToggle={onMuteToggle} />
+      <Navbar currentPage="terms" onNavigate={onNavigate} />
       <main>
         <section
           style={{

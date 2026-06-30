@@ -163,38 +163,38 @@ export default function CTABanner() {
               padding: '14px 28px',
               borderRadius: '6px',
               border: 'none',
-              cursor: 'none',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'all 0.2s',
-            }}
-            onMouseOver={e => {
-              (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
-              (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(5,10,7,0.3)';
-            }}
-            onMouseOut={e => {
-              (e.currentTarget as HTMLElement).style.transform = 'none';
-              (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-            }}
-          >
-            Start Free Trial
-          </a>
-          <a
-            href="#faq"
-            onClick={e => { e.preventDefault(); document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' }); }}
-            onMouseEnter={playTick}
-            style={{
-              background: 'none',
-              color: 'var(--bg-primary)',
-              fontFamily: 'Space Grotesk, sans-serif',
-              fontWeight: 500,
-              fontSize: '15px',
-              padding: '13px 26px',
-              borderRadius: '6px',
-              border: '2px solid var(--bg-primary)',
-              cursor: 'none',
+              cursor: 'pointer',
+               textDecoration: 'none',
+               display: 'inline-flex',
+               alignItems: 'center',
+               gap: '8px',
+               transition: 'all 0.2s',
+             }}
+             onMouseOver={e => {
+               (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
+               (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 24px rgba(5,10,7,0.3)';
+             }}
+             onMouseOut={e => {
+               (e.currentTarget as HTMLElement).style.transform = 'none';
+               (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+             }}
+           >
+             Start Free Trial
+           </a>
+           <a
+             href="#faq"
+             onClick={e => { e.preventDefault(); document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' }); }}
+             onMouseEnter={playTick}
+             style={{
+               background: 'none',
+               color: 'var(--bg-primary)',
+               fontFamily: 'Space Grotesk, sans-serif',
+               fontWeight: 500,
+               fontSize: '15px',
+               padding: '13px 26px',
+               borderRadius: '6px',
+               border: '2px solid var(--bg-primary)',
+               cursor: 'pointer',
               textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',

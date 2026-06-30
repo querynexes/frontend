@@ -1,18 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { playTick } from '../utils/audio';
-import SoundWaveIcon from './SoundWaveIcon';
 import logoLight from '../assets/logos/querynexes-logo.webp';
 
 const SECTION_IDS = ['hero', 'features', 'simulation', 'pricing', 'faq', 'about', 'contact'];
 
 type NavPage = 'home' | 'product' | 'privacy' | 'terms';
 
-export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }: {
+export default function Navbar({ currentPage, onNavigate }: {
   currentPage?: NavPage;
   onNavigate?: (page: NavPage) => void;
-  muted?: boolean;
-  onMuteToggle?: () => void;
 } = {}) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -149,14 +146,6 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
         {/* Actions — hidden on mobile */}
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }} className="nav-desktop-actions">
           <button
-            className="mute-btn"
-            onClick={onMuteToggle}
-            title={muted ? 'Unmute sounds' : 'Mute sounds'}
-            aria-label={muted ? 'Unmute' : 'Mute'}
-          >
-            <SoundWaveIcon muted={!!muted} />
-          </button>
-          <button
             className="btn-primary"
             onMouseEnter={playTick}
             style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '6px' }}
@@ -222,14 +211,6 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
           </div>
 
           <div className="nav-overlay-actions">
-            <button
-              className="mute-btn"
-              onClick={onMuteToggle}
-              title={muted ? 'Unmute sounds' : 'Mute sounds'}
-              aria-label={muted ? 'Unmute' : 'Mute'}
-            >
-              <SoundWaveIcon muted={!!muted} />
-            </button>
             <button
               className="btn-primary"
               onClick={() => onNavigate?.('product')}
@@ -365,10 +346,6 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
           margin-top: 12px;
           padding-bottom: 40px;
         }
-        .nav-overlay-actions .mute-btn {
-          width: 44px;
-          height: 44px;
-        }
         .nav-overlay-actions .btn-primary {
           padding: 14px 32px;
           font-size: 16px;
@@ -386,50 +363,12 @@ export default function Navbar({ currentPage, onNavigate, muted, onMuteToggle }:
             padding: 12px 24px;
             font-size: 14px;
           }
-          .nav-overlay-actions .mute-btn {
-            width: 38px;
-            height: 38px;
-          }
         }
         @media (max-width: 320px) {
           nav { padding: 0 6px !important; }
           .nav-logo-img { width: 72px !important; height: 72px !important; }
           .nav-overlay-link { font-size: 18px; }
           .nav-overlay-links { gap: 20px; }
-        }
-
-        /* ── Sound wave bars (unchanged) ────────────────────── */
-        @keyframes sound-wave-bar {
-          0%, 100% { height: 3px; }
-          25% { height: 14px; }
-          50% { height: 6px; }
-          75% { height: 11px; }
-        }
-
-        .sound-wave-container {
-          opacity: 0.6;
-          transition: opacity 0.25s ease;
-        }
-        .mute-btn:hover .sound-wave-container {
-          opacity: 1;
-        }
-
-        .sound-bar-active {
-          background: var(--green-neon);
-          box-shadow: 0 0 5px color-mix(in srgb, var(--green-neon) 50%, transparent);
-          animation: sound-wave-bar 0.6s ease-in-out infinite;
-          transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                      background 0.35s ease,
-                      box-shadow 0.35s ease;
-        }
-
-        .sound-bar-muted {
-          background: var(--text-disabled);
-          box-shadow: none;
-          animation: none !important;
-          transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                      background 0.35s ease,
-                      box-shadow 0.35s ease;
         }
 
         /* ── Keyframes used by overlay ──────────────────────── */
