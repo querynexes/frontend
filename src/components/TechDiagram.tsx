@@ -243,9 +243,7 @@ export default function TechDiagram() {
         <div style={{ marginBottom: '80px', position: 'relative' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', padding: '0 20px' }}>
             <span style={{ fontSize: '11px', color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace' }}>TELEMETRY & VISUALIZERS</span>
-            <span style={{ fontSize: '11px', color: 'var(--green-neon)', fontFamily: 'JetBrains Mono, monospace', opacity: 0.8, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              SCROLL OR DRAG TO EXPLORE <ChevronRight size={14} />
-            </span>
+
           </div>
           
           <div style={{ overflow: 'hidden' }}>
